@@ -126,7 +126,7 @@ body {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 6px 16px 95px 16px;
+  padding: 6px 16px 135px 16px;
   display: flex;
   flex-direction: column;
   scrollbar-width: none;
@@ -1006,14 +1006,16 @@ body {
    5. GLASSMORHPIC PILL INPUT BAR WITH SPARKLE GLINT & GLOW
    ========================================================================== */
 .bottom-bar-container {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 12px 18px 20px 18px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.98) 60%, rgba(0, 0, 0, 0.55) 85%, transparent 100%);
+  padding: 10px 18px max(18px, env(safe-area-inset-bottom, 18px)) 18px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.98) 55%, rgba(0, 0, 0, 0.65) 80%, transparent 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   pointer-events: none;
-  z-index: 30;
+  z-index: 60;
   display: flex;
   justify-content: center;
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.38s ease, filter 0.38s ease;
@@ -4664,45 +4666,66 @@ body {
    -------------------------------------------------------------------------- */
 @media (max-width: 640px) {
   .screen-scroll-view {
-    padding: 10px 14px 115px 14px;
+    padding: 8px 14px 145px 14px;
   }
 
   .grid-menu-section {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
+    gap: 8px !important;
     max-height: 500px;
   }
 
   .action-card {
-    min-height: 88px;
-    padding: 12px 8px;
+    min-height: 76px;
+    padding: 10px 6px;
+  }
+
+  .action-card .action-icon {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 4px;
+  }
+
+  .action-card .action-label {
+    font-size: 12px;
   }
 
   .hero-section {
-    margin: 16px 0 22px 0;
+    margin: 8px 0 14px 0;
   }
 
   #orbStage {
-    width: 150px;
-    height: 150px;
+    width: 125px;
+    height: 125px;
+  }
+
+  .orb-glow-backdrop {
+    width: 105px;
+    height: 105px;
   }
 
   .hero-headline {
-    font-size: 24px;
-    line-height: 1.25;
+    font-size: 20px;
+    line-height: 1.22;
   }
 
   .hero-greeting {
-    font-size: 14px;
+    font-size: 13px;
+    margin-bottom: 2px;
   }
 
   .bottom-bar-container {
-    padding: 10px 12px 16px 12px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 8px 12px max(14px, env(safe-area-inset-bottom, 14px)) 12px;
+    z-index: 60;
   }
 
   .pill-input-wrapper {
     max-width: 100%;
-    height: 52px;
+    height: 50px;
   }
 
   /* Mobile Auth Screens */
@@ -4718,7 +4741,7 @@ body {
    -------------------------------------------------------------------------- */
 @media (min-width: 641px) and (max-width: 1024px) {
   .screen-scroll-view {
-    padding: 20px 32px 125px 32px;
+    padding: 16px 28px 150px 28px;
   }
 
   .app-screen {
@@ -4727,7 +4750,7 @@ body {
 
   .header-section,
   .screen-top-header {
-    padding: 10px 0 18px;
+    padding: 10px 0 16px;
     max-width: 860px;
   }
 
@@ -4736,29 +4759,76 @@ body {
   }
 
   .hero-section {
-    margin: 18px 0 24px 0;
+    margin: 10px 0 16px 0;
+  }
+
+  #orbStage {
+    width: 140px;
+    height: 140px;
+  }
+
+  .orb-glow-backdrop {
+    width: 120px;
+    height: 120px;
   }
 
   .hero-headline {
-    font-size: 28px;
+    font-size: 24px;
+    line-height: 1.25;
+  }
+
+  .hero-greeting {
+    font-size: 14px;
+    margin-bottom: 4px;
   }
 
   .grid-menu-section {
     grid-template-columns: repeat(4, 1fr) !important;
-    gap: 12px !important;
+    gap: 10px !important;
   }
 
   .action-card {
-    min-height: 94px;
-    padding: 14px 10px;
+    min-height: 82px;
+    padding: 11px 8px;
+  }
+
+  .action-card .action-label {
+    font-size: 13px;
   }
 
   .bottom-bar-container {
-    padding: 14px 20px 20px 20px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 20px max(18px, env(safe-area-inset-bottom, 18px)) 20px;
+    z-index: 60;
   }
 
   .pill-input-wrapper {
     max-width: 720px;
+    height: 52px;
+  }
+
+  .email-dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  #screenPlanner .planner-full-cal-grid {
+    max-width: 640px;
+  }
+
+  .notes-folders-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  #screenFiles .cloud-services-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  #screenFiles .files-categories-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
   }
 
   .email-dashboard-grid {
@@ -5096,9 +5166,51 @@ body {
   }
 }
 
+/* --------------------------------------------------------------------------
+   4. SHORT / LANDSCAPE VIEWPORT ADAPTATION (Height <= 720px)
+   -------------------------------------------------------------------------- */
+@media (max-height: 720px) {
+  .hero-section {
+    margin: 4px 0 8px 0 !important;
+  }
 
+  #orbStage {
+    width: 95px !important;
+    height: 95px !important;
+  }
 
+  .orb-glow-backdrop {
+    width: 80px !important;
+    height: 80px !important;
+  }
 
+  .hero-headline {
+    font-size: 18px !important;
+    line-height: 1.2 !important;
+  }
 
+  .hero-greeting {
+    font-size: 12px !important;
+    margin-bottom: 2px !important;
+  }
 
+  .action-card {
+    min-height: 68px !important;
+    padding: 6px 6px !important;
+  }
 
+  .action-card .action-icon {
+    width: 32px !important;
+    height: 32px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .action-card .action-icon svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .action-card .action-label {
+    font-size: 11.5px !important;
+  }
+}
