@@ -1661,7 +1661,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================================================
   // OFFLINE / NO INTERNET CONTROLLER & MULTI-LAYER RESILIENCE SYSTEM
   // =========================================================================
-  const offlineBackBtn = document.getElementById('offlineBackBtn');
   const offlineRetryBtn = document.getElementById('offlineRetryBtn');
   const offlineRetryBtnText = document.getElementById('offlineRetryBtnText');
   const offlineContinueBtn = document.getElementById('offlineContinueBtn');
@@ -1788,14 +1787,6 @@ document.addEventListener('DOMContentLoaded', () => {
     headerOfflinePill.addEventListener('click', (e) => {
       e.stopPropagation();
       navigateToScreen('offline');
-    });
-  }
-
-  // Offline Back Button
-  if (offlineBackBtn) {
-    offlineBackBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      goBack();
     });
   }
 
