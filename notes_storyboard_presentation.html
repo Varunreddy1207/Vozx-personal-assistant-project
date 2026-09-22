@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOZX AI — Notes Flow Storyboard Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #030611;
+      --cyan-neon: #22d3ee;
+      --cyan-glow: rgba(34, 211, 238, 0.45);
+      --purple-neon: #c084fc;
+      --blue-electric: #0ea5e9;
+      --grid-line: rgba(34, 211, 238, 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Digital Grid Backdrop */
+    .grid-backdrop {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: 
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 36px 36px;
+      z-index: 0;
+    }
+
+    .ambient-glow-1 {
+      position: fixed;
+      top: -10%;
+      left: 15%;
+      width: 650px;
+      height: 650px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(34, 211, 238, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-glow-2 {
+      position: fixed;
+      bottom: -10%;
+      right: 15%;
+      width: 650px;
+      height: 650px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Presentation Board Master Container */
+    .presentation-board {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1340px;
+      background: rgba(6, 12, 28, 0.92);
+      border: 1.5px solid rgba(34, 211, 238, 0.35);
+      border-radius: 28px;
+      padding: 36px 40px 44px;
+      box-shadow: 
+        0 0 50px rgba(0, 0, 0, 0.9),
+        0 0 35px rgba(34, 211, 238, 0.15),
+        inset 0 0 30px rgba(34, 211, 238, 0.04);
+      backdrop-filter: blur(24px);
+    }
+
+    /* Board Top Brand Header */
+    .board-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(34, 211, 238, 0.18);
+      padding-bottom: 20px;
+      margin-bottom: 32px;
+    }
+
+    .board-title-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo-pill {
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(14, 165, 233, 0.1));
+      border: 1px solid rgba(34, 211, 238, 0.5);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      color: #38bdf8;
+      letter-spacing: 1.5px;
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.25);
+    }
+
+    .board-headline {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: #ffffff;
+    }
+
+    .board-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94a3b8;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    /* Storyboard 3-Column Layout: Left Phone, Center Transition, Right Phone */
+    .storyboard-layout {
+      display: grid;
+      grid-template-columns: 410px 1fr 410px;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .panel-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Panel Header Label */
+    .panel-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 14px;
+      padding: 6px 16px;
+      border-radius: 999px;
+    }
+
+    .panel-label.empty-label {
+      color: #38bdf8;
+      background: rgba(34, 211, 238, 0.08);
+      border: 1px solid rgba(34, 211, 238, 0.3);
+      box-shadow: 0 0 16px rgba(34, 211, 238, 0.2);
+    }
+
+    .panel-label.populated-label {
+      color: #c084fc;
+      background: rgba(168, 85, 247, 0.08);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.2);
+    }
+
+    /* Phone Device Mockup Container */
+    .phone-container {
+      width: 100%;
+      height: 840px;
+      background: #050816;
+      border: 1.8px solid rgba(34, 211, 238, 0.42);
+      border-radius: 42px;
+      padding: 14px 22px 24px;
+      box-shadow: 
+        0 0 35px rgba(34, 211, 238, 0.18),
+        0 20px 50px rgba(0, 0, 0, 0.8),
+        inset 0 0 20px rgba(34, 211, 238, 0.05);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .phone-container::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(34, 211, 238, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(34, 211, 238, 0.035) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .phone-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .phone-inner::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Status Bar */
+    .phone-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+      padding: 2px 6px 12px;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Screen Top Header */
+    .screen-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .circle-back {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(34, 211, 238, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.2);
+    }
+
+    .brand-center {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 1px;
+    }
+
+    .cyan-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22d3ee;
+      box-shadow: 0 0 10px #22d3ee;
+    }
+
+    .profile-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+    }
+
+    /* Title Banner */
+    .title-banner {
+      margin-bottom: 14px;
+    }
+
+    .main-screen-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 2px;
+      letter-spacing: -0.4px;
+    }
+
+    .main-screen-subtitle {
+      font-size: 12.5px;
+      color: #94a3b8;
+      font-weight: 400;
+    }
+
+    /* Search Bar */
+    .notes-search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(11, 18, 38, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: 16px;
+      height: 44px;
+      padding: 0 14px;
+      margin-bottom: 14px;
+    }
+
+    .search-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffffff;
+      font-size: 12.5px;
+      font-family: inherit;
+      width: 100%;
+    }
+
+    .search-input::placeholder {
+      color: #64748b;
+    }
+
+    /* 3 Top Quick Action Buttons */
+    .notes-quick-actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .action-pill-btn {
+      background: rgba(11, 18, 38, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: 16px;
+      padding: 12px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .action-pill-btn svg {
+      color: #38bdf8;
+    }
+
+    .action-pill-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    /* Section Headers */
+    .section-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .view-all-link {
+      font-size: 11.5px;
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* -------------------------------------------------------------
+       EMPTY STATE CARDS (Panel 1)
+       ------------------------------------------------------------- */
+    .folders-empty-card {
+      background: rgba(11, 18, 38, 0.72);
+      border: 1.2px solid rgba(34, 211, 238, 0.28);
+      border-radius: 20px;
+      padding: 18px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .folder-illustration-box {
+      position: relative;
+      width: 72px;
+      height: 56px;
+      flex-shrink: 0;
+    }
+
+    .thought-cloud-bubble {
+      position: absolute;
+      top: -16px;
+      left: 36px;
+      color: #cbd5e1;
+    }
+
+    .folders-empty-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .folders-empty-heading {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .create-first-folder-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(14, 165, 233, 0.08);
+      border: 1.2px solid rgba(34, 211, 238, 0.6);
+      color: #38bdf8;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 999px;
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.2);
+      cursor: pointer;
+      width: fit-content;
+    }
+
+    /* Empty Notice Glass Strip */
+    .empty-notice-strip {
+      background: rgba(11, 18, 38, 0.72);
+      border: 1.2px solid rgba(34, 211, 238, 0.25);
+      border-radius: 18px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      position: relative;
+    }
+
+    .notice-icon-circle {
+      color: #ef4444;
+      font-size: 13px;
+      margin-top: 1px;
+    }
+
+    .notice-icon-clock {
+      color: #64748b;
+      font-size: 13px;
+      margin-top: 1px;
+    }
+
+    .notice-text-block {
+      flex: 1;
+    }
+
+    .notice-strong {
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .notice-body {
+      color: #94a3b8;
+      font-size: 11.5px;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .empty-star-decor {
+      position: absolute;
+      bottom: -10px;
+      right: 18px;
+      color: rgba(34, 211, 238, 0.35);
+      font-size: 16px;
+    }
+
+    /* -------------------------------------------------------------
+       POPULATED STATE CARDS (Panel 2)
+       ------------------------------------------------------------- */
+    /* 2x2 Folders Grid */
+    .notes-2x2-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .notes-folder-box {
+      background: rgba(11, 18, 38, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s;
+    }
+
+    .notes-folder-box:hover {
+      border-color: rgba(34, 211, 238, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .folder-emoji-icon {
+      font-size: 22px;
+    }
+
+    .notes-folder-name {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .notes-folder-count {
+      font-size: 10px;
+      color: #64748b;
+      margin-top: 1px;
+    }
+
+    /* Note Card Item */
+    .note-glass-card {
+      background: rgba(11, 18, 38, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+
+    .note-glass-card:hover {
+      border-color: rgba(34, 211, 238, 0.4);
+      background: rgba(15, 25, 52, 0.9);
+    }
+
+    .note-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .note-card-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .note-card-date {
+      font-size: 10px;
+      color: #64748b;
+    }
+
+    .note-tags-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .note-tag {
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.2px;
+    }
+
+    .tag-purple {
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      color: #c084fc;
+    }
+
+    .tag-blue {
+      background: rgba(14, 165, 233, 0.15);
+      border: 1px solid rgba(14, 165, 233, 0.4);
+      color: #38bdf8;
+    }
+
+    .tag-green {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+
+    /* -------------------------------------------------------------
+       CENTER TRANSITION ARROW & CLUSTER
+       ------------------------------------------------------------- */
+    .center-transition-hub {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 0 10px;
+    }
+
+    .transition-caption-top {
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #22d3ee;
+      margin-bottom: 8px;
+    }
+
+    .transition-narrative {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f1f5f9;
+      line-height: 1.4;
+      max-width: 220px;
+      margin-bottom: 24px;
+    }
+
+    .floating-cluster-stage {
+      position: relative;
+      width: 220px;
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .arrow-vector-wrapper {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .neon-arrow-svg {
+      width: 180px;
+      height: 48px;
+      filter: drop-shadow(0 0 15px rgba(34, 211, 238, 0.8)) drop-shadow(0 0 30px rgba(14, 165, 233, 0.5));
+    }
+
+    .float-icon-bubble {
+      position: absolute;
+      border-radius: 10px;
+      padding: 6px 9px;
+      font-size: 11px;
+      font-weight: 800;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
+      z-index: 5;
+      animation: floatMotion 4s ease-in-out infinite alternate;
+    }
+
+    .bubble-pin-1 {
+      top: -2px;
+      left: 20px;
+      background: rgba(239, 68, 68, 0.25);
+      border: 1px solid rgba(239, 68, 68, 0.6);
+      color: #f87171;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.4);
+    }
+
+    .bubble-doc {
+      top: -10px;
+      right: 25px;
+      background: rgba(34, 211, 238, 0.25);
+      border: 1px solid rgba(34, 211, 238, 0.6);
+      color: #22d3ee;
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.4);
+      animation-delay: -1.5s;
+    }
+
+    .bubble-pin-2 {
+      bottom: 2px;
+      left: 35px;
+      background: rgba(239, 68, 68, 0.25);
+      border: 1px solid rgba(239, 68, 68, 0.6);
+      color: #f87171;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.4);
+      animation-delay: -2.8s;
+    }
+
+    .bubble-folder {
+      bottom: -6px;
+      right: 30px;
+      background: rgba(234, 179, 8, 0.25);
+      border: 1px solid rgba(234, 179, 8, 0.6);
+      color: #fde047;
+      box-shadow: 0 0 14px rgba(234, 179, 8, 0.4);
+      animation-delay: -0.7s;
+    }
+
+    @keyframes floatMotion {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-8px) scale(1.05); }
+    }
+
+    .sparkle-particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 8px #22d3ee;
+    }
+    .spk-1 { top: 25%; left: 10%; }
+    .spk-2 { top: 75%; right: 15%; }
+    .spk-3 { top: 20%; right: 12%; }
+    .spk-4 { bottom: 18%; left: 22%; }
+
+    /* Board Footer */
+    .board-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(34, 211, 238, 0.15);
+      font-size: 11.5px;
+      color: #64748b;
+    }
+
+    .board-footer-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .status-dot-green {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      display: inline-block;
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Grid Backdrop -->
+  <div class="grid-backdrop"></div>
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- Main Presentation Board -->
+  <main class="presentation-board">
+    
+    <!-- Top Header -->
+    <header class="board-header">
+      <div class="board-title-group">
+        <span class="brand-logo-pill">VOZX AI</span>
+        <h1 class="board-headline">Notes Architecture Storyboard</h1>
+      </div>
+      <div class="board-badge">Design Specification Presentation • Empty vs. Populated State</div>
+    </header>
+
+    <!-- 3-Column Storyboard Layout -->
+    <div class="storyboard-layout">
+
+      <!-- =================================================================
+           PANEL 1: NEW USER - INITIAL LOG-IN (EMPTY STATE)
+           ================================================================= -->
+      <section class="panel-column" aria-label="Panel 1 Empty State">
+        <h2 class="panel-label empty-label">PANEL 1: NEW USER - INITIAL LOG-IN (EMPTY STATE)</h2>
+        
+        <div class="phone-container">
+          <div class="phone-inner">
+            
+            <!-- Status Bar -->
+            <div class="phone-status-bar">
+              <span>9:41</span>
+              <div class="status-icons">
+                <svg width="15" height="11" viewBox="0 0 16 12" fill="currentColor">
+                  <path d="M1 9.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"/>
+                </svg>
+                <svg width="14" height="11" viewBox="0 0 16 12" fill="currentColor">
+                  <path d="M8 2.5a8.9 8.9 0 016.4 2.7.75.75 0 01-.06 1.1l-6 5.5a.75.75 0 01-.98 0l-6-5.5a.75.75 0 01-.06-1.1A8.9 8.9 0 018 2.5z"/>
+                </svg>
+                <svg width="19" height="11" viewBox="0 0 24 12" fill="currentColor">
+                  <rect x="1" y="1" width="19" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                  <rect x="2.5" y="2.5" width="14" height="7" rx="1.8"/>
+                  <path d="M22 4.5v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Header -->
+            <div class="screen-header">
+              <div class="circle-back">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+              </div>
+
+              <div class="brand-center">
+                <span>VOZX AI</span>
+                <span class="cyan-dot"></span>
+              </div>
+
+              <div class="profile-circle">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Title Banner -->
+            <div class="title-banner">
+              <h3 class="main-screen-title">Notes</h3>
+              <p class="main-screen-subtitle">Capture your thoughts, ideas and plans.</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="notes-search-bar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" class="search-input" placeholder="Search notes..." readonly>
+            </div>
+
+            <!-- 3 Top Action Buttons -->
+            <div class="notes-quick-actions">
+              <div class="action-pill-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                </svg>
+                <span class="action-pill-label">Voice Note</span>
+              </div>
+              <div class="action-pill-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                <span class="action-pill-label">Image Note</span>
+              </div>
+              <div class="action-pill-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                <span class="action-pill-label">Text Note</span>
+              </div>
+            </div>
+
+            <!-- Folders Header -->
+            <div class="section-header-row">
+              <span class="section-title">Folders</span>
+            </div>
+
+            <!-- Folders Empty Card (Exact match to image_25) -->
+            <div class="folders-empty-card">
+              <div class="folder-illustration-box">
+                <!-- Folder Outline Graphic -->
+                <svg width="68" height="52" viewBox="0 0 68 52" fill="none">
+                  <path d="M6 14a3 3 0 0 1 3-3h14l4 4h32a3 3 0 0 1 3 3v26a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V14z" stroke="#38bdf8" stroke-width="1.8" fill="rgba(14, 165, 233, 0.08)"/>
+                  <path d="M6 22h56v21a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V22z" stroke="#22d3ee" stroke-width="1.5" fill="#08142c"/>
+                </svg>
+                <!-- Thought Cloud -->
+                <div class="thought-cloud-bubble">
+                  <svg width="24" height="18" viewBox="0 0 24 18" fill="currentColor">
+                    <path d="M18 12a4 4 0 0 0-.8-7.9A5.5 5.5 0 0 0 6.6 6 3.5 3.5 0 0 0 3 9.5 3.5 3.5 0 0 0 6.5 13H18a4 4 0 0 0 0-1z"/>
+                    <circle cx="4" cy="15" r="1.5"/>
+                    <circle cx="1" cy="17" r="1"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="folders-empty-right">
+                <h4 class="folders-empty-heading">Folders help you organize!</h4>
+                <button type="button" class="create-first-folder-btn">
+                  <span>+</span>
+                  <span>Create First Folder</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Pinned Notes Header -->
+            <div class="section-header-row">
+              <span class="section-title">📌 Pinned Notes</span>
+            </div>
+
+            <!-- Pinned Notes Empty Card -->
+            <div class="empty-notice-strip">
+              <span class="notice-icon-circle">📌</span>
+              <div class="notice-text-block">
+                <span class="notice-strong">Pinned Notes:</span>
+                <span class="notice-body">No notes pinned yet. Select a note and pin it for easy access.</span>
+              </div>
+            </div>
+
+            <!-- Recent Notes Header -->
+            <div class="section-header-row">
+              <span class="section-title">Recent Notes</span>
+            </div>
+
+            <!-- Recent Notes Empty Card -->
+            <div class="empty-notice-strip">
+              <span class="notice-icon-clock">🕒</span>
+              <div class="notice-text-block">
+                <span class="notice-strong">Recent Notes:</span>
+                <span class="notice-body">Create a note above to get started.<br>Your recent activity will appear here.</span>
+              </div>
+              <span class="empty-star-decor">✦</span>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           CENTER TRANSITION: DIRECTIONAL ARROW & CLUSTERS
+           ================================================================= -->
+      <div class="center-transition-hub" aria-label="Transition Flow">
+        <span class="transition-caption-top">TRANSITION FLOW</span>
+        <p class="transition-narrative">Notes are captured and categorized...</p>
+
+        <div class="floating-cluster-stage">
+          <!-- Floating Miniature Document, Push-Pin, and Folder Badges -->
+          <div class="float-icon-bubble bubble-pin-1">📌 PIN</div>
+          <div class="float-icon-bubble bubble-doc">📄 DOC</div>
+          <div class="float-icon-bubble bubble-pin-2">📌 NOTE</div>
+          <div class="float-icon-bubble bubble-folder">📁 FLD</div>
+
+          <!-- Sparkle Particles -->
+          <span class="sparkle-particle spk-1"></span>
+          <span class="sparkle-particle spk-2"></span>
+          <span class="sparkle-particle spk-3"></span>
+          <span class="sparkle-particle spk-4"></span>
+
+          <!-- Neon Directional Arrow -->
+          <div class="arrow-vector-wrapper">
+            <svg class="neon-arrow-svg" viewBox="0 0 180 48" fill="none">
+              <defs>
+                <linearGradient id="arrowGlowGradNotes" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.3"/>
+                  <stop offset="35%" stop-color="#22d3ee" stop-opacity="0.9"/>
+                  <stop offset="80%" stop-color="#38bdf8"/>
+                  <stop offset="100%" stop-color="#67e8f9"/>
+                </linearGradient>
+              </defs>
+              <rect x="0" y="20" width="138" height="8" rx="4" fill="url(#arrowGlowGradNotes)"/>
+              <path d="M132 8l38 16-38 16-6-6 24-10-24-10 6-6z" fill="#38bdf8"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- =================================================================
+           PANEL 2: ACTIVE USER - AFTER CREATION (POPULATED STATE)
+           ================================================================= -->
+      <section class="panel-column" aria-label="Panel 2 Populated State">
+        <h2 class="panel-label populated-label">PANEL 2: ACTIVE USER - AFTER CREATION (POPULATED STATE)</h2>
+
+        <div class="phone-container">
+          <div class="phone-inner">
+            
+            <!-- Status Bar -->
+            <div class="phone-status-bar">
+              <span>9:41</span>
+              <div class="status-icons">
+                <svg width="15" height="11" viewBox="0 0 16 12" fill="currentColor">
+                  <path d="M1 9.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"/>
+                </svg>
+                <svg width="14" height="11" viewBox="0 0 16 12" fill="currentColor">
+                  <path d="M8 2.5a8.9 8.9 0 016.4 2.7.75.75 0 01-.06 1.1l-6 5.5a.75.75 0 01-.98 0l-6-5.5a.75.75 0 01-.06-1.1A8.9 8.9 0 018 2.5z"/>
+                </svg>
+                <svg width="19" height="11" viewBox="0 0 24 12" fill="currentColor">
+                  <rect x="1" y="1" width="19" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                  <rect x="2.5" y="2.5" width="14" height="7" rx="1.8"/>
+                  <path d="M22 4.5v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Header -->
+            <div class="screen-header">
+              <div class="circle-back">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+              </div>
+
+              <div class="brand-center">
+                <span>VOZX AI</span>
+                <span class="cyan-dot"></span>
+              </div>
+
+              <div class="profile-circle">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Title Banner -->
+            <div class="title-banner">
+              <h3 class="main-screen-title">Notes</h3>
+              <p class="main-screen-subtitle">Capture your thoughts, ideas and plans.</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="notes-search-bar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" class="search-input" placeholder="Search notes..." readonly>
+            </div>
+
+            <!-- 3 Top Action Buttons -->
+            <div class="notes-quick-actions">
+              <div class="action-pill-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                </svg>
+                <span class="action-pill-label">Voice Note</span>
+              </div>
+              <div class="action-pill-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                <span class="action-pill-label">Image Note</span>
+              </div>
+              <div class="action-pill-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                <span class="action-pill-label">Text Note</span>
+              </div>
+            </div>
+
+            <!-- Folders Header with View All -->
+            <div class="section-header-row">
+              <span class="section-title">Folders</span>
+              <a href="#" class="view-all-link">View all &gt;</a>
+            </div>
+
+            <!-- 2x2 Folders Grid (Populated) -->
+            <div class="notes-2x2-grid">
+              <!-- Folder 1: Personal -->
+              <div class="notes-folder-box">
+                <span class="folder-emoji-icon">📁</span>
+                <div>
+                  <div class="notes-folder-name">Personal</div>
+                  <div class="notes-folder-count">12 notes</div>
+                </div>
+              </div>
+
+              <!-- Folder 2: Work -->
+              <div class="notes-folder-box">
+                <span class="folder-emoji-icon">💼</span>
+                <div>
+                  <div class="notes-folder-name">Work</div>
+                  <div class="notes-folder-count">8 notes</div>
+                </div>
+              </div>
+
+              <!-- Folder 3: College -->
+              <div class="notes-folder-box">
+                <span class="folder-emoji-icon">🎓</span>
+                <div>
+                  <div class="notes-folder-name">College</div>
+                  <div class="notes-folder-count">15 notes</div>
+                </div>
+              </div>
+
+              <!-- Folder 4: Startup -->
+              <div class="notes-folder-box">
+                <span class="folder-emoji-icon">🚀</span>
+                <div>
+                  <div class="notes-folder-name">Startup</div>
+                  <div class="notes-folder-count">6 notes</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pinned Notes Header with View All -->
+            <div class="section-header-row">
+              <span class="section-title">📌 Pinned Notes</span>
+              <a href="#" class="view-all-link">View all &gt;</a>
+            </div>
+
+            <!-- Pinned Note 1: Vozx Business Plan -->
+            <article class="note-glass-card">
+              <div class="note-card-top">
+                <span class="note-card-title">Vozx Business Plan</span>
+                <span class="note-card-date">Today, 10:24 AM</span>
+              </div>
+              <div class="note-tags-row">
+                <span class="note-tag tag-purple">Startup</span>
+                <span class="note-tag tag-blue">Important</span>
+              </div>
+            </article>
+
+            <!-- Pinned Note 2: Project Ideas -->
+            <article class="note-glass-card">
+              <div class="note-card-top">
+                <span class="note-card-title">Project Ideas</span>
+                <span class="note-card-date">Sep 16, 2026</span>
+              </div>
+              <div class="note-tags-row">
+                <span class="note-tag tag-blue">Work</span>
+                <span class="note-tag tag-green">Ideas</span>
+              </div>
+            </article>
+
+            <!-- Recent Notes Header with View All -->
+            <div class="section-header-row" style="margin-top: 10px;">
+              <span class="section-title">Recent Notes</span>
+              <a href="#" class="view-all-link">View all &gt;</a>
+            </div>
+
+            <!-- Recent Note 1: Gym & Diet Plan -->
+            <article class="note-glass-card">
+              <div class="note-card-top">
+                <span class="note-card-title">Gym &amp; Diet Plan</span>
+                <span class="note-card-date">Sep 10, 2026</span>
+              </div>
+              <div class="note-tags-row">
+                <span class="note-tag tag-green">Health</span>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /storyboard-layout -->
+
+    <!-- Board Footer -->
+    <footer class="board-footer">
+      <div class="board-footer-left">
+        <span><span class="status-dot-green"></span>Dynamic State Synchronization</span>
+        <span>Storage: Encrypted Zero-Knowledge Vault</span>
+      </div>
+      <div>VOZX AI Mobile Design System v2.4 • Confidential Presentation</div>
+    </footer>
+
+  </main>
+
+</body>
+</html>
+

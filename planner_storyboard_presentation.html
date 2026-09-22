@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOZX AI — Planner Flow Storyboard Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #030611;
+      --cyan-neon: #22d3ee;
+      --cyan-glow: rgba(34, 211, 238, 0.45);
+      --purple-neon: #c084fc;
+      --blue-electric: #0ea5e9;
+      --grid-line: rgba(34, 211, 238, 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Digital Grid Backdrop */
+    .grid-backdrop {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: 
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 36px 36px;
+      z-index: 0;
+    }
+
+    .ambient-glow-1 {
+      position: fixed;
+      top: -10%;
+      left: 15%;
+      width: 650px;
+      height: 650px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(34, 211, 238, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-glow-2 {
+      position: fixed;
+      bottom: -10%;
+      right: 15%;
+      width: 650px;
+      height: 650px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Presentation Board Master Container */
+    .presentation-board {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1340px;
+      background: rgba(6, 12, 28, 0.92);
+      border: 1.5px solid rgba(34, 211, 238, 0.35);
+      border-radius: 28px;
+      padding: 36px 40px 44px;
+      box-shadow: 
+        0 0 50px rgba(0, 0, 0, 0.9),
+        0 0 35px rgba(34, 211, 238, 0.15),
+        inset 0 0 30px rgba(34, 211, 238, 0.04);
+      backdrop-filter: blur(24px);
+    }
+
+    /* Board Top Brand Header */
+    .board-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(34, 211, 238, 0.18);
+      padding-bottom: 20px;
+      margin-bottom: 32px;
+    }
+
+    .board-title-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo-pill {
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(14, 165, 233, 0.1));
+      border: 1px solid rgba(34, 211, 238, 0.5);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      color: #38bdf8;
+      letter-spacing: 1.5px;
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.25);
+    }
+
+    .board-headline {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: #ffffff;
+    }
+
+    .board-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94a3b8;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    /* Storyboard 3-Column Layout: Left Phone, Center Transition, Right Phone */
+    .storyboard-layout {
+      display: grid;
+      grid-template-columns: 410px 1fr 410px;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .panel-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Panel Header Label */
+    .panel-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 14px;
+      padding: 6px 16px;
+      border-radius: 999px;
+    }
+
+    .panel-label.empty-label {
+      color: #38bdf8;
+      background: rgba(34, 211, 238, 0.08);
+      border: 1px solid rgba(34, 211, 238, 0.3);
+      box-shadow: 0 0 16px rgba(34, 211, 238, 0.2);
+    }
+
+    .panel-label.populated-label {
+      color: #c084fc;
+      background: rgba(168, 85, 247, 0.08);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.2);
+    }
+
+    /* Phone Device Mockup Container */
+    .phone-container {
+      width: 100%;
+      height: 870px;
+      background: #050816;
+      border: 1.8px solid rgba(34, 211, 238, 0.42);
+      border-radius: 42px;
+      padding: 14px 20px 24px;
+      box-shadow: 
+        0 0 35px rgba(34, 211, 238, 0.18),
+        0 20px 50px rgba(0, 0, 0, 0.8),
+        inset 0 0 20px rgba(34, 211, 238, 0.05);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .phone-container::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(34, 211, 238, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(34, 211, 238, 0.035) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .phone-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .phone-inner::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Status Bar */
+    .phone-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+      padding: 2px 6px 10px;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Screen Top Header */
+    .screen-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .circle-back {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(34, 211, 238, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.2);
+    }
+
+    .brand-center {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 1px;
+    }
+
+    .cyan-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22d3ee;
+      box-shadow: 0 0 10px #22d3ee;
+    }
+
+    .profile-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+    }
+
+    /* Title Banner */
+    .title-banner {
+      margin-bottom: 10px;
+    }
+
+    .main-screen-title {
+      font-size: 25px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 1px;
+      letter-spacing: -0.4px;
+    }
+
+    .main-screen-subtitle {
+      font-size: 11.5px;
+      color: #94a3b8;
+      font-weight: 400;
+    }
+
+    /* Month Selector */
+    .month-selector-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4px;
+      margin-bottom: 8px;
+    }
+
+    .month-nav-btn {
+      color: #94a3b8;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .month-label-text {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    /* Calendar Grid */
+    .cal-table-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .cal-day-name {
+      font-size: 10px;
+      font-weight: 600;
+      color: #64748b;
+      padding: 2px 0;
+    }
+
+    .cal-cell {
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11.5px;
+      font-weight: 500;
+      color: #cbd5e1;
+      border-radius: 8px;
+    }
+
+    .cal-cell.muted {
+      color: #334155;
+    }
+
+    .cal-cell.today-pill {
+      background: #0284c7;
+      color: #ffffff;
+      font-weight: 700;
+      border-radius: 999px;
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.7);
+      border: 1px solid #38bdf8;
+    }
+
+    /* Weekly Progress Card */
+    .progress-glass-card {
+      background: rgba(11, 18, 38, 0.85);
+      border: 1.2px solid rgba(34, 211, 238, 0.28);
+      border-radius: 18px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+    }
+
+    .gauge-wrapper {
+      position: relative;
+      width: 58px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .gauge-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .gauge-bg {
+      fill: none;
+      stroke: rgba(15, 23, 42, 0.9);
+      stroke-width: 5;
+    }
+
+    .gauge-fill {
+      fill: none;
+      stroke-width: 5;
+      stroke-linecap: round;
+    }
+
+    .gauge-fill.empty {
+      stroke: transparent;
+    }
+
+    .gauge-fill.active-65 {
+      stroke: url(#calProgressGrad);
+      stroke-dasharray: 188.4;
+      stroke-dashoffset: 65.94; /* 65% */
+      filter: drop-shadow(0 0 6px #22d3ee);
+    }
+
+    .gauge-pct-center {
+      position: absolute;
+      font-size: 13px;
+      font-weight: 800;
+      color: #ffffff;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .progress-text-block {
+      flex: 1;
+    }
+
+    .progress-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+
+    .progress-sub-empty {
+      font-size: 10.5px;
+      color: #94a3b8;
+      line-height: 1.35;
+    }
+
+    .progress-stats-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 4px;
+      font-size: 10.5px;
+      color: #cbd5e1;
+    }
+
+    .stat-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot-green { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px #10b981; }
+    .dot-blue { width: 6px; height: 6px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 6px #38bdf8; }
+    .dot-yellow { width: 6px; height: 6px; border-radius: 50%; background: #eab308; box-shadow: 0 0 6px #eab308; }
+
+    /* Section Headers */
+    .section-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .view-all-link {
+      font-size: 11px;
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* Empty Notice Cards */
+    .empty-planner-card {
+      background: rgba(11, 18, 38, 0.72);
+      border: 1.2px solid rgba(34, 211, 238, 0.28);
+      border-radius: 18px;
+      padding: 16px 14px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 14px;
+      position: relative;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+    }
+
+    .empty-icon-svg {
+      color: #94a3b8;
+      width: 26px;
+      height: 26px;
+      margin-bottom: 2px;
+    }
+
+    .empty-main-text {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .empty-sub-text {
+      font-size: 10.5px;
+      color: #94a3b8;
+      margin-bottom: 4px;
+    }
+
+    .empty-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(14, 165, 233, 0.08);
+      border: 1.2px solid rgba(34, 211, 238, 0.6);
+      color: #38bdf8;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 999px;
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.2);
+      cursor: pointer;
+    }
+
+    .corner-sparkle {
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      color: rgba(34, 211, 238, 0.4);
+      font-size: 14px;
+    }
+
+    /* Populated Tasks List */
+    .tasks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .task-item-row {
+      background: rgba(11, 18, 38, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .task-checkbox {
+      width: 18px;
+      height: 18px;
+      border-radius: 6px;
+      border: 1.5px solid rgba(56, 189, 248, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .task-checkbox.checked {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
+    }
+
+    .task-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+
+    .task-item-row.done .task-name {
+      color: #94a3b8;
+      text-decoration: line-through;
+    }
+
+    /* Populated Deadlines List */
+    .deadlines-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .deadline-item-row {
+      background: rgba(11, 18, 38, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .deadline-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .deadline-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .deadline-date {
+      font-size: 10.5px;
+      color: #94a3b8;
+    }
+
+    /* -------------------------------------------------------------
+       CENTER TRANSITION ARROW & CLUSTER
+       ------------------------------------------------------------- */
+    .center-transition-hub {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 0 10px;
+    }
+
+    .transition-caption-top {
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #22d3ee;
+      margin-bottom: 8px;
+    }
+
+    .transition-narrative {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f1f5f9;
+      line-height: 1.4;
+      max-width: 220px;
+      margin-bottom: 24px;
+    }
+
+    .floating-cluster-stage {
+      position: relative;
+      width: 220px;
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .arrow-vector-wrapper {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .neon-arrow-svg {
+      width: 180px;
+      height: 48px;
+      filter: drop-shadow(0 0 15px rgba(34, 211, 238, 0.8)) drop-shadow(0 0 30px rgba(14, 165, 233, 0.5));
+    }
+
+    .float-icon-bubble {
+      position: absolute;
+      border-radius: 10px;
+      padding: 6px 9px;
+      font-size: 11px;
+      font-weight: 800;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
+      z-index: 5;
+      animation: floatMotion 4s ease-in-out infinite alternate;
+    }
+
+    .bubble-cal {
+      top: -2px;
+      left: 20px;
+      background: rgba(14, 165, 233, 0.25);
+      border: 1px solid rgba(14, 165, 233, 0.6);
+      color: #38bdf8;
+      box-shadow: 0 0 14px rgba(14, 165, 233, 0.4);
+    }
+
+    .bubble-check {
+      top: -10px;
+      right: 25px;
+      background: rgba(16, 185, 129, 0.25);
+      border: 1px solid rgba(16, 185, 129, 0.6);
+      color: #34d399;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.4);
+      animation-delay: -1.5s;
+    }
+
+    .bubble-alarm {
+      bottom: 2px;
+      left: 35px;
+      background: rgba(234, 179, 8, 0.25);
+      border: 1px solid rgba(234, 179, 8, 0.6);
+      color: #fde047;
+      box-shadow: 0 0 14px rgba(234, 179, 8, 0.4);
+      animation-delay: -2.8s;
+    }
+
+    .bubble-task {
+      bottom: -6px;
+      right: 30px;
+      background: rgba(168, 85, 247, 0.25);
+      border: 1px solid rgba(168, 85, 247, 0.6);
+      color: #c084fc;
+      box-shadow: 0 0 14px rgba(168, 85, 247, 0.4);
+      animation-delay: -0.7s;
+    }
+
+    @keyframes floatMotion {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-8px) scale(1.05); }
+    }
+
+    .sparkle-particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 8px #22d3ee;
+    }
+    .spk-1 { top: 25%; left: 10%; }
+    .spk-2 { top: 75%; right: 15%; }
+    .spk-3 { top: 20%; right: 12%; }
+    .spk-4 { bottom: 18%; left: 22%; }
+
+    /* Board Footer */
+    .board-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(34, 211, 238, 0.15);
+      font-size: 11.5px;
+      color: #64748b;
+    }
+
+    .board-footer-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .status-dot-green {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      display: inline-block;
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Grid Backdrop -->
+  <div class="grid-backdrop"></div>
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- Main Presentation Board -->
+  <main class="presentation-board">
+    
+    <!-- Top Header -->
+    <header class="board-header">
+      <div class="board-title-group">
+        <span class="brand-logo-pill">VOZX AI</span>
+        <h1 class="board-headline">Planner Architecture Storyboard</h1>
+      </div>
+      <div class="board-badge">Design Specification Presentation • Empty vs. Populated State</div>
+    </header>
+
+    <!-- 3-Column Storyboard Layout -->
+    <div class="storyboard-layout">
+
+      <!-- =================================================================
+           PANEL 1: NEW USER - INITIAL LOG-IN (EMPTY STATE)
+           ================================================================= -->
+      <section class="panel-column" aria-label="Panel 1 Empty State">
+        <h2 class="panel-label empty-label">PANEL 1: NEW USER - INITIAL LOG-IN (EMPTY STATE)</h2>
+        
+        <div class="phone-container">
+          <div class="phone-inner">
+            
+            <!-- Status Bar -->
+            <div class="phone-status-bar">
+              <span>9:41</span>
+              <div class="status-icons">
+                <svg width="15" height="11" viewBox="0 0 16 12" fill="currentColor">
+                  <path d="M1 9.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"/>
+                </svg>
+                <svg width="14" height="11" viewBox="0 0 16 12" fill="currentColor">
+                  <path d="M8 2.5a8.9 8.9 0 016.4 2.7.75.75 0 01-.06 1.1l-6 5.5a.75.75 0 01-.98 0l-6-5.5a.75.75 0 01-.06-1.1A8.9 8.9 0 018 2.5z"/>
+                </svg>
+                <svg width="19" height="11" viewBox="0 0 24 12" fill="currentColor">
+                  <rect x="1" y="1" width="19" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                  <rect x="2.5" y="2.5" width="14" height="7" rx="1.8"/>
+                  <path d="M22 4.5v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Header -->
+            <div class="screen-header">
+              <div class="circle-back">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+              </div>
+
+              <div class="brand-center">
+                <span>VOZX AI</span>
+                <span class="cyan-dot"></span>
+              </div>
+
+              <div class="profile-circle">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Title Banner -->
+            <div class="title-banner">
+              <h3 class="main-screen-title">Planner</h3>
+              <p class="main-screen-subtitle">Plan your goals, manage your time, make it happen.</p>
+            </div>
+
+            <!-- Month Selector -->
+            <div class="month-selector-row">
+              <span class="month-nav-btn">&lt;</span>
+              <span class="month-label-text">September 2026</span>
+              <span class="month-nav-btn">&gt;</span>
+            </div>
+
+            <!-- Calendar Grid -->
+            <div class="cal-table-grid">
+              <span class="cal-day-name">Sun</span>
+              <span class="cal-day-name">Mon</span>
+              <span class="cal-day-name">Tue</span>
+              <span class="cal-day-name">Wed</span>
+              <span class="cal-day-name">Thu</span>
+              <span class="cal-day-name">Fri</span>
+              <span class="cal-day-name">Sat</span>
+
+              <span class="cal-cell muted">30</span>
+              <span class="cal-cell muted">31</span>
+              <span class="cal-cell">1</span>
+              <span class="cal-cell">2</span>
+              <span class="cal-cell">3</span>
+              <span class="cal-cell">4</span>
+              <span class="cal-cell">5</span>
+
+              <span class="cal-cell">6</span>
+              <span class="cal-cell">7</span>
+              <span class="cal-cell">8</span>
+              <span class="cal-cell">9</span>
+              <span class="cal-cell">10</span>
+              <span class="cal-cell">11</span>
+              <span class="cal-cell">12</span>
+
+              <span class="cal-cell">13</span>
+              <span class="cal-cell">14</span>
+              <span class="cal-cell">15</span>
+              <span class="cal-cell">16</span>
+              <span class="cal-cell today-pill">17</span>
+              <span class="cal-cell">18</span>
+              <span class="cal-cell">19</span>
+
+              <span class="cal-cell">20</span>
+              <span class="cal-cell">21</span>
+              <span class="cal-cell">22</span>
+              <span class="cal-cell">23</span>
+              <span class="cal-cell">24</span>
+              <span class="cal-cell">25</span>
+              <span class="cal-cell">26</span>
+
+              <span class="cal-cell">27</span>
+              <span class="cal-cell">28</span>
+              <span class="cal-cell">29</span>
+              <span class="cal-cell">30</span>
+              <span class="cal-cell muted">1</span>
+              <span class="cal-cell muted">2</span>
+              <span class="cal-cell muted">3</span>
+            </div>
+
+            <!-- Weekly Progress Empty Card (0%) -->
+            <div class="progress-glass-card">
+              <div class="gauge-wrapper">
+                <svg class="gauge-svg" viewBox="0 0 60 60">
+                  <circle class="gauge-bg" cx="30" cy="30" r="24"></circle>
+                </svg>
+                <span class="gauge-pct-center">0%</span>
+              </div>
+              <div class="progress-text-block">
+                <h4 class="progress-title">Weekly Progress</h4>
+                <p class="progress-sub-empty">Your weekly progress summary will appear here as you complete tasks.</p>
+              </div>
+            </div>
+
+            <!-- Today's Tasks Empty (Sep 17) -->
+            <div class="section-header-row">
+              <span class="section-title">Today's Tasks (Sep 17)</span>
+              <a href="#" class="view-all-link">View all &gt;</a>
+            </div>
+
+            <div class="empty-planner-card">
+              <!-- Clipboard SVG -->
+              <svg class="empty-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+              </svg>
+              <span class="empty-main-text">No tasks planned for today.</span>
+              <span class="empty-sub-text">Tap to add your first goal!</span>
+              <button type="button" class="empty-pill-btn">
+                <span>+</span>
+                <span>Add Task</span>
+              </button>
+            </div>
+
+            <!-- Upcoming Deadlines Empty -->
+            <div class="section-header-row">
+              <span class="section-title">Upcoming Deadlines</span>
+              <a href="#" class="view-all-link">View all &gt;</a>
+            </div>
+
+            <div class="empty-planner-card">
+              <!-- Alarm Clock SVG -->
+              <svg class="empty-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="13" r="8"></circle>
+                <polyline points="12 9 12 13 14 15"></polyline>
+                <line x1="5" y1="3" x2="2" y2="6"></line>
+                <line x1="19" y1="3" x2="22" y2="6"></line>
+              </svg>
+              <span class="empty-main-text">No upcoming deadlines.</span>
+              <span class="empty-sub-text">Keep track of important dates.</span>
+              <button type="button" class="empty-pill-btn">
+                <span>+</span>
+                <span>Add Deadline</span>
+              </button>
+              <span class="corner-sparkle">✦</span>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           CENTER TRANSITION: DIRECTIONAL ARROW & CLUSTERS
+           ================================================================= -->
+      <div class="center-transition-hub" aria-label="Transition Flow">
+        <span class="transition-caption-top">TRANSITION FLOW</span>
+        <p class="transition-narrative">Goals are set, tasks are scheduled...</p>
+
+        <div class="floating-cluster-stage">
+          <!-- Floating Miniature Calendar, Checkmark, and Alarm Clock Badges -->
+          <div class="float-icon-bubble bubble-cal">📅 CAL</div>
+          <div class="float-icon-bubble bubble-check">✓ GOAL</div>
+          <div class="float-icon-bubble bubble-alarm">⏰ TIME</div>
+          <div class="float-icon-bubble bubble-task">✓ TASK</div>
+
+          <!-- Sparkle Particles -->
+          <span class="sparkle-particle spk-1"></span>
+          <span class="sparkle-particle spk-2"></span>
+          <span class="sparkle-particle spk-3"></span>
+          <span class="sparkle-particle spk-4"></span>
+
+          <!-- Neon Directional Arrow -->
+          <div class="arrow-vector-wrapper">
+            <svg class="neon-arrow-svg" viewBox="0 0 180 48" fill="none">
+              <defs>
+                <linearGradient id="arrowGlowGradPlanner" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.3"/>
+                  <stop offset="35%" stop-color="#22d3ee" stop-opacity="0.9"/>
+                  <stop offset="80%" stop-color="#38bdf8"/>
+                  <stop offset="100%" stop-color="#67e8f9"/>
+                </linearGradient>
+              </defs>
+              <rect x="0" y="20" width="138" height="8" rx="4" fill="url(#arrowGlowGradPlanner)"/>
+              <path d="M132 8l38 16-38 16-6-6 24-10-24-10 6-6z" fill="#38bdf8"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- =================================================================
+           PANEL 2: ACTIVE USER - AFTER SCHEDULING (POPULATED STATE)
+           ================================================================= -->
+      <section class="panel-column" aria-label="Panel 2 Populated State">
+        <h2 class="panel-label populated-label">PANEL 2: ACTIVE USER - AFTER SCHEDULING (POPULATED STATE)</h2>
+
+        <div class="phone-container">
+          <div class="phone-inner">
+            
+            <!-- Status Bar -->
+            <div class="phone-status-bar">
+              <span>9:41</span>
+              <div class="status-icons">
+                <svg width="15" height="11" viewBox="0 0 16 12" fill="currentColor">
+                  <path d="M1 9.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"/>
+                </svg>
+                <svg width="14" height="11" viewBox="0 0 16 12" fill="currentColor">
+                  <path d="M8 2.5a8.9 8.9 0 016.4 2.7.75.75 0 01-.06 1.1l-6 5.5a.75.75 0 01-.98 0l-6-5.5a.75.75 0 01-.06-1.1A8.9 8.9 0 018 2.5z"/>
+                </svg>
+                <svg width="19" height="11" viewBox="0 0 24 12" fill="currentColor">
+                  <rect x="1" y="1" width="19" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                  <rect x="2.5" y="2.5" width="14" height="7" rx="1.8"/>
+                  <path d="M22 4.5v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Header -->
+            <div class="screen-header">
+              <div class="circle-back">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+              </div>
+
+              <div class="brand-center">
+                <span>VOZX AI</span>
+                <span class="cyan-dot"></span>
+              </div>
+
+              <div class="profile-circle">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Title Banner -->
+            <div class="title-banner">
+              <h3 class="main-screen-title">Planner</h3>
+              <p class="main-screen-subtitle">Plan your goals, manage your time, make it happen.</p>
+            </div>
+
+            <!-- Month Selector -->
+            <div class="month-selector-row">
+              <span class="month-nav-btn">&lt;</span>
+              <span class="month-label-text">September 2026</span>
+              <span class="month-nav-btn">&gt;</span>
+            </div>
+
+            <!-- Calendar Grid -->
+            <div class="cal-table-grid">
+              <span class="cal-day-name">Sun</span>
+              <span class="cal-day-name">Mon</span>
+              <span class="cal-day-name">Tue</span>
+              <span class="cal-day-name">Wed</span>
+              <span class="cal-day-name">Thu</span>
+              <span class="cal-day-name">Fri</span>
+              <span class="cal-day-name">Sat</span>
+
+              <span class="cal-cell muted">30</span>
+              <span class="cal-cell muted">31</span>
+              <span class="cal-cell">1</span>
+              <span class="cal-cell">2</span>
+              <span class="cal-cell">3</span>
+              <span class="cal-cell">4</span>
+              <span class="cal-cell">5</span>
+
+              <span class="cal-cell">6</span>
+              <span class="cal-cell">7</span>
+              <span class="cal-cell">8</span>
+              <span class="cal-cell">9</span>
+              <span class="cal-cell">10</span>
+              <span class="cal-cell">11</span>
+              <span class="cal-cell">12</span>
+
+              <span class="cal-cell">13</span>
+              <span class="cal-cell">14</span>
+              <span class="cal-cell">15</span>
+              <span class="cal-cell">16</span>
+              <span class="cal-cell today-pill">17</span>
+              <span class="cal-cell">18</span>
+              <span class="cal-cell">19</span>
+
+              <span class="cal-cell">20</span>
+              <span class="cal-cell">21</span>
+              <span class="cal-cell">22</span>
+              <span class="cal-cell">23</span>
+              <span class="cal-cell">24</span>
+              <span class="cal-cell">25</span>
+              <span class="cal-cell">26</span>
+
+              <span class="cal-cell">27</span>
+              <span class="cal-cell">28</span>
+              <span class="cal-cell">29</span>
+              <span class="cal-cell">30</span>
+              <span class="cal-cell muted">1</span>
+              <span class="cal-cell muted">2</span>
+              <span class="cal-cell muted">3</span>
+            </div>
+
+            <!-- Weekly Progress Populated Card (65%) -->
+            <div class="progress-glass-card">
+              <div class="gauge-wrapper">
+                <svg class="gauge-svg" viewBox="0 0 70 70">
+                  <defs>
+                    <linearGradient id="calProgressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#0ea5e9"/>
+                      <stop offset="50%" stop-color="#22d3ee"/>
+                      <stop offset="100%" stop-color="#38bdf8"/>
+                    </linearGradient>
+                  </defs>
+                  <circle class="gauge-bg" cx="35" cy="35" r="30"></circle>
+                  <circle class="gauge-fill active-65" cx="35" cy="35" r="30"></circle>
+                </svg>
+                <span class="gauge-pct-center">65%</span>
+              </div>
+              <div class="progress-text-block">
+                <h4 class="progress-title">Weekly Progress</h4>
+                <div class="progress-stats-breakdown">
+                  <div class="stat-row"><span class="dot-green"></span><span>13 Completed</span></div>
+                  <div class="stat-row"><span class="dot-blue"></span><span>6 In Progress</span></div>
+                  <div class="stat-row"><span class="dot-yellow"></span><span>7 Pending</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Today's Tasks Populated (Sep 17) -->
+            <div class="section-header-row">
+              <span class="section-title">Today's Tasks (Sep 17)</span>
+              <a href="#" class="view-all-link">View all &gt;</a>
+            </div>
+
+            <div class="tasks-list">
+              <div class="task-item-row done">
+                <div class="task-checkbox checked">✓</div>
+                <span class="task-name">College class (9:00 AM)</span>
+              </div>
+              <div class="task-item-row done">
+                <div class="task-checkbox checked">✓</div>
+                <span class="task-name">Work on PrintFlow backend</span>
+              </div>
+              <div class="task-item-row">
+                <div class="task-checkbox"></div>
+                <span class="task-name">Gym session (6:00 PM)</span>
+              </div>
+              <div class="task-item-row">
+                <div class="task-checkbox"></div>
+                <span class="task-name">Read 30 mins (9:30 PM)</span>
+              </div>
+            </div>
+
+            <!-- Upcoming Deadlines Populated -->
+            <div class="section-header-row">
+              <span class="section-title">Upcoming Deadlines</span>
+              <a href="#" class="view-all-link">View all &gt;</a>
+            </div>
+
+            <div class="deadlines-list">
+              <div class="deadline-item-row">
+                <div class="deadline-left">
+                  <span class="dot-yellow"></span>
+                  <span class="deadline-name">3rd Semester Fee Payment</span>
+                </div>
+                <span class="deadline-date">Sep 25</span>
+              </div>
+              <div class="deadline-item-row">
+                <div class="deadline-left">
+                  <span class="dot-blue"></span>
+                  <span class="deadline-name">Project Presentation</span>
+                </div>
+                <span class="deadline-date">Sep 28</span>
+              </div>
+              <div class="deadline-item-row">
+                <div class="deadline-left">
+                  <span class="dot-green"></span>
+                  <span class="deadline-name">Passport Verification</span>
+                </div>
+                <span class="deadline-date">Mar 16, 2027</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /storyboard-layout -->
+
+    <!-- Board Footer -->
+    <footer class="board-footer">
+      <div class="board-footer-left">
+        <span><span class="status-dot-green"></span>Dynamic State Synchronization</span>
+        <span>Calendar: Automated Priority Scheduling</span>
+      </div>
+      <div>VOZX AI Mobile Design System v2.4 • Confidential Presentation</div>
+    </footer>
+
+  </main>
+
+</body>
+</html>
+

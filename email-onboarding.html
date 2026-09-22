@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VOZX AI — Email Assistant Onboarding</title>
+  <meta name="description" content="Connect your email account to VOZX AI for intelligent email organization, summaries, and AI drafting.">
+  <link rel="stylesheet" href="email-onboarding.css">
+</head>
+<body>
+
+  <!-- Cosmic Ambient Background Particles & Energy Waves -->
+  <div class="ambient-cosmic-bg" aria-hidden="true">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+    <span class="particle p-1"></span>
+    <span class="particle p-2"></span>
+    <span class="particle p-3"></span>
+    <span class="particle p-4"></span>
+    <span class="particle p-5"></span>
+    <span class="particle p-6"></span>
+  </div>
+
+  <!-- Hardware Mobile Phone Viewport Frame -->
+  <main class="phone-frame" id="emailPhoneFrame">
+
+    <!-- Glowing Cyber Perimeter Border -->
+    <div class="screen-perimeter-border" aria-hidden="true"></div>
+
+    <!-- Sweeping Cosmic Plasma Arc Wave -->
+    <div class="sweeping-plasma-arc" aria-hidden="true"></div>
+
+    <!-- Phone Hardware Top Status Bar -->
+    <div class="phone-status-notch">
+      <span class="status-time">9:41</span>
+      <div class="status-right-icons">
+        <svg width="15" height="11" viewBox="0 0 16 12" fill="currentColor">
+          <path d="M1 9.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"/>
+        </svg>
+        <svg width="14" height="11" viewBox="0 0 16 12" fill="currentColor">
+          <path d="M8 2.5a8.9 8.9 0 016.4 2.7.75.75 0 01-.06 1.1l-6 5.5a.75.75 0 01-.98 0l-6-5.5a.75.75 0 01-.06-1.1A8.9 8.9 0 018 2.5z"/>
+        </svg>
+        <svg width="19" height="11" viewBox="0 0 24 12" fill="currentColor">
+          <rect x="1" y="1" width="19" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          <rect x="2.5" y="2.5" width="14" height="7" rx="1.8"/>
+          <path d="M22 4.5v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Multi-Screen Viewport Container -->
+    <div class="screens-viewport" id="screensViewport">
+
+      <!-- =================================================================
+           SCREEN 1 — LINK YOUR EMAIL (Exact Match to Reference Image)
+           ================================================================= -->
+      <section class="email-step-screen active" id="screen1LinkEmail" data-step="1">
+        
+        <!-- Header -->
+        <header class="email-top-header">
+          <button type="button" class="circle-back-btn" id="s1BackBtn" aria-label="Go back" title="Back to Dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+
+          <div class="brand-title-group">
+            <span class="brand-text">VOZX AI</span>
+            <span class="online-cyan-dot" aria-hidden="true"></span>
+          </div>
+
+          <div class="header-spacer"></div>
+        </header>
+
+        <!-- Hero Section with Animated 3D Energy Orbits -->
+        <div class="hero-email-stage">
+          <div class="email-orbit-system">
+            <!-- 3D Orbital Energy Rings -->
+            <div class="orbit-ring ring-1"></div>
+            <div class="orbit-ring ring-2"></div>
+            <div class="orbit-ring ring-3"></div>
+            <!-- Orbiting Energy Sparkles -->
+            <span class="orbit-sparkle sp-1"></span>
+            <span class="orbit-sparkle sp-2"></span>
+            <span class="orbit-sparkle sp-3"></span>
+            <span class="orbit-sparkle sp-4"></span>
+
+            <!-- Central Glowing Email Icon Box -->
+            <div class="central-email-icon-box">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="3"></rect>
+                <path d="M22 6l-10 7L2 6"></path>
+              </svg>
+            </div>
+          </div>
+
+          <span class="tracking-label">LINK YOUR EMAIL</span>
+          <h1 class="hero-title">
+            Let's connect<br>your <span class="gradient-email-word">email</span>
+          </h1>
+          <p class="hero-subtitle">
+            This helps us manage your emails, give you smart suggestions and keep you organized.
+          </p>
+        </div>
+
+        <!-- Glassmorphic Form Card -->
+        <div class="glassmorphic-email-card">
+          
+          <!-- Input Field: Email Address -->
+          <div class="input-block">
+            <label class="card-field-label" for="emailInput">Email Address</label>
+            <div class="glass-input-field" id="emailInputWrapper">
+              <span class="input-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                  <path d="M22 6l-10 7L2 6"></path>
+                </svg>
+              </span>
+              <input 
+                type="email" 
+                id="emailInput" 
+                class="card-text-input" 
+                placeholder="Enter your email address" 
+                value="varun.reddy@gmail.com"
+                autocomplete="email"
+              >
+            </div>
+          </div>
+
+          <!-- Choose Email Provider Row -->
+          <div class="providers-block">
+            <label class="card-field-label">Choose Your Email Provider</label>
+            <div class="providers-grid" role="radiogroup" aria-label="Email Providers">
+              
+              <!-- 1. Gmail (Active by default) -->
+              <button type="button" class="provider-card active" data-provider="Gmail" role="radio" aria-checked="true" title="Gmail">
+                <div class="provider-icon-wrapper">
+                  <svg width="22" height="18" viewBox="0 0 24 18" fill="none">
+                    <path d="M1.5 16.5V4.5C1.5 3.4 2.4 2.5 3.5 2.5H5.5L12 8L18.5 2.5H20.5C21.6 2.5 22.5 3.4 22.5 4.5V16.5C22.5 17.6 21.6 18.5 20.5 18.5H19V7.5L12 13L5 7.5V18.5H3.5C2.4 18.5 1.5 17.6 1.5 16.5Z" fill="#EA4335"/>
+                    <path d="M19 7.5V18.5H20.5C21.6 18.5 22.5 17.6 22.5 16.5V4.5L19 7.5Z" fill="#4285F4"/>
+                    <path d="M5 7.5L1.5 4.5V16.5C1.5 17.6 2.4 18.5 3.5 18.5H5V7.5Z" fill="#34A853"/>
+                    <path d="M19 4.5V7.5L12 13L5 7.5V4.5L12 10L19 4.5Z" fill="#EA4335"/>
+                    <path d="M18.5 2.5H20.5C21.6 2.5 22.5 3.4 22.5 4.5L19 7.5L12 2L18.5 2.5Z" fill="#FBBC05"/>
+                  </svg>
+                </div>
+                <span class="provider-name">Gmail</span>
+              </button>
+
+              <!-- 2. Outlook -->
+              <button type="button" class="provider-card" data-provider="Outlook" role="radio" aria-checked="false" title="Microsoft Outlook">
+                <div class="provider-icon-wrapper">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect x="2" y="4" width="20" height="16" rx="3" fill="#0078D4"/>
+                    <text x="12" y="16" font-family="'Space Grotesk', sans-serif" font-weight="bold" font-size="12" fill="#ffffff" text-anchor="middle">O</text>
+                  </svg>
+                </div>
+                <span class="provider-name">Outlook</span>
+              </button>
+
+              <!-- 3. Yahoo -->
+              <button type="button" class="provider-card" data-provider="Yahoo" role="radio" aria-checked="false" title="Yahoo Mail">
+                <div class="provider-icon-wrapper">
+                  <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="#6001D2" d="M2.5 4h4.2l3.8 8.5L14.3 4h4.2l-6 12.2V20H9v-3.8L2.5 4z"/>
+                    <circle cx="19.5" cy="18.5" r="2" fill="#6001D2"/>
+                  </svg>
+                </div>
+                <span class="provider-name">Yahoo</span>
+              </button>
+
+              <!-- 4. Other -->
+              <button type="button" class="provider-card" data-provider="Other" role="radio" aria-checked="false" title="IMAP / Other Mail">
+                <div class="provider-icon-wrapper">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e2e8f0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                    <path d="M22 6l-10 7L2 6"></path>
+                  </svg>
+                </div>
+                <span class="provider-name">Other</span>
+              </button>
+
+            </div>
+          </div>
+
+          <!-- Gradient Continue Button -->
+          <button type="button" class="gradient-continue-btn" id="continueBtn">
+            <span class="btn-ripple-layer"></span>
+            <span class="btn-icon-side">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+              </svg>
+            </span>
+            <span class="btn-divider-stroke"></span>
+            <span class="btn-label-text" id="continueBtnLabel">Continue</span>
+            <span class="btn-arrow-right">&rarr;</span>
+          </button>
+
+          <!-- Glowing OR Divider -->
+          <div class="glowing-or-divider">
+            <span class="divider-line"></span>
+            <span class="divider-badge">OR</span>
+            <span class="divider-line"></span>
+          </div>
+
+          <!-- Outline Scan QR Code Button -->
+          <button type="button" class="glass-qr-btn" id="scanQrBtn">
+            <svg class="qr-bracket-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+              <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+              <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+              <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+              <rect x="7" y="7" width="3" height="3"></rect>
+              <rect x="14" y="7" width="3" height="3"></rect>
+              <rect x="7" y="14" width="3" height="3"></rect>
+              <rect x="14" y="14" width="3" height="3"></rect>
+            </svg>
+            <span>Scan QR Code</span>
+          </button>
+
+        </div>
+
+        <!-- Footer Section -->
+        <footer class="email-footer-block">
+          <p class="footer-note-text">You can always connect your email later in settings.</p>
+          <button type="button" class="skip-link-btn" id="skipLinkBtn">Skip for Now</button>
+        </footer>
+
+      </section>
+
+      <!-- =================================================================
+           SCREEN 2 — CONNECTING EMAIL (Animated Circular Progress)
+           ================================================================= -->
+      <section class="email-step-screen" id="screen2Connecting" data-step="2">
+        <div class="connecting-stage">
+          
+          <!-- Glowing Animated Progress Ring -->
+          <div class="progress-ring-container">
+            <svg class="circular-progress-svg" viewBox="0 0 120 120">
+              <defs>
+                <linearGradient id="ringProgressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#0ea5e9"/>
+                  <stop offset="50%" stop-color="#22d3ee"/>
+                  <stop offset="100%" stop-color="#a855f7"/>
+                </linearGradient>
+              </defs>
+              <circle class="ring-bg-track" cx="60" cy="60" r="50"></circle>
+              <circle class="ring-stroke-bar" id="progressStrokeBar" cx="60" cy="60" r="50"></circle>
+            </svg>
+
+            <!-- Inner Floating Spinning Icon -->
+            <div class="inner-spinning-email">
+              <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="3"></rect>
+                <path d="M22 6l-10 7L2 6"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Progress Percentage Counter -->
+          <div class="progress-percent-label" id="progressPercentLabel">0%</div>
+
+          <h2 class="connecting-title" id="connectingTitle">Connecting your Gmail...</h2>
+          <p class="connecting-subtitle">Please wait while VOZX securely links your account and neural keys.</p>
+
+          <div class="connecting-security-badge">
+            <span>🔒</span>
+            <span>256-Bit Encrypted OAuth Pipeline</span>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =================================================================
+           SCREEN 3 — EMAIL CONNECTED SUCCESSFULLY (Green Checkmark Glow)
+           ================================================================= -->
+      <section class="email-step-screen" id="screen3Success" data-step="3">
+        <div class="success-stage">
+          
+          <!-- Neon Green Success Checkmark Badge -->
+          <div class="success-neon-circle">
+            <svg class="success-checkmark-svg" viewBox="0 0 52 52">
+              <circle class="success-circle-outline" cx="26" cy="26" r="23" fill="none"/>
+              <path class="success-check-path" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+          </div>
+
+          <span class="success-badge-pill">● Neural Sync Ready</span>
+
+          <h2 class="success-title">Email Connected Successfully!</h2>
+          <p class="success-subtitle">
+            VOZX can now organize your emails, summarize inboxes, draft replies, and notify important messages.
+          </p>
+
+          <div class="features-unlocked-card">
+            <div class="feature-item">
+              <span class="feat-dot"></span>
+              <span>AI Smart Inbox Summaries</span>
+            </div>
+            <div class="feature-item">
+              <span class="feat-dot"></span>
+              <span>1-Click Contextual Replies</span>
+            </div>
+            <div class="feature-item">
+              <span class="feat-dot"></span>
+              <span>Priority &amp; Deadline Extraction</span>
+            </div>
+          </div>
+
+          <button type="button" class="open-dashboard-btn" id="openEmailDashboardBtn">
+            <span>Open Email Assistant</span>
+            <span>&rarr;</span>
+          </button>
+
+          <div class="auto-redirect-note">Auto-opening in <span id="autoRedirectTimer">2</span>s...</div>
+
+        </div>
+      </section>
+
+      <!-- =================================================================
+           SCREEN 4 — EMAIL ASSISTANT DASHBOARD (Main Production Hub)
+           ================================================================= -->
+      <section class="email-step-screen" id="screen4Dashboard" data-step="4">
+        
+        <!-- Dashboard Top Header -->
+        <header class="dash-top-header">
+          <button type="button" class="circle-back-btn" id="dashBackBtn" title="Back to Main Home Dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+
+          <div class="brand-title-group">
+            <span class="brand-text">VOZX AI</span>
+            <span class="online-cyan-dot" aria-hidden="true"></span>
+          </div>
+
+          <div class="dash-header-actions">
+            <button type="button" class="dash-del-btn" id="dashDeleteAccountBtn" title="Delete & Unlink Email Account" aria-label="Delete Email Account">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              <span>Delete</span>
+            </button>
+            <div class="dash-profile-circle" id="dashProfileBtn" title="Connected: varun.reddy@gmail.com">
+              <span>VR</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- Scrollable Dashboard Content -->
+        <div class="dash-scroll-content">
+
+          <!-- Dashboard Title Banner -->
+          <div class="dash-heading-block">
+            <h1 class="dash-main-title">Email Assistant</h1>
+            <p class="dash-sub-title">Write, organize, and manage your emails with AI.</p>
+          </div>
+
+          <!-- Connected Accounts & Add Mail Bar -->
+          <div class="connected-accounts-bar" id="connectedAccountsBar">
+            <button type="button" class="active-account-badge" id="accountSwitcherTrigger" title="Switch or manage email accounts" aria-haspopup="dialog">
+              <span class="account-provider-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+              </span>
+              <span class="active-account-email" id="activeAccountEmailDisplay">varun.reddy@gmail.com</span>
+              <span class="account-status-dot" title="Account Synced"></span>
+              <svg class="account-switcher-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+
+            <div class="account-actions-group">
+              <button type="button" class="add-mail-pill-btn" id="addMailBtn" title="Connect another email address">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Add Mail</span>
+              </button>
+
+              <button type="button" class="del-mail-icon-btn" id="delMailIconBtn" title="Delete this email account" aria-label="Delete this email">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Category Tabs: Inbox, Important, Sent, Drafts -->
+          <div class="dash-category-tabs" role="tablist">
+            <button type="button" class="cat-tab-pill active" data-tab="inbox" role="tab" aria-selected="true">
+              <span>Inbox</span>
+              <span class="tab-badge">12</span>
+            </button>
+            <button type="button" class="cat-tab-pill" data-tab="important" role="tab" aria-selected="false">
+              <span>Important</span>
+              <span class="tab-badge">3</span>
+            </button>
+            <button type="button" class="cat-tab-pill" data-tab="sent" role="tab" aria-selected="false">
+              <span>Sent</span>
+            </button>
+            <button type="button" class="cat-tab-pill" data-tab="drafts" role="tab" aria-selected="false">
+              <span>Drafts</span>
+              <span class="tab-badge">2</span>
+            </button>
+          </div>
+
+          <!-- AI Compose Card -->
+          <div class="ai-compose-card" id="composeTriggerCard" title="Compose an AI Email">
+            <div class="compose-left">
+              <div class="sparkles-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2">
+                  <path d="M12 2l2.4 7.2L21.6 12l-7.2 2.4L12 21.6l-2.4-7.2L2.4 12l7.2-2.4z"/>
+                </svg>
+              </div>
+              <div class="compose-text">
+                <h3 class="compose-title">AI Compose</h3>
+                <p class="compose-desc">Write a professional email in seconds.</p>
+              </div>
+            </div>
+            <span class="compose-arrow">&rarr;</span>
+          </div>
+
+          <!-- Email Summary Card -->
+          <div class="email-summary-card">
+            <div class="summary-header">
+              <div class="summary-icon-pill">
+                <span>✉️</span>
+                <span>AI Inbox Synthesis</span>
+              </div>
+              <span class="summary-time">Just now</span>
+            </div>
+            <p class="summary-body">
+              You have <strong>12 unread emails</strong>, <strong>3 important messages</strong>, and <strong>2 meeting invitations</strong> today.
+            </p>
+            <button type="button" class="summary-details-btn" id="viewSummaryDetailsBtn">
+              <span>View Details</span>
+              <span>&rarr;</span>
+            </button>
+          </div>
+
+          <!-- Smart Reply Suggestions (Horizontal Chips) -->
+          <div class="smart-replies-section">
+            <div class="section-label-row">
+              <span class="section-title">💡 Smart Reply Suggestions</span>
+              <span class="section-hint">Tap to use</span>
+            </div>
+            <div class="replies-horizontal-scroll">
+              <button type="button" class="reply-chip">"I'll take a look."</button>
+              <button type="button" class="reply-chip">"Sounds good, let's do it."</button>
+              <button type="button" class="reply-chip">"I'm on it."</button>
+              <button type="button" class="reply-chip">"Can we reschedule?"</button>
+            </div>
+          </div>
+
+          <!-- Recent Emails Section (Dark Glass List) -->
+          <div class="recent-emails-section">
+            <div class="section-label-row">
+              <span class="section-title">Recent Emails</span>
+              <span class="section-counter">4 New</span>
+            </div>
+
+            <div class="emails-glass-list" id="emailsListContainer">
+              
+              <!-- Email 1 -->
+              <article class="email-glass-item unread" data-email-id="1">
+                <div class="email-item-header">
+                  <div class="sender-info">
+                    <div class="sender-avatar av-blue">UN</div>
+                    <div>
+                      <span class="sender-name">University Administration</span>
+                      <span class="sender-addr">admin@university.edu</span>
+                    </div>
+                  </div>
+                  <div class="email-meta">
+                    <span class="email-time">10:24 AM</span>
+                    <span class="unread-blue-dot" title="Unread"></span>
+                  </div>
+                </div>
+                <h4 class="email-subject">University Fee Reminder &bull; Semester 2</h4>
+                <p class="email-preview">Please find attached the schedule for semester registration and fee submission...</p>
+              </article>
+
+              <!-- Email 2 -->
+              <article class="email-glass-item unread" data-email-id="2">
+                <div class="email-item-header">
+                  <div class="sender-info">
+                    <div class="sender-avatar av-purple">PF</div>
+                    <div>
+                      <span class="sender-name">PrintFlow Client Team</span>
+                      <span class="sender-addr">client@printflow.design</span>
+                    </div>
+                  </div>
+                  <div class="email-meta">
+                    <span class="email-time">9:15 AM</span>
+                    <span class="unread-blue-dot" title="Unread"></span>
+                  </div>
+                </div>
+                <h4 class="email-subject">PrintFlow Client Inquiry: Production Milestone</h4>
+                <p class="email-preview">Our production team has completed sprint 3 review. We would like to sync on...</p>
+              </article>
+
+              <!-- Email 3 -->
+              <article class="email-glass-item" data-email-id="3">
+                <div class="email-item-header">
+                  <div class="sender-info">
+                    <div class="sender-avatar av-green">TM</div>
+                    <div>
+                      <span class="sender-name">Elena Rostova</span>
+                      <span class="sender-addr">elena@techcorp.io</span>
+                    </div>
+                  </div>
+                  <div class="email-meta">
+                    <span class="email-time">Yesterday</span>
+                  </div>
+                </div>
+                <h4 class="email-subject">Team Meeting Tomorrow: Architecture Review</h4>
+                <p class="email-preview">Hi Varun, let's connect at 11 AM to finalize the neural pipeline schema...</p>
+              </article>
+
+              <!-- Email 4 -->
+              <article class="email-glass-item" data-email-id="4">
+                <div class="email-item-header">
+                  <div class="sender-info">
+                    <div class="sender-avatar av-cyan">PU</div>
+                    <div>
+                      <span class="sender-name">Alex Chen</span>
+                      <span class="sender-addr">alex@startup.co</span>
+                    </div>
+                  </div>
+                  <div class="email-meta">
+                    <span class="email-time">Yesterday</span>
+                  </div>
+                </div>
+                <h4 class="email-subject">Project Update: Design System V2 Ready</h4>
+                <p class="email-preview">The new high-contrast dark cyberpunk UI components have been pushed to main...</p>
+              </article>
+
+            </div>
+          </div>
+
+        </div><!-- /dash-scroll-content -->
+
+        <!-- Bottom AI Input Bar -->
+        <div class="bottom-ai-bar-wrapper">
+          <div class="bottom-ai-bar">
+            <button type="button" class="bar-icon-btn" title="Attach file" id="attachBtn">📎</button>
+            <input type="text" class="bar-input" id="quickEmailInput" placeholder="Write your email with AI...">
+            <button type="button" class="bar-icon-btn" title="Voice dictation" id="voiceEmailBtn">🎙️</button>
+            <button type="button" class="bar-icon-btn" title="Insert emoji" id="emojiEmailBtn">😊</button>
+            <button type="button" class="bar-send-btn" title="Send with VOZX AI" id="sendEmailBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+    </div><!-- /screens-viewport -->
+
+  </main>
+
+  <!-- QR Scanner Glass Modal -->
+  <div class="glass-modal-backdrop hidden" id="qrScannerModal">
+    <div class="qr-modal-card">
+      <div class="modal-top-row">
+        <span class="modal-badge">📷 QR Instant Sync</span>
+        <button type="button" class="modal-close-btn" id="closeQrModal">✕</button>
+      </div>
+      <h3 class="modal-heading">Scan to Link Email</h3>
+      <p class="modal-sub">Scan this secure pairing code using your mobile authenticator or webmail app.</p>
+      
+      <div class="qr-target-box">
+        <div class="qr-laser-line"></div>
+        <div class="qr-corner tl"></div>
+        <div class="qr-corner tr"></div>
+        <div class="qr-corner bl"></div>
+        <div class="qr-corner br"></div>
+        <svg class="qr-code-svg" viewBox="0 0 100 100">
+          <rect width="100" height="100" fill="#0b1226"/>
+          <!-- Simplified high-contrast futuristic QR pattern -->
+          <rect x="10" y="10" width="25" height="25" fill="#22d3ee" rx="3"/>
+          <rect x="15" y="15" width="15" height="15" fill="#0b1226"/>
+          <rect x="18" y="18" width="9" height="9" fill="#22d3ee"/>
+
+          <rect x="65" y="10" width="25" height="25" fill="#22d3ee" rx="3"/>
+          <rect x="70" y="15" width="15" height="15" fill="#0b1226"/>
+          <rect x="73" y="18" width="9" height="9" fill="#22d3ee"/>
+
+          <rect x="10" y="65" width="25" height="25" fill="#22d3ee" rx="3"/>
+          <rect x="15" y="70" width="15" height="15" fill="#0b1226"/>
+          <rect x="18" y="73" width="9" height="9" fill="#22d3ee"/>
+
+          <rect x="42" y="12" width="6" height="6" fill="#38bdf8"/>
+          <rect x="52" y="18" width="6" height="6" fill="#c084fc"/>
+          <rect x="42" y="32" width="16" height="6" fill="#22d3ee"/>
+          <rect x="65" y="45" width="8" height="8" fill="#38bdf8"/>
+          <rect x="45" y="68" width="12" height="12" fill="#22d3ee"/>
+          <rect x="78" y="72" width="12" height="12" fill="#c084fc"/>
+        </svg>
+      </div>
+
+      <button type="button" class="simulate-qr-btn" id="simulateQrSuccessBtn">
+        <span>Simulate Instant Scan Success</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- AI Email Compose Modal -->
+  <div class="glass-modal-backdrop hidden" id="composeModal">
+    <div class="compose-modal-card">
+      <div class="modal-top-row">
+        <span class="modal-badge">✨ AI Neural Composer</span>
+        <button type="button" class="modal-close-btn" id="closeComposeModal">✕</button>
+      </div>
+      <h3 class="modal-heading">Draft New Email</h3>
+      
+      <div class="compose-form-group">
+        <input type="text" class="modal-input" id="composeRecipient" placeholder="To: recipient@example.com" value="alex@startup.co">
+        <input type="text" class="modal-input" id="composeSubject" placeholder="Subject: Project Milestone">
+        <textarea class="modal-textarea" id="composePrompt" rows="4" placeholder="Briefly describe what you want to say... (e.g. Confirm tomorrow's meeting at 11am and ask for the slide deck)"></textarea>
+      </div>
+
+      <div class="compose-actions-row">
+        <button type="button" class="ai-generate-draft-btn" id="generateDraftBtn">
+          <span>✨ Generate AI Draft</span>
+        </button>
+        <button type="button" class="send-draft-btn" id="sendDraftBtn">
+          <span>Send &rarr;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Account Switcher Modal -->
+  <div class="glass-modal-backdrop hidden" id="accountSwitcherModal" role="dialog" aria-modal="true" aria-labelledby="switcherModalTitle">
+    <div class="account-switcher-card">
+      <div class="modal-top-row">
+        <div class="switcher-header-title-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <span class="switcher-modal-heading" id="switcherModalTitle">Connected Accounts</span>
+        </div>
+        <button type="button" class="modal-close-btn" id="closeSwitcherModal">✕</button>
+      </div>
+
+      <p class="switcher-modal-sub">Switch active inbox or manage linked mailboxes.</p>
+
+      <div class="accounts-list-container" id="accountsListContainer">
+        <!-- Dynamically rendered accounts list -->
+      </div>
+
+      <button type="button" class="switcher-add-btn" id="switcherAddAccountBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>Add Another Email Account</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Delete Account Confirmation Modal -->
+  <div class="glass-modal-backdrop hidden" id="emailDeleteModal" role="dialog" aria-modal="true" aria-labelledby="emailDelModalTitle">
+    <div class="email-del-card">
+      <div class="email-del-icon-circle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          <line x1="10" y1="11" x2="10" y2="17"></line>
+          <line x1="14" y1="11" x2="14" y2="17"></line>
+        </svg>
+      </div>
+      <h3 class="email-del-title" id="emailDelModalTitle">Delete Email Account?</h3>
+      <p class="email-del-desc" id="emailDelModalDesc">Are you sure you want to delete and unlink <strong id="deleteAccountTargetEmail">varun.reddy@gmail.com</strong>? You will be returned to the Link Your Email setup screen.</p>
+      <div class="email-del-actions">
+        <button type="button" class="email-del-cancel-btn" id="emailDelCancelBtn">Cancel</button>
+        <button type="button" class="email-del-confirm-btn" id="emailDelConfirmBtn">Delete &amp; Unlink</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="feedback-toast" id="emailToast" role="alert" aria-live="polite"></div>
+
+  <script src="email-onboarding.js"></script>
+</body>
+</html>
+

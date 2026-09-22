@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOZX AI - New User Onboarding &amp; Registration Flow</title>
+  <link rel="stylesheet" href="onboarding.css">
+</head>
+<body>
+
+  <!-- Ambient Backdrop -->
+  <div class="board-ambient-bg"></div>
+  <div class="circuit-overlay"></div>
+
+  <!-- =================================================================
+       PRESENTATION HEADER & TOOLBAR
+       ================================================================= -->
+  <header class="presentation-header">
+    <h1 class="presentation-title">NEW USER ONBOARDING AND REGISTRATION FLOW</h1>
+    <div class="header-controls-bar">
+      <button id="btnInteractiveMode" class="mode-tab-btn active">
+        <span>📱</span> One-by-One Flow
+      </button>
+      <button id="btnBoardMode" class="mode-tab-btn">
+        <span>🖼️</span> 2x4 Overview Board
+      </button>
+      <a href="login.html" class="back-to-home-link" style="border-color: rgba(34, 211, 238, 0.5); background: rgba(34, 211, 238, 0.15);" title="Open Dedicated Standalone Login Page">
+        <span>🔐</span> Standalone Login
+      </a>
+      <a href="index.html" class="back-to-home-link" title="Go to Main VOZX AI Assistant">
+        <span>⚡</span> Go to Home App
+      </a>
+    </div>
+  </header>
+
+  <!-- =================================================================
+       MODE A: 2x4 PRESENTATION BOARD LAYOUT
+       ================================================================= -->
+  <main id="boardPresentationLayout" class="board-presentation-layout hidden">
+
+    <div class="board-grid-wrapper">
+
+      <!-- ROW 1: SCREENS 1 TO 4 -->
+      <div class="board-row">
+
+        <!-- 1. Splash Screen -->
+        <div class="screen-card-unit" data-step-index="1">
+          <div class="mockup-phone-frame">
+            <div class="phone-top-notch">
+              <span>9:41</span>
+              <div class="notch-pill"></div>
+              <div class="notch-status-icons">
+                <span>📶</span><span>🔋</span>
+              </div>
+            </div>
+
+            <div class="phone-canvas">
+              <div class="splash-screen-body">
+                <div class="splash-energy-bg"></div>
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                  <!-- Metallic 3D "V" Logo -->
+                  <div class="metallic-v-logo-wrapper">
+                    <svg class="metallic-v-svg" viewBox="0 0 100 100" fill="none">
+                      <defs>
+                        <linearGradient id="v-grad-left" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#ffffff"/>
+                          <stop offset="40%" stop-color="#38bdf8"/>
+                          <stop offset="100%" stop-color="#0284c7"/>
+                        </linearGradient>
+                        <linearGradient id="v-grad-right" x1="100%" y1="0%" x2="0%" y2="100%">
+                          <stop offset="0%" stop-color="#ffffff"/>
+                          <stop offset="40%" stop-color="#c084fc"/>
+                          <stop offset="100%" stop-color="#1e3a8a"/>
+                        </linearGradient>
+                      </defs>
+                      <path d="M12 20L45 84L55 84L28 20Z" fill="url(#v-grad-left)"/>
+                      <path d="M88 20L55 84L45 84L72 20Z" fill="url(#v-grad-right)"/>
+                      <path d="M28 20L50 68L72 20L55 20L50 32L45 20Z" fill="#ffffff" opacity="0.85"/>
+                    </svg>
+                    <h2 class="brand-vozx-title">VOZX</h2>
+                    <span class="brand-vozx-sub">YOUR AI PERSONAL ASSISTANT</span>
+                  </div>
+                </div>
+
+                <div class="splash-footer-box">
+                  <div class="splash-tagline">Smarter Today. Bigger Tomorrow.</div>
+                  <div class="splash-loading-track">
+                    <div class="splash-loading-bar"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <span class="screen-unit-caption">1. Splash Screen</span>
+          <svg class="flow-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </div>
+
+        <!-- 2. Welcome Screen -->
+        <div class="screen-card-unit" data-step-index="2">
+          <div class="mockup-phone-frame">
+            <div class="phone-top-notch">
+              <span>9:41</span>
+              <div class="notch-pill"></div>
+              <div class="notch-status-icons">
+                <span>📶</span><span>🔋</span>
+              </div>
+            </div>
+
+            <div class="phone-canvas welcome-canvas-target">
+              <!-- 1. Hero 3D Robot / Cyborg Visual Card -->
+              <div class="welcome-robot-card">
+                <img src="assets/robot_cyborg_hero.png" alt="VOZX AI Cyborg Neural Interface" class="welcome-robot-img" />
+              </div>
+
+              <!-- 2. Typography Heading & Subtitle -->
+              <div class="welcome-heading-block">
+                <h3 class="welcome-main-title">Meet VOZX AI</h3>
+                <p class="welcome-sub-desc">Your all-in-one AI assistant to boost efficiency, organize tasks, and spark intelligence.</p>
+              </div>
+
+              <!-- 3. Features Highlight List -->
+              <div class="welcome-features-list">
+                <div class="welcome-feature-item">
+                  <div class="welcome-feature-icon-box">
+                    <img src="assets/icon_smart_automations.png" alt="Smart Automations" class="welcome-feature-icon-img" />
+                  </div>
+                  <div class="welcome-feature-text">
+                    <div class="feature-title">Smart Automations</div>
+                    <div class="feature-subtitle">Effortless workflow orchestration</div>
+                  </div>
+                </div>
+
+                <div class="welcome-feature-item">
+                  <div class="welcome-feature-icon-box">
+                    <img src="assets/icon_neural_voice.png" alt="Neural Voice &amp; Chat" class="welcome-feature-icon-img" />
+                  </div>
+                  <div class="welcome-feature-text">
+                    <div class="feature-title">Neural Voice &amp; Chat</div>
+                    <div class="feature-subtitle">Real-time vocal intelligence</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 4. Primary "Get Started →" Button with Radar Rings & Diamond Sparkle -->
+              <div class="get-started-btn-wrapper">
+                <div class="btn-radar-ring r1"></div>
+                <div class="btn-radar-ring r2"></div>
+                <button class="cyan-action-btn get-started-primary-btn" aria-label="Get Started">
+                  <span class="btn-text">Get Started &rarr;</span>
+                  <span class="btn-sparkle-wrap">
+                    <svg class="btn-sparkle-svg" width="22" height="22" viewBox="0 0 24 24" fill="#cffafe">
+                      <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z"/>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+
+              <!-- 5. Bottom Sign In Auth Link -->
+              <div class="bottom-auth-link">
+                Already have an account? <span class="link-accent">Sign In</span>
+              </div>
+            </div>
+          </div>
+          <span class="screen-unit-caption">2. Welcome Screen</span>
+          <svg class="flow-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </div>
+
+        <!-- 3. Sign Up Screen -->
+        <div class="screen-card-unit" data-step-index="3">
+          <div class="mockup-phone-frame">
+            <div class="phone-top-notch">
+              <span>9:41</span>
+              <div class="notch-pill"></div>
+              <div class="notch-status-icons">
+                <span>📶</span><span>🔋</span>
+              </div>
+            </div>
+
+            <div class="phone-canvas">
+              <div class="mock-header-row">
+                <button class="mock-back-btn">&larr;</button>
+                <div style="display: flex; align-items: center; justify-content: center;">
+                  <svg width="26" height="26" viewBox="0 0 100 100" fill="none" style="filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.7));">
+                    <defs>
+                      <linearGradient id="v-grad-left-s3" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ffffff"/>
+                        <stop offset="40%" stop-color="#38bdf8"/>
+                        <stop offset="100%" stop-color="#0284c7"/>
+                      </linearGradient>
+                      <linearGradient id="v-grad-right-s3" x1="100%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#ffffff"/>
+                        <stop offset="40%" stop-color="#c084fc"/>
+                        <stop offset="100%" stop-color="#1e3a8a"/>
+                      </linearGradient>
+                    </defs>
+                    <path d="M12 20L45 84L55 84L28 20Z" fill="url(#v-grad-left-s3)"/>
+                    <path d="M88 20L55 84L45 84L72 20Z" fill="url(#v-grad-right-s3)"/>
+                    <path d="M28 20L50 68L72 20L55 20L50 32L45 20Z" fill="#ffffff" opacity="0.85"/>
+                  </svg>
+                </div>
+                <span style="width: 28px;"></span>
+              </div>
+
+              <div class="form-title-block">
+                <h3 class="form-main-title">Create Your Account</h3>
+                <p class="form-sub-title">Join VOZX and unlock your AI-powered productivity</p>
+              </div>
+
+              <form class="glass-inputs-group" id="boardSignupForm" onsubmit="return false;" novalidate>
+                <div class="glass-input-field" id="s3FieldFullNameWrap">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <input type="text" id="s3InputFullName" placeholder="Full Name" value="Varun Reddy">
+                </div>
+                <div class="inline-err-text" id="s3ErrFullName"></div>
+
+                <div class="glass-input-field" id="s3FieldEmailWrap">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                    <path d="M22 6l-10 7L2 6"></path>
+                  </svg>
+                  <input type="email" id="s3InputEmail" placeholder="Email Address" value="varun.reddy@gmail.com">
+                </div>
+                <div class="inline-err-text" id="s3ErrEmail"></div>
+
+                <div class="glass-input-field" id="s3FieldPassWrap">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  <input type="password" id="s3InputPassword" placeholder="Password (min. 8 chars)" value="VozxAI#2026">
+                </div>
+                <div class="inline-err-text" id="s3ErrPassword"></div>
+
+                <div class="glass-input-field" id="s3FieldConfirmWrap">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  <input type="password" id="s3InputConfirm" placeholder="Confirm Password" value="VozxAI#2026">
+                </div>
+                <div class="inline-err-text" id="s3ErrConfirm"></div>
+
+                <button type="submit" class="cyan-action-btn" id="s3CreateAccountBtn" style="margin-top: 4px;">
+                  <span id="s3BtnLabel">Create Account</span>
+                  <span>&rarr;</span>
+                </button>
+              </form>
+
+              <div class="divider-text-row">or continue with</div>
+
+              <div class="social-login-row">
+                <div class="social-btn" title="Google">
+                  <svg width="18" height="18" viewBox="0 0 24 24">
+                    <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z"/>
+                    <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/>
+                    <path fill="#FBBC05" d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 10.6 0 12s.6 2.7 1.6 4.7l3.7-1.9z"/>
+                    <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16c1.9 3.7 5.8 7 10.4 7z"/>
+                  </svg>
+                </div>
+                <div class="social-btn" title="Apple">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.62-.75 1.04-1.8 0.92-2.85-.9.04-1.99.6-2.63 1.35-.57.65-.98 1.7-0.85 2.73.99.08 2.01-.52 2.56-1.23z"/>
+                  </svg>
+                </div>
+                <div class="social-btn" title="Microsoft">
+                  <svg width="18" height="18" viewBox="0 0 24 24">
+                    <rect x="1" y="1" width="10" height="10" fill="#F25022"/>
+                    <rect x="13" y="1" width="10" height="10" fill="#7FBA00"/>
+                    <rect x="1" y="13" width="10" height="10" fill="#00A4EF"/>
+                    <rect x="13" y="13" width="10" height="10" fill="#FFB900"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="bottom-auth-link">
+                Already have an account? <span class="link-accent">Sign In</span>
+              </div>
+            </div>
+          </div>
+          <span class="screen-unit-caption">3. Sign Up Screen</span>
+          <svg class="flow-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </div>
+
+        <!-- 4. Login Screen -->
+        <div class="screen-card-unit" data-step-index="4">
+          <div class="mockup-phone-frame">
+            <div class="phone-top-notch">
+              <span>9:41</span>
+              <div class="notch-pill"></div>
+              <div class="notch-status-icons">
+                <span>📶</span><span>🔋</span>
+              </div>
+            </div>
+
+            <div class="phone-canvas">
+              <div class="mock-header-row">
+                <button class="mock-back-btn">&larr;</button>
+                <div style="display: flex; align-items: center; justify-content: center;">
+                  <svg width="26" height="26" viewBox="0 0 100 100" fill="none" style="filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.7));">
+                    <defs>
+                      <linearGradient id="v-grad-left-s4" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ffffff"/>
+                        <stop offset="40%" stop-color="#38bdf8"/>
+                        <stop offset="100%" stop-color="#0284c7"/>
+                      </linearGradient>
+                      <linearGradient id="v-grad-right-s4" x1="100%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#ffffff"/>
+                        <stop offset="40%" stop-color="#c084fc"/>
+                        <stop offset="100%" stop-color="#1e3a8a"/>
+                      </linearGradient>
+                    </defs>
+                    <path d="M12 20L45 84L55 84L28 20Z" fill="url(#v-grad-left-s4)"/>
+                    <path d="M88 20L55 84L45 84L72 20Z" fill="url(#v-grad-right-s4)"/>
+                    <path d="M28 20L50 68L72 20L55 20L50 32L45 20Z" fill="#ffffff" opacity="0.85"/>
+                  </svg>
+                </div>
+                <span style="width: 28px;"></span>
+              </div>
+
+              <!-- Profile Avatar Circle with Pulse Ring -->
+              <div style="display: flex; flex-direction: column; align-items: center; margin: 4px 0 10px;">
+                <div style="width: 52px; height: 52px; border-radius: 50%; padding: 2px; background: linear-gradient(135deg, #22d3ee, #0284c7); box-shadow: 0 0 16px rgba(34, 211, 238, 0.5); display: flex; align-items: center; justify-content: center;">
+                  <div style="width: 100%; height: 100%; border-radius: 50%; background: #0b1224; display: flex; align-items: center; justify-content: center; color: #22d3ee; font-weight: 700; font-size: 16px;">
+                    VR
+                  </div>
+                </div>
+                <span style="margin-top: 4px; font-size: 9.5px; color: #38bdf8; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 999px; padding: 1px 7px;">AI Ready</span>
+              </div>
+
+              <div class="form-title-block">
+                <h3 class="form-main-title">Welcome Back</h3>
+                <p class="form-sub-title">Sign in to continue with your AI-powered personal assistant.</p>
+              </div>
+
+              <div class="glass-inputs-group">
+                <div class="glass-input-field">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                    <path d="M22 6l-10 7L2 6"></path>
+                  </svg>
+                  <input type="email" placeholder="Email Address" value="varun.reddy@gmail.com">
+                </div>
+
+                <div class="glass-input-field">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  <input type="password" placeholder="Password" value="••••••••••••">
+                </div>
+              </div>
+
+              <div class="inline-options-row">
+                <label class="remember-checkbox">
+                  <input type="checkbox" checked style="accent-color: #38bdf8;">
+                  <span>Remember me</span>
+                </label>
+                <a href="login.html" style="color: #38bdf8; text-decoration: none; font-size: 11px;">Forgot password?</a>
+              </div>
+
+              <a href="login.html" class="cyan-action-btn" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                <span>Sign In</span>
+                <span>&rarr;</span>
+              </a>
+
+              <div class="divider-text-row">or continue with</div>
+
+              <div class="social-login-row">
+                <div class="social-btn" title="Google"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 10.6 0 12s.6 2.7 1.6 4.7l3.7-1.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16c1.9 3.7 5.8 7 10.4 7z"/></svg></div>
+                <div class="social-btn" title="Apple"><svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.62-.75 1.04-1.8 0.92-2.85-.9.04-1.99.6-2.63 1.35-.57.65-.98 1.7-0.85 2.73.99.08 2.01-.52 2.56-1.23z"/></svg></div>
+                <div class="social-btn" title="Microsoft"><svg width="18" height="18" viewBox="0 0 24 24"><rect x="1" y="1" width="10" height="10" fill="#F25022"/><rect x="13" y="1" width="10" height="10" fill="#7FBA00"/><rect x="1" y="13" width="10" height="10" fill="#00A4EF"/><rect x="13" y="13" width="10" height="10" fill="#FFB900"/></svg></div>
+              </div>
+
+              <div class="bottom-auth-link">
+                Don't have an account? <span class="link-accent">Sign Up</span>
+              </div>
+            </div>
+          </div>
+          <span class="screen-unit-caption">4. Login Screen</span>
+        </div>
+
+      </div><!-- /board-row 1 -->
+
+      <!-- Serpentine Flow Connector from Screen 4 down and across to Screen 5 -->
+      <svg id="serpentineConnectorSvg" class="serpentine-flow-svg" fill="none">
+        <defs>
+          <marker id="arrow-head-down" viewBox="0 0 10 10" refX="5" refY="8" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <polyline points="2,2 5,7 8,2" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+        <path id="serpentinePath" d="" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-head-down)" filter="drop-shadow(0 0 6px rgba(56, 189, 248, 0.7))"/>
+      </svg>
+
+      <!-- ROW 2: SCREENS 5 TO 8 -->
+      <div class="board-row">
+
+        <!-- 5. Email Verification -->
+        <div class="screen-card-unit" data-step-index="5">
+          <div class="mockup-phone-frame">
+            <div class="phone-top-notch">
+              <span>9:41</span>
+              <div class="notch-pill"></div>
+              <div class="notch-status-icons">
+                <span>📶</span><span>🔋</span>
+              </div>
+            </div>
+
+            <div class="phone-canvas">
+              <div class="mock-header-row">
+                <button class="mock-back-btn">&larr;</button>
+                <span></span>
+                <span style="width: 28px;"></span>
+              </div>
+
+              <div class="verify-screen-body">
+                <div class="envelope-visual-box">
+                  <svg class="envelope-icon-big" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="3"></rect>
+                    <path d="M22 7l-10 7L2 7"></path>
+                  </svg>
+                  <div class="envelope-badge-check">✓</div>
+                </div>
+
+                <h3 style="font-size: 19px; font-weight: 800; color: #ffffff; margin-bottom: 8px;">Verify Your Email</h3>
+                <p style="font-size: 11.5px; color: #94a3b8; line-height: 1.5; margin-bottom: 8px;">
+                  We've sent a verification link to<br>
+                  <strong style="color: #ffffff;">varun***@gmail.com</strong>
+                </p>
+                <p style="font-size: 10.5px; color: #64748b; line-height: 1.45;">
+                  Please check your inbox and click the link to verify your account.
+                </p>
+
+                <button class="outlined-glass-btn">
+                  <span>✉️</span>
+                  <span>Open Email App</span>
+                </button>
+
+                <div style="font-size: 10.5px; color: #64748b; margin-top: 10px;">
+                  Didn't receive the email?<br>
+                  <span style="color: #38bdf8; font-weight: 600; cursor: pointer;">Resend in 00:45</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <span class="screen-unit-caption">5. Email Verification</span>
+          <svg class="flow-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </div>
+
+        <!-- 6. Profile Setup -->
+        <div class="screen-card-unit" data-step-index="6">
+          <div class="mockup-phone-frame">
+            <div class="phone-top-notch">
+              <span>9:41</span>
+              <div class="notch-pill"></div>
+              <div class="notch-status-icons">
+                <span>📶</span><span>🔋</span>
+              </div>
+            </div>
+
+            <div class="phone-canvas">
+              <div class="mock-header-row">
+                <button class="mock-back-btn">&larr;</button>
+                <span></span>
+                <span style="width: 28px;"></span>
+              </div>
+
+              <div class="form-title-block">
+                <h3 class="form-main-title">Setup Your Profile</h3>
+                <p class="form-sub-title">Help us personalize your experience</p>
+              </div>
+
+              <div class="avatar-uploader-center">
+                <div class="avatar-circle-box" title="Click to upload profile picture">
+                  <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.8">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <div class="avatar-cam-badge">📷</div>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px;">
+                <div>
+                  <label style="font-size: 10px; color: #64748b; font-weight: 600; display: block; margin-bottom: 4px;">Display Name</label>
+                  <div class="glass-input-field">
+                    <input type="text" value="Varun Reddy">
+                  </div>
+                </div>
+
+                <div>
+                  <label style="font-size: 10px; color: #64748b; font-weight: 600; display: block; margin-bottom: 4px;">Current Role</label>
+                  <div class="glass-input-field">
+                    <select style="width: 100%; background: transparent; border: none; outline: none; color: #ffffff; font-size: 12px;">
+                      <option style="background: #0b1329;" selected>Student</option>
+                      <option style="background: #0b1329;">Developer / Engineer</option>
+                      <option style="background: #0b1329;">Founder / Entrepreneur</option>
+                      <option style="background: #0b1329;">Designer</option>
+                      <option style="background: #0b1329;">Other</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <label style="font-size: 10.5px; color: #94a3b8; font-weight: 600;">Interests (Select at least 2)</label>
+              <div class="interest-pills-wrap">
+                <button class="interest-pill selected">AI</button>
+                <button class="interest-pill selected">Cars</button>
+                <button class="interest-pill">Fitness</button>
+                <button class="interest-pill selected">Tech</button>
+                <button class="interest-pill">Business</button>
+                <button class="interest-pill">Others</button>
+              </div>
+
+              <button class="cyan-action-btn">
+                <span>Continue</span>
+                <span>&rarr;</span>
+              </button>
+            </div>
+          </div>
+          <span class="screen-unit-caption">6. Profile Setup</span>
+          <svg class="flow-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </div>
+
+        <!-- 7. Choose Preferences -->
+        <div class="screen-card-unit" data-step-index="7">
+          <div class="mockup-phone-frame">
+            <div class="phone-top-notch">
+              <span>9:41</span>
+              <div class="notch-pill"></div>
+              <div class="notch-status-icons">
+                <span>📶</span><span>🔋</span>
+              </div>
+            </div>
+
+            <div class="phone-canvas">
+              <div class="mock-header-row">
+                <button class="mock-back-btn">&larr;</button>
+                <span></span>
+                <span style="width: 28px;"></span>
+              </div>
+
+              <div class="form-title-block">
+                <h3 class="form-main-title">What are you mainly here for?</h3>
+                <p class="form-sub-title">Select the features you want to use</p>
+              </div>
+
+              <!-- 2x3 Grid of Feature Cards -->
+              <div class="pref-grid-2x3">
+                <div class="pref-card selected">
+                  <span class="pref-card-radio"></span>
+                  <div class="pref-card-icon">🎓</div>
+                  <div class="pref-card-name">Study &amp; Learning</div>
+                </div>
+
+                <div class="pref-card selected">
+                  <span class="pref-card-radio"></span>
+                  <div class="pref-card-icon">💼</div>
+                  <div class="pref-card-name">Work &amp; Productivity</div>
+                </div>
+
+                <div class="pref-card">
+                  <span class="pref-card-radio"></span>
+                  <div class="pref-card-icon">💚</div>
+                  <div class="pref-card-name">Health &amp; Fitness</div>
+                </div>
+
+                <div class="pref-card selected">
+                  <span class="pref-card-radio"></span>
+                  <div class="pref-card-icon">🚀</div>
+                  <div class="pref-card-name">Startup &amp; Business</div>
+                </div>
+
+                <div class="pref-card selected">
+                  <span class="pref-card-radio"></span>
+                  <div class="pref-card-icon">🏎️</div>
+                  <div class="pref-card-name">Car &amp; Automotive</div>
+                </div>
+
+                <div class="pref-card">
+                  <span class="pref-card-radio"></span>
+                  <div class="pref-card-icon">✨</div>
+                  <div class="pref-card-name">Personal Assistant</div>
+                </div>
+              </div>
+
+              <button class="cyan-action-btn">
+                <span>Continue</span>
+                <span>&rarr;</span>
+              </button>
+            </div>
+          </div>
+          <span class="screen-unit-caption">7. Choose Preferences</span>
+          <svg class="flow-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </div>
+
+        <!-- 8. All Set! -->
+        <div class="screen-card-unit" data-step-index="8">
+          <div class="mockup-phone-frame">
+            <div class="phone-top-notch">
+              <span>9:41</span>
+              <div class="notch-pill"></div>
+              <div class="notch-status-icons">
+                <span>📶</span><span>🔋</span>
+              </div>
+            </div>
+
+            <div class="phone-canvas">
+              <div class="allset-body">
+                <div>
+                  <div class="checkmark-pulsing-wrapper">
+                    <div class="checkmark-circle-glow">
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="3">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </div>
+                  </div>
+
+                  <h3 style="font-size: 21px; font-weight: 800; color: #ffffff; margin-bottom: 4px;">You're All Set!</h3>
+                  <p style="font-size: 11.5px; color: #94a3b8; line-height: 1.45;">
+                    Welcome to VOZX.<br>Your AI journey begins now.
+                  </p>
+                </div>
+
+                <!-- Promotional Card -->
+                <div class="allset-promo-card">
+                  <svg width="40" height="40" viewBox="0 0 100 100" fill="none" style="margin-bottom: 6px;">
+                    <path d="M12 20L45 84L55 84L28 20Z" fill="url(#v-grad-left)"/>
+                    <path d="M88 20L55 84L45 84L72 20Z" fill="url(#v-grad-right)"/>
+                  </svg>
+                  <h4 style="font-size: 14px; font-weight: 800; color: #ffffff; letter-spacing: 1.2px; margin-bottom: 2px;">VOZX</h4>
+                  <span style="font-size: 9.5px; color: #94a3b8; letter-spacing: 0.5px;">Smarter Today, Bigger Tomorrow</span>
+                </div>
+
+                <a href="index.html" class="cyan-action-btn">
+                  <span>Go to Home</span>
+                  <span>&rarr;</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <span class="screen-unit-caption">8. All Set!</span>
+        </div>
+
+      </div><!-- /board-row 2 -->
+
+    </div><!-- /board-grid-wrapper -->
+
+    <!-- Summary Presentation Card at Bottom -->
+    <div class="bottom-presentation-summary">
+      A comprehensive visualization of the new user journey for the VOZX AI personal assistant, from initial splash screen through registration, verification, profile personalization, and preference selection, to the final confirmation and app entry.
+    </div>
+
+  </main>
+
+  <!-- =================================================================
+       MODE B: INTERACTIVE WALKTHROUGH MODE (LIVE PHONE FRAME)
+       ================================================================= -->
+  <main id="interactiveFlowLayout" class="interactive-flow-layout active">
+    <!-- Stepper indicator dots (1 to 8) -->
+    <div class="step-stepper-bar" id="stepStepperBar"></div>
+
+    <!-- Active focused phone frame -->
+    <div class="mockup-phone-frame interactive-single-phone" id="interactivePhoneFrame">
+      <div class="phone-top-notch">
+        <span>9:41</span>
+        <div class="notch-pill"></div>
+        <div class="notch-status-icons">
+          <span>📶</span><span>🔋</span>
+        </div>
+      </div>
+      <div class="phone-canvas" id="interactiveCanvas">
+        <!-- Live step content injected dynamically -->
+      </div>
+    </div>
+
+    <!-- Step Navigation Controls -->
+    <div class="interactive-nav-controls">
+      <button id="prevStepBtn" class="step-nav-btn" title="Previous Screen">
+        <span>&larr;</span> Prev
+      </button>
+      <span id="stepCounterLabel" class="step-counter-label">Screen 1 of 8: Splash Screen</span>
+      <button id="nextStepBtn" class="step-nav-btn" title="Next Screen">
+        Next <span>&rarr;</span>
+      </button>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseClient.js"></script>
+  <script src="onboarding.js"></script>
+</body>
+</html>
+

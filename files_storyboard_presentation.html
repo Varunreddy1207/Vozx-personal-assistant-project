@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOZX AI — Files Flow Storyboard Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #030611;
+      --bg-board: #050a18;
+      --cyan-neon: #22d3ee;
+      --cyan-glow: rgba(34, 211, 238, 0.45);
+      --purple-neon: #c084fc;
+      --blue-electric: #0ea5e9;
+      --grid-line: rgba(34, 211, 238, 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Futuristic Grid & Glow Backdrop */
+    .grid-backdrop {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: 
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 36px 36px;
+      z-index: 0;
+    }
+
+    .ambient-glow-1 {
+      position: fixed;
+      top: -15%;
+      left: 20%;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(34, 211, 238, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-glow-2 {
+      position: fixed;
+      bottom: -15%;
+      right: 15%;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Presentation Board Master Container */
+    .presentation-board {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1340px;
+      background: rgba(6, 12, 28, 0.92);
+      border: 1.5px solid rgba(34, 211, 238, 0.35);
+      border-radius: 28px;
+      padding: 36px 40px 44px;
+      box-shadow: 
+        0 0 50px rgba(0, 0, 0, 0.9),
+        0 0 35px rgba(34, 211, 238, 0.15),
+        inset 0 0 30px rgba(34, 211, 238, 0.04);
+      backdrop-filter: blur(24px);
+    }
+
+    /* Board Top Brand Header */
+    .board-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(34, 211, 238, 0.18);
+      padding-bottom: 20px;
+      margin-bottom: 32px;
+    }
+
+    .board-title-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo-pill {
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(14, 165, 233, 0.1));
+      border: 1px solid rgba(34, 211, 238, 0.5);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      color: #38bdf8;
+      letter-spacing: 1.5px;
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.25);
+    }
+
+    .board-headline {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: #ffffff;
+    }
+
+    .board-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94a3b8;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    /* Storyboard 3-Column Grid: Left Phone, Center Transition, Right Phone */
+    .storyboard-layout {
+      display: grid;
+      grid-template-columns: 410px 1fr 410px;
+      gap: 24px;
+      align-items: center;
+    }
+
+    /* Panel Column */
+    .panel-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Panel Header Label */
+    .panel-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 14px;
+      padding: 6px 16px;
+      border-radius: 999px;
+    }
+
+    .panel-label.empty-label {
+      color: #38bdf8;
+      background: rgba(34, 211, 238, 0.08);
+      border: 1px solid rgba(34, 211, 238, 0.3);
+      box-shadow: 0 0 16px rgba(34, 211, 238, 0.2);
+    }
+
+    .panel-label.populated-label {
+      color: #c084fc;
+      background: rgba(168, 85, 247, 0.08);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.2);
+    }
+
+    /* Phone Device Mockup Container */
+    .phone-container {
+      width: 100%;
+      height: 840px;
+      background: #050816;
+      border: 1.8px solid rgba(34, 211, 238, 0.42);
+      border-radius: 42px;
+      padding: 14px 22px 24px;
+      box-shadow: 
+        0 0 35px rgba(34, 211, 238, 0.18),
+        0 20px 50px rgba(0, 0, 0, 0.8),
+        inset 0 0 20px rgba(34, 211, 238, 0.05);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Phone Subtle Grid overlay */
+    .phone-container::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(34, 211, 238, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(34, 211, 238, 0.035) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .phone-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .phone-inner::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Status Bar */
+    .phone-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+      padding: 2px 6px 12px;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Screen Top Header */
+    .screen-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .circle-back {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(34, 211, 238, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.2);
+    }
+
+    .brand-center {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 1px;
+    }
+
+    .cyan-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22d3ee;
+      box-shadow: 0 0 10px #22d3ee;
+    }
+
+    .header-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .synced-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+
+    .profile-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+    }
+
+    /* Screen Title Banner */
+    .title-banner {
+      margin-bottom: 16px;
+    }
+
+    .main-screen-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 2px;
+      letter-spacing: -0.4px;
+    }
+
+    .main-screen-subtitle {
+      font-size: 12.5px;
+      color: #94a3b8;
+      font-weight: 400;
+    }
+
+    /* Storage Usage Card */
+    .storage-card {
+      background: rgba(11, 18, 38, 0.75);
+      border: 1.2px solid rgba(34, 211, 238, 0.28);
+      border-radius: 18px;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .storage-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .storage-icon-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .storage-folder-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: rgba(234, 179, 8, 0.15);
+      border: 1px solid rgba(234, 179, 8, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #eab308;
+      font-size: 15px;
+    }
+
+    .storage-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+
+    .storage-counter {
+      font-size: 12px;
+      font-weight: 600;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .storage-pct {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .storage-track {
+      width: 100%;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .storage-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #0ea5e9, #22d3ee);
+      box-shadow: 0 0 10px rgba(34, 211, 238, 0.7);
+      transition: width 0.3s ease;
+    }
+
+    /* Section Headers */
+    .section-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .view-all-link {
+      font-size: 11.5px;
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* -------------------------------------------------------------
+       EMPTY STATE CARDS (Panel 1)
+       ------------------------------------------------------------- */
+    .empty-glass-card {
+      background: rgba(11, 18, 38, 0.72);
+      border: 1.2px solid rgba(34, 211, 238, 0.28);
+      border-radius: 20px;
+      padding: 28px 18px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .empty-card-icon {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 18px rgba(34, 211, 238, 0.55));
+    }
+
+    .empty-card-heading {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .empty-card-sub {
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.4;
+      max-width: 250px;
+      margin-bottom: 14px;
+    }
+
+    .empty-action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(14, 165, 233, 0.08);
+      border: 1.2px solid rgba(34, 211, 238, 0.6);
+      color: #38bdf8;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 999px;
+      box-shadow: 0 0 16px rgba(34, 211, 238, 0.25);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .empty-action-btn:hover {
+      background: rgba(34, 211, 238, 0.18);
+      box-shadow: 0 0 22px rgba(34, 211, 238, 0.45);
+    }
+
+    .empty-sparkle {
+      position: absolute;
+      bottom: 14px;
+      right: 18px;
+      color: rgba(34, 211, 238, 0.45);
+      font-size: 14px;
+    }
+
+    /* -------------------------------------------------------------
+       POPULATED STATE CARDS (Panel 2)
+       ------------------------------------------------------------- */
+    /* 6 Folders Grid */
+    .folders-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .folder-card {
+      background: rgba(11, 18, 38, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .folder-card:hover {
+      border-color: rgba(34, 211, 238, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .folder-card.add-folder-dashed {
+      border: 1.5px dashed rgba(34, 211, 238, 0.5);
+      background: rgba(14, 165, 233, 0.04);
+      justify-content: center;
+    }
+
+    .badge-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .badge-red { background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444; }
+    .badge-purple { background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168, 85, 247, 0.4); color: #c084fc; }
+    .badge-yellow { background: rgba(234, 179, 8, 0.2); border: 1px solid rgba(234, 179, 8, 0.4); color: #eab308; }
+    .badge-blue { background: rgba(14, 165, 233, 0.2); border: 1px solid rgba(14, 165, 233, 0.4); color: #38bdf8; }
+    .badge-cyan { background: rgba(6, 182, 212, 0.2); border: 1px solid rgba(6, 182, 212, 0.4); color: #22d3ee; }
+
+    .folder-name {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+
+    .folder-meta {
+      font-size: 9.5px;
+      color: #64748b;
+    }
+
+    /* Recent Uploads List */
+    .uploads-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .upload-item-row {
+      background: rgba(11, 18, 38, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s;
+    }
+
+    .upload-item-row:hover {
+      border-color: rgba(34, 211, 238, 0.4);
+      background: rgba(15, 25, 52, 0.9);
+    }
+
+    .upload-item-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .file-tag-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .file-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .file-meta {
+      font-size: 10px;
+      color: #64748b;
+      margin-top: 1px;
+    }
+
+    .three-dots {
+      color: #64748b;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    /* -------------------------------------------------------------
+       CENTER TRANSITION ARROW & CLUSTER
+       ------------------------------------------------------------- */
+    .center-transition-hub {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 0 10px;
+    }
+
+    .transition-caption-top {
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #22d3ee;
+      margin-bottom: 8px;
+    }
+
+    .transition-narrative {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f1f5f9;
+      line-height: 1.4;
+      max-width: 220px;
+      margin-bottom: 24px;
+    }
+
+    /* Floating Icons Halo Cluster */
+    .floating-cluster-stage {
+      position: relative;
+      width: 220px;
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Glowing Big Arrow */
+    .arrow-vector-wrapper {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .neon-arrow-svg {
+      width: 180px;
+      height: 48px;
+      filter: drop-shadow(0 0 15px rgba(34, 211, 238, 0.8)) drop-shadow(0 0 30px rgba(14, 165, 233, 0.5));
+    }
+
+    /* Floating elements surrounding the arrow */
+    .float-icon-bubble {
+      position: absolute;
+      border-radius: 10px;
+      padding: 6px 9px;
+      font-size: 11px;
+      font-weight: 800;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
+      z-index: 5;
+      animation: floatMotion 4s ease-in-out infinite alternate;
+    }
+
+    .bubble-pdf {
+      top: 0px;
+      left: 20px;
+      background: rgba(239, 68, 68, 0.25);
+      border: 1px solid rgba(239, 68, 68, 0.6);
+      color: #f87171;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.4);
+    }
+
+    .bubble-img {
+      top: -10px;
+      right: 25px;
+      background: rgba(168, 85, 247, 0.25);
+      border: 1px solid rgba(168, 85, 247, 0.6);
+      color: #c084fc;
+      box-shadow: 0 0 14px rgba(168, 85, 247, 0.4);
+      animation-delay: -1.5s;
+    }
+
+    .bubble-code {
+      bottom: 5px;
+      left: 35px;
+      background: rgba(6, 182, 212, 0.25);
+      border: 1px solid rgba(6, 182, 212, 0.6);
+      color: #22d3ee;
+      box-shadow: 0 0 14px rgba(6, 182, 212, 0.4);
+      animation-delay: -2.8s;
+    }
+
+    .bubble-folder {
+      bottom: -4px;
+      right: 30px;
+      background: rgba(234, 179, 8, 0.25);
+      border: 1px solid rgba(234, 179, 8, 0.6);
+      color: #fde047;
+      box-shadow: 0 0 14px rgba(234, 179, 8, 0.4);
+      animation-delay: -0.7s;
+    }
+
+    @keyframes floatMotion {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-8px) scale(1.05); }
+    }
+
+    /* Floating energy sparkles */
+    .sparkle-particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 8px #22d3ee;
+    }
+    .spk-1 { top: 25%; left: 10%; }
+    .spk-2 { top: 75%; right: 15%; }
+    .spk-3 { top: 20%; right: 12%; }
+    .spk-4 { bottom: 18%; left: 22%; }
+
+    /* Bottom Board Footer Info */
+    .board-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(34, 211, 238, 0.15);
+      font-size: 11.5px;
+      color: #64748b;
+    }
+
+    .board-footer-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .status-dot-green {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      display: inline-block;
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Grid Backdrop -->
+  <div class="grid-backdrop"></div>
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- Main Presentation Board -->
+  <main class="presentation-board">
+    
+    <!-- Top Header -->
+    <header class="board-header">
+      <div class="board-title-group">
+        <span class="brand-logo-pill">VOZX AI</span>
+        <h1 class="board-headline">Files Architecture Storyboard</h1>
+      </div>
+      <div class="board-badge">Design Specification Presentation • Empty vs. Populated State</div>
+    </header>
+
+    <!-- 3-Column Storyboard Layout -->
+    <div class="storyboard-layout">
+
+      <!-- =================================================================
+           PANEL 1: NEW USER - INITIAL LOG-IN (EMPTY STATE)
+           ================================================================= -->
+      <section class="panel-column" aria-label="Panel 1 Empty State">
+        <h2 class="panel-label empty-label">PANEL 1: NEW USER - INITIAL LOG-IN (EMPTY STATE)</h2>
+        
+        <div class="phone-container">
+          <div class="phone-inner">
+            
+            <!-- Status Bar -->
+            <div class="phone-status-bar">
+              <span>9:41</span>
+              <div class="status-icons">
+                <svg width="15" height="11" viewBox="0 0 16 12" fill="currentColor">
+                  <path d="M1 9.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"/>
+                </svg>
+                <svg width="14" height="11" viewBox="0 0 16 12" fill="currentColor">
+                  <path d="M8 2.5a8.9 8.9 0 016.4 2.7.75.75 0 01-.06 1.1l-6 5.5a.75.75 0 01-.98 0l-6-5.5a.75.75 0 01-.06-1.1A8.9 8.9 0 018 2.5z"/>
+                </svg>
+                <svg width="19" height="11" viewBox="0 0 24 12" fill="currentColor">
+                  <rect x="1" y="1" width="19" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                  <rect x="2.5" y="2.5" width="14" height="7" rx="1.8"/>
+                  <path d="M22 4.5v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Header -->
+            <div class="screen-header">
+              <div class="circle-back">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+              </div>
+
+              <div class="brand-center">
+                <span>VOZX AI</span>
+                <span class="cyan-dot"></span>
+              </div>
+
+              <div class="header-right-actions">
+                <div class="synced-pill">
+                  <span>☁</span>
+                  <span>Synced</span>
+                </div>
+                <div class="profile-circle">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Title Banner -->
+            <div class="title-banner">
+              <h3 class="main-screen-title">Files</h3>
+              <p class="main-screen-subtitle">Your files, organized and always accessible.</p>
+            </div>
+
+            <!-- Storage Usage 0 GB / 50 GB -->
+            <div class="storage-card">
+              <div class="storage-top-row">
+                <div class="storage-icon-title">
+                  <div class="storage-folder-icon">📁</div>
+                  <span class="storage-label">Storage Usage</span>
+                </div>
+                <div class="storage-counter">
+                  <span>0 GB / 50 GB</span>
+                  <span class="storage-pct">0%</span>
+                </div>
+              </div>
+              <div class="storage-track">
+                <div class="storage-fill" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <!-- My Folders (Empty State) -->
+            <div class="section-header-row">
+              <span class="section-title">My Folders</span>
+              <a href="#" class="view-all-link">View all &gt;</a>
+            </div>
+
+            <div class="empty-glass-card">
+              <!-- Glowing Cyan Folded Folder Graphic -->
+              <svg class="empty-card-icon" viewBox="0 0 64 64" fill="none">
+                <defs>
+                  <linearGradient id="folderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.9"/>
+                    <stop offset="100%" stop-color="#0284c7" stop-opacity="0.4"/>
+                  </linearGradient>
+                </defs>
+                <path d="M8 18a4 4 0 0 1 4-4h12l4 5h24a4 4 0 0 1 4 4v23a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4V18z" fill="url(#folderGrad)" stroke="#38bdf8" stroke-width="1.8"/>
+                <path d="M8 26h48v19a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4V26z" fill="#081530" fill-opacity="0.6" stroke="#22d3ee" stroke-width="1.5"/>
+              </svg>
+
+              <h4 class="empty-card-heading">No Folders Created Yet.</h4>
+              <p class="empty-card-sub">Start organizing your documents and projects by creating a new folder.</p>
+              
+              <button type="button" class="empty-action-btn">
+                <span>+</span>
+                <span>Add Your First Folder</span>
+              </button>
+            </div>
+
+            <!-- Recent Uploads (Empty State) -->
+            <div class="section-header-row">
+              <span class="section-title">Recent Uploads</span>
+              <a href="#" class="view-all-link">View all &gt;</a>
+            </div>
+
+            <div class="empty-glass-card">
+              <!-- Glowing Cloud with Up Arrow -->
+              <svg class="empty-card-icon" viewBox="0 0 64 64" fill="none">
+                <defs>
+                  <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.85"/>
+                    <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.35"/>
+                  </linearGradient>
+                </defs>
+                <path d="M48 38a10 10 0 0 0-2-19.8 14 14 0 0 0-26.6 3.4A9 9 0 0 0 14 38c0 5 4 9 9 9h24c5 0 9-4 9-9z" fill="url(#cloudGrad)" stroke="#38bdf8" stroke-width="1.8"/>
+                <!-- Upward Arrow -->
+                <path d="M32 42V26M32 26l-6 6M32 26l6 6" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+
+              <h4 class="empty-card-heading">No Recent Uploads.</h4>
+              <p class="empty-card-sub">Your recently uploaded files will be displayed here.</p>
+              
+              <button type="button" class="empty-action-btn">
+                <span>+</span>
+                <span>Upload Files</span>
+              </button>
+
+              <span class="empty-sparkle">✦</span>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           CENTER TRANSITION: DIRECTIONAL ARROW & CLUSTERS
+           ================================================================= -->
+      <div class="center-transition-hub" aria-label="Transition Flow">
+        <span class="transition-caption-top">TRANSITION FLOW</span>
+        <p class="transition-narrative">Folders are created, files are uploaded...</p>
+
+        <div class="floating-cluster-stage">
+          <!-- Floating Tiny Icons -->
+          <div class="float-icon-bubble bubble-pdf">PDF</div>
+          <div class="float-icon-bubble bubble-img">IMG</div>
+          <div class="float-icon-bubble bubble-code">&lt;/&gt;</div>
+          <div class="float-icon-bubble bubble-folder">📁</div>
+
+          <!-- Sparkle Particles -->
+          <span class="sparkle-particle spk-1"></span>
+          <span class="sparkle-particle spk-2"></span>
+          <span class="sparkle-particle spk-3"></span>
+          <span class="sparkle-particle spk-4"></span>
+
+          <!-- Neon Directional Arrow -->
+          <div class="arrow-vector-wrapper">
+            <svg class="neon-arrow-svg" viewBox="0 0 180 48" fill="none">
+              <defs>
+                <linearGradient id="arrowGlowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.3"/>
+                  <stop offset="35%" stop-color="#22d3ee" stop-opacity="0.9"/>
+                  <stop offset="80%" stop-color="#38bdf8"/>
+                  <stop offset="100%" stop-color="#67e8f9"/>
+                </linearGradient>
+              </defs>
+              <!-- Glowing shaft with laser pulse -->
+              <rect x="0" y="20" width="138" height="8" rx="4" fill="url(#arrowGlowGrad)"/>
+              <path d="M132 8l38 16-38 16-6-6 24-10-24-10 6-6z" fill="#38bdf8"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- =================================================================
+           PANEL 2: ACTIVE USER - AFTER UPLOAD (POPULATED STATE)
+           ================================================================= -->
+      <section class="panel-column" aria-label="Panel 2 Populated State">
+        <h2 class="panel-label populated-label">PANEL 2: ACTIVE USER - AFTER UPLOAD (POPULATED STATE)</h2>
+
+        <div class="phone-container">
+          <div class="phone-inner">
+            
+            <!-- Status Bar -->
+            <div class="phone-status-bar">
+              <span>9:41</span>
+              <div class="status-icons">
+                <svg width="15" height="11" viewBox="0 0 16 12" fill="currentColor">
+                  <path d="M1 9.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm4.5-3a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"/>
+                </svg>
+                <svg width="14" height="11" viewBox="0 0 16 12" fill="currentColor">
+                  <path d="M8 2.5a8.9 8.9 0 016.4 2.7.75.75 0 01-.06 1.1l-6 5.5a.75.75 0 01-.98 0l-6-5.5a.75.75 0 01-.06-1.1A8.9 8.9 0 018 2.5z"/>
+                </svg>
+                <svg width="19" height="11" viewBox="0 0 24 12" fill="currentColor">
+                  <rect x="1" y="1" width="19" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                  <rect x="2.5" y="2.5" width="14" height="7" rx="1.8"/>
+                  <path d="M22 4.5v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Header -->
+            <div class="screen-header">
+              <div class="circle-back">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+              </div>
+
+              <div class="brand-center">
+                <span>VOZX AI</span>
+                <span class="cyan-dot"></span>
+              </div>
+
+              <div class="header-right-actions">
+                <div class="synced-pill">
+                  <span>☁</span>
+                  <span>Synced</span>
+                </div>
+                <div class="profile-circle">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Title Banner -->
+            <div class="title-banner">
+              <h3 class="main-screen-title">Files</h3>
+              <p class="main-screen-subtitle">Your files, organized and always accessible.</p>
+            </div>
+
+            <!-- Storage Usage 12.4 GB / 50 GB 25% -->
+            <div class="storage-card">
+              <div class="storage-top-row">
+                <div class="storage-icon-title">
+                  <div class="storage-folder-icon">📁</div>
+                  <span class="storage-label">Storage Usage</span>
+                </div>
+                <div class="storage-counter">
+                  <span>12.4 GB / 50 GB</span>
+                  <span class="storage-pct">25%</span>
+                </div>
+              </div>
+              <div class="storage-track">
+                <div class="storage-fill" style="width: 25%;"></div>
+              </div>
+            </div>
+
+            <!-- My Folders (Populated 6 Grid) -->
+            <div class="section-header-row">
+              <span class="section-title">My Folders</span>
+              <a href="#" class="view-all-link">View all &gt;</a>
+            </div>
+
+            <div class="folders-grid">
+              <!-- 1. PDF -->
+              <div class="folder-card">
+                <div class="badge-icon badge-red">📄</div>
+                <span class="folder-name">PDF</span>
+                <span class="folder-meta">24 files • 4.2 GB</span>
+              </div>
+
+              <!-- 2. Images -->
+              <div class="folder-card">
+                <div class="badge-icon badge-purple">🖼️</div>
+                <span class="folder-name">Images</span>
+                <span class="folder-meta">56 files • 3.8 GB</span>
+              </div>
+
+              <!-- 3. Projects -->
+              <div class="folder-card">
+                <div class="badge-icon badge-yellow">📁</div>
+                <span class="folder-name">Projects</span>
+                <span class="folder-meta">12 files • 1.6 GB</span>
+              </div>
+
+              <!-- 4. PrintFlow -->
+              <div class="folder-card">
+                <div class="badge-icon badge-blue">⚡</div>
+                <span class="folder-name">PrintFlow</span>
+                <span class="folder-meta">8 files • 1.2 GB</span>
+              </div>
+
+              <!-- 5. VOZX -->
+              <div class="folder-card">
+                <div class="badge-icon badge-cyan">🤖</div>
+                <span class="folder-name">VOZX</span>
+                <span class="folder-meta">5 files • 840 MB</span>
+              </div>
+
+              <!-- 6. Add Folder -->
+              <div class="folder-card add-folder-dashed">
+                <span style="font-size: 18px; color: #38bdf8; font-weight: 300;">+</span>
+                <span class="folder-name" style="color: #38bdf8;">Add Folder</span>
+                <span class="folder-meta">New Vault</span>
+              </div>
+            </div>
+
+            <!-- Recent Uploads (Populated List) -->
+            <div class="section-header-row">
+              <span class="section-title">Recent Uploads</span>
+              <a href="#" class="view-all-link">View all &gt;</a>
+            </div>
+
+            <div class="uploads-list">
+              <!-- Item 1: PDF -->
+              <div class="upload-item-row">
+                <div class="upload-item-left">
+                  <div class="file-tag-badge badge-red">PDF</div>
+                  <div>
+                    <div class="file-name">Project_Proposal.pdf</div>
+                    <div class="file-meta">2.4 MB • 2 hours ago</div>
+                  </div>
+                </div>
+                <span class="three-dots">•••</span>
+              </div>
+
+              <!-- Item 2: PNG -->
+              <div class="upload-item-row">
+                <div class="upload-item-left">
+                  <div class="file-tag-badge badge-blue">PNG</div>
+                  <div>
+                    <div class="file-name">car_render.png</div>
+                    <div class="file-meta">5.6 MB • 5 hours ago</div>
+                  </div>
+                </div>
+                <span class="three-dots">•••</span>
+              </div>
+
+              <!-- Item 3: Python -->
+              <div class="upload-item-row">
+                <div class="upload-item-left">
+                  <div class="file-tag-badge badge-cyan">&lt;/&gt;</div>
+                  <div>
+                    <div class="file-name">backend_api.py</div>
+                    <div class="file-meta">18 KB • 1 day ago</div>
+                  </div>
+                </div>
+                <span class="three-dots">•••</span>
+              </div>
+
+              <!-- Item 4: Figma -->
+              <div class="upload-item-row">
+                <div class="upload-item-left">
+                  <div class="file-tag-badge badge-purple">FIG</div>
+                  <div>
+                    <div class="file-name">design_mockup.fig</div>
+                    <div class="file-meta">3.2 MB • 1 day ago</div>
+                  </div>
+                </div>
+                <span class="three-dots">•••</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /storyboard-layout -->
+
+    <!-- Board Footer -->
+    <footer class="board-footer">
+      <div class="board-footer-left">
+        <span><span class="status-dot-green"></span>Dynamic State Synchronization</span>
+        <span>Storage: Encrypted Zero-Knowledge Vault</span>
+      </div>
+      <div>VOZX AI Mobile Design System v2.4 • Confidential Presentation</div>
+    </footer>
+
+  </main>
+
+</body>
+</html>
+

@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VOZX AI — Supabase Auth (React + Tailwind CSS)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Supabase JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- React & ReactDOM CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel standalone for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="supabaseClient.js"></script>
+  <style>
+    body {
+      background-color: #050816;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function VozxSignupPage({ onNavigateToLogin, onShowToast }) {
+      const [fullName, setFullName] = useState('Varun Reddy');
+      const [email, setEmail] = useState('varun.reddy@gmail.com');
+      const [password, setPassword] = useState('');
+      const [confirmPassword, setConfirmPassword] = useState('');
+      const [showPassword, setShowPassword] = useState(false);
+      const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+      const [isLoading, setIsLoading] = useState(false);
+      const [agreedTerms, setAgreedTerms] = useState(true);
+
+      const [errors, setErrors] = useState({
+        fullName: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        general: ''
+      });
+
+      const [touched, setTouched] = useState({
+        fullName: false,
+        email: false,
+        password: false,
+        confirmPassword: false
+      });
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      const getPasswordStrength = (pwd) => {
+        if (!pwd) return { score: 0, label: 'Empty', color: 'bg-slate-700', width: '0%' };
+        let score = 0;
+        if (pwd.length >= 8) score++;
+        if (/[A-Z]/.test(pwd)) score++;
+        if (/[0-9]/.test(pwd)) score++;
+        if (/[^A-Za-z0-9]/.test(pwd)) score++;
+
+        if (score <= 1 || pwd.length < 6) {
+          return { score: 1, label: 'Weak', color: 'bg-red-500', width: '33%' };
+        }
+        if (score <= 3) {
+          return { score: 2, label: 'Medium', color: 'bg-amber-400', width: '66%' };
+        }
+        return { score: 4, label: 'Strong', color: 'bg-emerald-400', width: '100%' };
+      };
+
+      const strength = getPasswordStrength(password);
+
+      const validateField = (field, value, otherValue = '') => {
+        let error = '';
+        switch (field) {
+          case 'fullName':
+            if (!value.trim()) error = 'Full Name is required.';
+            else if (value.trim().length < 2) error = 'Full Name must be at least 2 characters.';
+            break;
+          case 'email':
+            if (!value.trim()) error = 'Email address is required.';
+            else if (!emailRegex.test(value.trim())) error = 'Please enter a valid email address.';
+            break;
+          case 'password':
+            if (!value) error = 'Password is required.';
+            else if (value.length < 8) error = 'Password must be at least 8 characters.';
+            break;
+          case 'confirmPassword':
+            if (!value) error = 'Please confirm your password.';
+            else if (value !== (otherValue || password)) error = 'Passwords do not match.';
+            break;
+          default:
+            break;
+        }
+        return error;
+      };
+
+      const handleBlur = (field) => {
+        setTouched((prev) => ({ ...prev, [field]: true }));
+        let val = field === 'fullName' ? fullName : field === 'email' ? email : field === 'password' ? password : confirmPassword;
+        const error = validateField(field, val);
+        setErrors((prev) => ({ ...prev, [field]: error }));
+      };
+
+      const handleInputChange = (field, value) => {
+        if (field === 'fullName') setFullName(value);
+        if (field === 'email') setEmail(value);
+        if (field === 'password') {
+          setPassword(value);
+          if (touched.confirmPassword && confirmPassword) {
+            setErrors((prev) => ({
+              ...prev,
+              confirmPassword: value === confirmPassword ? '' : 'Passwords do not match.'
+            }));
+          }
+        }
+        if (field === 'confirmPassword') setConfirmPassword(value);
+
+        if (touched[field]) {
+          const err = validateField(field, value, field === 'confirmPassword' ? password : confirmPassword);
+          setErrors((prev) => ({ ...prev, [field]: err }));
+        }
+      };
+
+      const handleSignUp = async (e) => {
+        e.preventDefault();
+        setTouched({ fullName: true, email: true, password: true, confirmPassword: true });
+
+        const errName = validateField('fullName', fullName);
+        const errEmail = validateField('email', email);
+        const errPass = validateField('password', password);
+        const errConfirm = validateField('confirmPassword', confirmPassword, password);
+
+        setErrors({
+          fullName: errName,
+          email: errEmail,
+          password: errPass,
+          confirmPassword: errConfirm,
+          general: ''
+        });
+
+        if (errName || errEmail || errPass || errConfirm) {
+          if (onShowToast) onShowToast('Please fix the highlighted errors.', 'error');
+          return;
+        }
+
+        if (!agreedTerms) {
+          if (onShowToast) onShowToast('Please accept the Terms of Service & Privacy Policy.', 'error');
+          return;
+        }
+
+        setIsLoading(true);
+        if (onShowToast) onShowToast('Creating Supabase Auth account...', 'info');
+
+        try {
+          const res = await window.VozxAuth.signUpWithSupabase(fullName, email, password);
+          if (!res.success) {
+            setIsLoading(false);
+            setErrors((prev) => ({ ...prev, general: res.error }));
+            if (onShowToast) onShowToast(res.error || 'Failed to create account.', 'error');
+            return;
+          }
+
+          if (onShowToast) onShowToast('Account created successfully! Redirecting...', 'success');
+          setTimeout(() => {
+            setIsLoading(false);
+            if (onNavigateToLogin) onNavigateToLogin();
+          }, 1200);
+        } catch (err) {
+          setIsLoading(false);
+          const msg = err.message || 'Signup failed';
+          setErrors((prev) => ({ ...prev, general: msg }));
+          if (onShowToast) onShowToast(msg, 'error');
+        }
+      };
+
+      return (
+        <div className="relative w-full max-w-[412px] min-h-[860px] bg-[#050816]/90 border border-cyan-400/35 rounded-[44px] shadow-[0_0_50px_rgba(34,211,238,0.18)] flex flex-col p-6 backdrop-blur-xl overflow-hidden my-4">
+          <div className="flex items-center justify-between text-xs text-slate-400 font-semibold mb-2 px-2">
+            <span>9:41</span>
+            <div className="w-20 h-4 bg-black/80 rounded-full border border-white/10" />
+            <div className="flex items-center gap-1.5">
+              <span>5G</span>
+              <span>100%</span>
+            </div>
+          </div>
+
+          <header className="flex items-center justify-between py-1 mb-2">
+            <button
+              type="button"
+              onClick={onNavigateToLogin}
+              className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white"
+            >
+              ←
+            </button>
+            <div className="flex items-center justify-center drop-shadow-[0_0_12px_rgba(34,211,238,0.7)]">
+              <svg className="w-8 h-8" viewBox="0 0 32 32">
+                <defs>
+                  <linearGradient id="vGradSignupHtml" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ffffff" />
+                    <stop offset="40%" stopColor="#22d3ee" />
+                    <stop offset="100%" stopColor="#0284c7" />
+                  </linearGradient>
+                </defs>
+                <path d="M4 6 L16 26 L28 6 L22 6 L16 18 L10 6 Z" fill="url(#vGradSignupHtml)" />
+              </svg>
+            </div>
+            <div className="w-10" />
+          </header>
+
+          <div className="text-center my-2">
+            <h1 className="text-2xl font-bold tracking-tight text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+              Create Your Account
+            </h1>
+            <p className="text-xs text-slate-400 mt-1 max-w-[280px] mx-auto">
+              Join VOZX with real Supabase Authentication
+            </p>
+          </div>
+
+          {errors.general && (
+            <div className="my-2 p-2.5 rounded-xl bg-red-950/60 border border-red-500/50 text-xs text-red-300 text-center font-medium">
+              {errors.general}
+            </div>
+          )}
+
+          <form onSubmit={handleSignUp} className="flex flex-col gap-3 my-auto" noValidate>
+            <div>
+              <div className={`flex items-center h-12 px-4 rounded-2xl bg-[#0d1730]/70 border transition-all ${
+                errors.fullName 
+                  ? 'border-red-500 shadow-[0_0_16px_rgba(239,68,68,0.35)]' 
+                  : touched.fullName && fullName
+                  ? 'border-emerald-400 shadow-[0_0_14px_rgba(16,185,129,0.3)]'
+                  : 'border-cyan-400/25 focus-within:border-cyan-400'
+              }`}>
+                <span className="mr-3 text-slate-400">👤</span>
+                <input
+                  type="text"
+                  required
+                  value={fullName}
+                  onChange={(e) => handleInputChange('fullName', e.target.value)}
+                  onBlur={() => handleBlur('fullName')}
+                  placeholder="Full Name"
+                  className="w-full bg-transparent outline-none text-sm text-white placeholder-slate-500 font-medium"
+                />
+              </div>
+              {errors.fullName && (
+                <span className="text-[11px] text-red-400 px-3 mt-1 block font-medium">
+                  {errors.fullName}
+                </span>
+              )}
+            </div>
+
+            <div>
+              <div className={`flex items-center h-12 px-4 rounded-2xl bg-[#0d1730]/70 border transition-all ${
+                errors.email 
+                  ? 'border-red-500 shadow-[0_0_16px_rgba(239,68,68,0.35)]' 
+                  : touched.email && email && !errors.email
+                  ? 'border-emerald-400 shadow-[0_0_14px_rgba(16,185,129,0.3)]'
+                  : 'border-cyan-400/25 focus-within:border-cyan-400'
+              }`}>
+                <span className="mr-3 text-slate-400">✉️</span>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  onBlur={() => handleBlur('email')}
+                  placeholder="Email Address"
+                  className="w-full bg-transparent outline-none text-sm text-white placeholder-slate-500 font-medium"
+                />
+              </div>
+              {errors.email && (
+                <span className="text-[11px] text-red-400 px-3 mt-1 block font-medium">
+                  {errors.email}
+                </span>
+              )}
+            </div>
+
+            <div>
+              <div className={`flex items-center h-12 px-4 rounded-2xl bg-[#0d1730]/70 border transition-all ${
+                errors.password 
+                  ? 'border-red-500 shadow-[0_0_16px_rgba(239,68,68,0.35)]' 
+                  : touched.password && password && !errors.password
+                  ? 'border-emerald-400 shadow-[0_0_14px_rgba(16,185,129,0.3)]'
+                  : 'border-cyan-400/25 focus-within:border-cyan-400'
+              }`}>
+                <span className="mr-3 text-slate-400">🔒</span>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  value={password}
+                  onChange={(e) => handleInputChange('password', e.target.value)}
+                  onBlur={() => handleBlur('password')}
+                  placeholder="Password (min. 8 characters)"
+                  className="w-full bg-transparent outline-none text-sm text-white placeholder-slate-500 font-medium"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-slate-400 hover:text-cyan-400 p-1"
+                >
+                  {showPassword ? '👁️' : '👁️‍🗨️'}
+                </button>
+              </div>
+              {errors.password && (
+                <span className="text-[11px] text-red-400 px-3 mt-1 block font-medium">
+                  {errors.password}
+                </span>
+              )}
+
+              {password && (
+                <div className="mt-1 px-2">
+                  <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                    <div className={`h-full transition-all duration-300 ${strength.color}`} style={{ width: strength.width }} />
+                  </div>
+                  <div className="flex justify-between items-center text-[10px] text-slate-400 mt-1">
+                    <span>Password Strength</span>
+                    <span className={`font-semibold ${strength.score >= 3 ? 'text-emerald-400' : strength.score === 2 ? 'text-amber-400' : 'text-red-400'}`}>
+                      {strength.label}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div>
+              <div className={`flex items-center h-12 px-4 rounded-2xl bg-[#0d1730]/70 border transition-all ${
+                errors.confirmPassword 
+                  ? 'border-red-500 shadow-[0_0_16px_rgba(239,68,68,0.35)]' 
+                  : touched.confirmPassword && confirmPassword && !errors.confirmPassword
+                  ? 'border-emerald-400 shadow-[0_0_14px_rgba(16,185,129,0.3)]'
+                  : 'border-cyan-400/25 focus-within:border-cyan-400'
+              }`}>
+                <span className="mr-3 text-slate-400">🛡️</span>
+                <input
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  required
+                  value={confirmPassword}
+                  onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                  onBlur={() => handleBlur('confirmPassword')}
+                  placeholder="Confirm Password"
+                  className="w-full bg-transparent outline-none text-sm text-white placeholder-slate-500 font-medium"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="text-slate-400 hover:text-cyan-400 p-1"
+                >
+                  {showConfirmPassword ? '👁️' : '👁️‍🗨️'}
+                </button>
+              </div>
+              {errors.confirmPassword && (
+                <span className="text-[11px] text-red-400 px-3 mt-1 block font-medium">
+                  {errors.confirmPassword}
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-start gap-2 text-[11px] text-slate-400 px-1 mt-1">
+              <input
+                type="checkbox"
+                id="signupTerms"
+                checked={agreedTerms}
+                onChange={(e) => setAgreedTerms(e.target.checked)}
+                className="mt-0.5 w-3.5 h-3.5 rounded bg-slate-800 border-cyan-400/40 text-cyan-400 cursor-pointer"
+              />
+              <label htmlFor="signupTerms" className="cursor-pointer">
+                I agree to the <span className="text-cyan-400 hover:underline">Terms of Service</span> and <span className="text-cyan-400 hover:underline">Privacy Policy</span>.
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              disabled={!agreedTerms || isLoading}
+              className={`relative mt-2 h-12 rounded-full font-bold text-sm tracking-wide text-slate-950 flex items-center justify-center transition-all ${
+                !agreedTerms || isLoading
+                  ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-[#0ea5e9] to-[#38bdf8] shadow-[0_4px_25px_rgba(14,165,233,0.5)] hover:shadow-[0_6px_30px_rgba(34,211,238,0.7)]'
+              }`}
+            >
+              {isLoading ? 'Creating Supabase Account...' : 'Create Account →'}
+            </button>
+          </form>
+
+          <footer className="mt-auto text-center pt-2">
+            <p className="text-xs text-slate-400">
+              Already have an account?{' '}
+              <button
+                type="button"
+                onClick={onNavigateToLogin}
+                className="text-cyan-400 font-semibold hover:underline ml-1"
+              >
+                Sign In
+              </button>
+            </p>
+          </footer>
+        </div>
+      );
+    }
+
+    function VozxLoginPage({ onNavigateToSignUp, onLoginSuccess, onShowToast }) {
+      const [email, setEmail] = useState('varun.reddy@gmail.com');
+      const [password, setPassword] = useState('VozxAI#2026');
+      const [showPassword, setShowPassword] = useState(false);
+      const [rememberMe, setRememberMe] = useState(true);
+      const [agreedTerms, setAgreedTerms] = useState(true);
+      const [isLoading, setIsLoading] = useState(false);
+      const [showForgotModal, setShowForgotModal] = useState(false);
+      const [resetEmail, setResetEmail] = useState('');
+      const [isResetting, setIsResetting] = useState(false);
+
+      const [errors, setErrors] = useState({ email: '', password: '', general: '' });
+      const [touched, setTouched] = useState({ email: false, password: false });
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      const validate = () => {
+        let errEmail = '';
+        let errPass = '';
+        if (!email.trim()) errEmail = 'Email is required.';
+        else if (!emailRegex.test(email.trim())) errEmail = 'Invalid email address.';
+
+        if (!password) errPass = 'Password is required.';
+        else if (password.length < 8) errPass = 'Password must be at least 8 characters.';
+
+        setErrors({ email: errEmail, password: errPass, general: '' });
+        return !errEmail && !errPass;
+      };
+
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        setTouched({ email: true, password: true });
+
+        if (!validate()) {
+          if (onShowToast) onShowToast('Please correct form errors.', 'error');
+          return;
+        }
+
+        if (!agreedTerms) {
+          if (onShowToast) onShowToast('Please accept Terms of Service.', 'error');
+          return;
+        }
+
+        setIsLoading(true);
+        if (onShowToast) onShowToast('Authenticating with Supabase...', 'info');
+
+        try {
+          const res = await window.VozxAuth.signInWithSupabase(email, password, rememberMe);
+          if (!res.success) {
+            setIsLoading(false);
+            setErrors((prev) => ({ ...prev, general: res.error }));
+            if (onShowToast) onShowToast(res.error || 'Login failed.', 'error');
+            return;
+          }
+
+          if (onShowToast) onShowToast('Signed in successfully! Redirecting...', 'success');
+          setTimeout(() => {
+            setIsLoading(false);
+            if (onLoginSuccess) onLoginSuccess(res);
+          }, 1100);
+        } catch (err) {
+          setIsLoading(false);
+          setErrors((prev) => ({ ...prev, general: err.message }));
+          if (onShowToast) onShowToast(err.message, 'error');
+        }
+      };
+
+      const handleReset = async () => {
+        const target = (resetEmail || email).trim();
+        if (!target || !emailRegex.test(target)) {
+          if (onShowToast) onShowToast('Enter a valid recovery email.', 'error');
+          return;
+        }
+        setIsResetting(true);
+        await window.VozxAuth.resetPasswordWithSupabase(target);
+        setIsResetting(false);
+        setShowForgotModal(false);
+        if (onShowToast) onShowToast(`Recovery email dispatched to ${target}`, 'success');
+      };
+
+      return (
+        <div className="relative w-full max-w-[412px] min-h-[850px] bg-[#050816]/90 border border-cyan-400/30 rounded-[44px] shadow-[0_0_50px_rgba(34,211,238,0.15)] flex flex-col p-6 backdrop-blur-xl overflow-hidden my-4">
+          <div className="flex items-center justify-between text-xs text-slate-400 font-semibold mb-3 px-2">
+            <span>9:41</span>
+            <div className="w-20 h-4 bg-black/80 rounded-full border border-white/10" />
+            <div className="flex items-center gap-1.5">
+              <span>5G</span>
+              <span>100%</span>
+            </div>
+          </div>
+
+          <header className="flex items-center justify-between py-2 mb-2">
+            <button type="button" onClick={onNavigateToSignUp} className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-300">
+              ←
+            </button>
+            <div className="flex items-center justify-center drop-shadow-[0_0_12px_rgba(34,211,238,0.7)]">
+              <svg className="w-8 h-8" viewBox="0 0 32 32">
+                <path d="M4 6 L16 26 L28 6 L22 6 L16 18 L10 6 Z" fill="#22d3ee" />
+              </svg>
+            </div>
+            <div className="w-10" />
+          </header>
+
+          <div className="flex flex-col items-center my-2">
+            <div className="w-18 h-18 rounded-full p-[3px] bg-gradient-to-tr from-cyan-400 to-sky-600 shadow-[0_0_24px_rgba(34,211,238,0.4)] flex items-center justify-center">
+              <div className="w-full h-full rounded-full bg-[#0b1224] flex items-center justify-center font-bold text-cyan-300 text-lg">
+                VR
+              </div>
+            </div>
+            <span className="mt-1.5 px-2.5 py-0.5 rounded-full bg-slate-900/80 border border-cyan-400/20 text-[11px] text-slate-400 font-medium">
+              ● AI Ready
+            </span>
+          </div>
+
+          <div className="text-center mb-4">
+            <h1 className="text-2xl font-bold tracking-tight text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+              Welcome Back
+            </h1>
+            <p className="text-xs text-slate-400 mt-1 max-w-[270px] mx-auto">
+              Sign in to continue with your AI-powered personal assistant.
+            </p>
+          </div>
+
+          {errors.general && (
+            <div className="mb-3 p-2.5 rounded-xl bg-red-950/60 border border-red-500/50 text-xs text-red-300 text-center font-medium">
+              {errors.general}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
+            <div>
+              <div className={`flex items-center h-12 px-4 rounded-2xl bg-[#0d1730]/70 border transition-all ${
+                errors.email ? 'border-red-500' : 'border-cyan-400/25 focus-within:border-cyan-400'
+              }`}>
+                <span className="mr-3 text-slate-400">✉️</span>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email address"
+                  className="w-full bg-transparent outline-none text-sm text-white placeholder-slate-500 font-medium"
+                />
+              </div>
+              {errors.email && <span className="text-[11px] text-red-400 px-3 mt-1 block">{errors.email}</span>}
+            </div>
+
+            <div>
+              <div className={`flex items-center h-12 px-4 rounded-2xl bg-[#0d1730]/70 border transition-all ${
+                errors.password ? 'border-red-500' : 'border-cyan-400/25 focus-within:border-cyan-400'
+              }`}>
+                <span className="mr-3 text-slate-400">🔒</span>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  className="w-full bg-transparent outline-none text-sm text-white placeholder-slate-500 font-medium"
+                />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="text-slate-400 p-1">
+                  {showPassword ? '👁️' : '👁️‍🗨️'}
+                </button>
+              </div>
+              {errors.password && <span className="text-[11px] text-red-400 px-3 mt-1 block">{errors.password}</span>}
+            </div>
+
+            <div className="flex items-center justify-between text-xs px-1">
+              <label className="flex items-center gap-2 cursor-pointer text-slate-300">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-4 h-4 rounded bg-slate-800 border-cyan-400/40 text-cyan-400"
+                />
+                <span>Remember Me</span>
+              </label>
+              <button
+                type="button"
+                onClick={() => { setResetEmail(email); setShowForgotModal(true); }}
+                className="text-cyan-400 hover:underline"
+              >
+                Forgot Password?
+              </button>
+            </div>
+
+            <div className="flex items-start gap-2 text-[11px] text-slate-400 px-1">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={agreedTerms}
+                onChange={(e) => setAgreedTerms(e.target.checked)}
+                className="mt-0.5 w-3.5 h-3.5 rounded bg-slate-800 border-cyan-400/40 text-cyan-400"
+              />
+              <label htmlFor="terms">
+                I agree to the <span className="text-cyan-400 hover:underline">Terms</span> and <span className="text-cyan-400 hover:underline">Privacy</span>.
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              disabled={!agreedTerms || isLoading}
+              className={`relative mt-2 h-12 rounded-full font-bold text-sm tracking-wide text-slate-950 flex items-center justify-center transition-all ${
+                !agreedTerms || isLoading
+                  ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-[#0ea5e9] to-[#38bdf8] shadow-[0_4px_25px_rgba(14,165,233,0.5)]'
+              }`}
+            >
+              {isLoading ? 'Signing In with Supabase...' : 'Sign In →'}
+            </button>
+          </form>
+
+          <footer className="mt-auto text-center pt-2">
+            <p className="text-xs text-slate-400">
+              Don't have an account?{' '}
+              <button type="button" onClick={onNavigateToSignUp} className="text-cyan-400 font-semibold hover:underline ml-1">
+                Sign Up
+              </button>
+            </p>
+          </footer>
+
+          {showForgotModal && (
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
+              <div className="w-full max-w-sm bg-[#0b1226]/95 border border-cyan-400/40 rounded-3xl p-6 shadow-2xl flex flex-col">
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-xs font-semibold text-cyan-300">⚡ Reset Password</span>
+                  <button onClick={() => setShowForgotModal(false)} className="text-slate-400 hover:text-white">✕</button>
+                </div>
+                <h3 className="text-base font-bold text-white mb-1">Send Recovery Link</h3>
+                <input
+                  type="email"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                  placeholder="Recovery email"
+                  className="w-full h-11 px-3 rounded-xl bg-black/50 border border-cyan-400/30 text-xs text-white my-3 outline-none"
+                />
+                <button
+                  type="button"
+                  disabled={isResetting}
+                  onClick={handleReset}
+                  className="h-10 rounded-full bg-gradient-to-r from-sky-500 to-cyan-400 text-slate-950 font-bold text-xs"
+                >
+                  {isResetting ? 'Sending...' : 'Send Link →'}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    function App() {
+      const [view, setView] = useState('signup');
+      const [toast, setToast] = useState(null);
+
+      const showToast = (message, type = 'info') => {
+        setToast({ message, type });
+        setTimeout(() => setToast(null), 3400);
+      };
+
+      return (
+        <div className="min-h-screen bg-[#050816] text-white flex flex-col items-center justify-center p-2 relative">
+          <div className="fixed top-3 right-3 z-50 flex gap-2">
+            <button
+              onClick={() => setView(view === 'signup' ? 'login' : 'signup')}
+              className="px-3 py-1.5 rounded-full bg-cyan-500/15 border border-cyan-400/40 text-xs text-cyan-300 font-medium"
+            >
+              Switch to {view === 'signup' ? 'Login' : 'Sign Up'}
+            </button>
+            <a
+              href="index.html"
+              className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-slate-300 font-medium"
+            >
+              Dashboard →
+            </a>
+          </div>
+
+          {view === 'signup' && (
+            <VozxSignupPage
+              onNavigateToLogin={() => setView('login')}
+              onShowToast={showToast}
+            />
+          )}
+
+          {view === 'login' && (
+            <VozxLoginPage
+              onNavigateToSignUp={() => setView('signup')}
+              onLoginSuccess={() => {
+                showToast('Authenticated! Redirecting to Dashboard...', 'success');
+                setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+              }}
+              onShowToast={showToast}
+            />
+          )}
+
+          {toast && (
+            <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full border backdrop-blur-md shadow-2xl text-xs font-semibold flex items-center gap-2 z-50 ${
+              toast.type === 'success'
+                ? 'bg-slate-900/95 border-emerald-400 text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.4)]'
+                : toast.type === 'error'
+                ? 'bg-slate-900/95 border-red-400 text-red-300 shadow-[0_0_20px_rgba(239,68,68,0.4)]'
+                : 'bg-slate-900/95 border-cyan-400 text-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.4)]'
+            }`}>
+              <span className="w-2 h-2 rounded-full bg-current animate-ping" />
+              <span>{toast.message}</span>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
+

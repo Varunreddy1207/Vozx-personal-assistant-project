@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOZX AI — PDF Assistant Storyboard Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #030611;
+      --cyan-neon: #22d3ee;
+      --cyan-glow: rgba(34, 211, 238, 0.45);
+      --purple-neon: #c084fc;
+      --blue-electric: #0ea5e9;
+      --red-pdf: #ef4444;
+      --grid-line: rgba(34, 211, 238, 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Digital Grid Backdrop */
+    .grid-backdrop {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: 
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 36px 36px;
+      z-index: 0;
+    }
+
+    .ambient-glow-1 {
+      position: fixed;
+      top: -10%;
+      left: 15%;
+      width: 650px;
+      height: 650px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(34, 211, 238, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-glow-2 {
+      position: fixed;
+      bottom: -10%;
+      right: 15%;
+      width: 650px;
+      height: 650px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Presentation Board Master Container */
+    .presentation-board {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1340px;
+      background: rgba(6, 12, 28, 0.92);
+      border: 1.5px solid rgba(34, 211, 238, 0.35);
+      border-radius: 28px;
+      padding: 36px 40px 44px;
+      box-shadow: 
+        0 0 50px rgba(0, 0, 0, 0.9),
+        0 0 35px rgba(34, 211, 238, 0.15),
+        inset 0 0 30px rgba(34, 211, 238, 0.04);
+      backdrop-filter: blur(24px);
+    }
+
+    /* Board Top Brand Header */
+    .board-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(34, 211, 238, 0.18);
+      padding-bottom: 20px;
+      margin-bottom: 32px;
+    }
+
+    .board-title-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo-pill {
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(14, 165, 233, 0.1));
+      border: 1px solid rgba(34, 211, 238, 0.5);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      color: #38bdf8;
+      letter-spacing: 1.5px;
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.25);
+    }
+
+    .board-headline {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: #ffffff;
+    }
+
+    .board-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94a3b8;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    /* Storyboard 3-Column Layout */
+    .storyboard-layout {
+      display: grid;
+      grid-template-columns: 410px 1fr 410px;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .panel-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Panel Header Label */
+    .panel-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 14px;
+      padding: 6px 16px;
+      border-radius: 999px;
+    }
+
+    .panel-label.empty-label {
+      color: #38bdf8;
+      background: rgba(34, 211, 238, 0.08);
+      border: 1px solid rgba(34, 211, 238, 0.3);
+      box-shadow: 0 0 16px rgba(34, 211, 238, 0.2);
+    }
+
+    .panel-label.populated-label {
+      color: #c084fc;
+      background: rgba(168, 85, 247, 0.08);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.2);
+    }
+
+    /* Phone Device Mockup Container */
+    .phone-container {
+      width: 100%;
+      height: 870px;
+      background: #050816;
+      border: 1.8px solid rgba(34, 211, 238, 0.42);
+      border-radius: 42px;
+      padding: 14px 18px 20px;
+      box-shadow: 
+        0 0 35px rgba(34, 211, 238, 0.18),
+        0 20px 50px rgba(0, 0, 0, 0.8),
+        inset 0 0 20px rgba(34, 211, 238, 0.05);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .phone-container::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(34, 211, 238, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(34, 211, 238, 0.035) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .phone-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+    }
+
+    /* Status Bar */
+    .phone-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+      padding: 2px 6px 8px;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Screen Top Header */
+    .screen-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .circle-back {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1.2px solid rgba(34, 211, 238, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #38bdf8;
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.35);
+    }
+
+    .brand-center {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 1px;
+    }
+
+    .cyan-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22d3ee;
+      box-shadow: 0 0 10px #22d3ee;
+    }
+
+    .profile-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+    }
+
+    /* Title Banner */
+    .title-banner {
+      margin-bottom: 12px;
+    }
+
+    .main-screen-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 3px;
+      letter-spacing: -0.4px;
+    }
+
+    .main-screen-subtitle {
+      font-size: 11px;
+      color: #94a3b8;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+
+    /* Upload PDF Dropzone Card */
+    .upload-dropzone-card {
+      background: rgba(10, 20, 38, 0.7);
+      border: 1.5px solid rgba(34, 211, 238, 0.45);
+      border-radius: 20px;
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 
+        0 0 20px rgba(34, 211, 238, 0.12),
+        inset 0 0 15px rgba(34, 211, 238, 0.05);
+      margin-bottom: 14px;
+    }
+
+    .upload-icon-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid #22d3ee;
+      background: rgba(34, 211, 238, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #22d3ee;
+      margin-bottom: 8px;
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.3);
+    }
+
+    .upload-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+
+    .upload-sub {
+      font-size: 10.5px;
+      color: #94a3b8;
+      margin-bottom: 2px;
+    }
+
+    .upload-tag {
+      font-size: 9.5px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    /* Section Header */
+    .section-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .section-heading-text {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .section-view-all {
+      font-size: 11px;
+      font-weight: 600;
+      color: #38bdf8;
+      text-decoration: none;
+    }
+
+    /* Empty State Card: Recent PDFs */
+    .empty-recent-card {
+      background: rgba(10, 20, 38, 0.65);
+      border: 1.2px solid rgba(34, 211, 238, 0.3);
+      border-radius: 20px;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: inset 0 0 15px rgba(34, 211, 238, 0.04);
+      margin-bottom: 12px;
+    }
+
+    .empty-folder-svg-wrapper {
+      position: relative;
+      width: 76px;
+      height: 64px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .empty-headline {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .empty-body {
+      font-size: 10px;
+      color: #94a3b8;
+      line-height: 1.45;
+      max-width: 240px;
+    }
+
+    /* Populated PDF File Cards List */
+    .populated-pdf-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+
+    .pdf-file-card {
+      background: rgba(11, 18, 38, 0.85);
+      border: 1px solid rgba(34, 211, 238, 0.2);
+      border-radius: 14px;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .pdf-file-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pdf-icon-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+    }
+
+    .pdf-icon-badge svg {
+      color: #ef4444;
+    }
+
+    .pdf-icon-badge span {
+      font-size: 7px;
+      font-weight: 800;
+      color: #ef4444;
+      line-height: 1;
+      margin-top: 1px;
+    }
+
+    .pdf-info-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .pdf-title {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #f1f5f9;
+      max-width: 230px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pdf-meta {
+      font-size: 9.5px;
+      color: #64748b;
+    }
+
+    .pdf-more-btn {
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+    }
+
+    /* AI Summary Action Card */
+    .ai-summary-card {
+      background: rgba(12, 22, 44, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 14px;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.08);
+    }
+
+    .ai-summary-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ai-summary-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: rgba(34, 211, 238, 0.1);
+      border: 1px solid rgba(34, 211, 238, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #38bdf8;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .ai-summary-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .ai-summary-sub {
+      font-size: 9.5px;
+      color: #94a3b8;
+    }
+
+    .ai-summary-arrow {
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    /* Bottom Chat Query Bar */
+    .chat-section {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .chat-heading-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-heading {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+
+    .chat-star-icon {
+      color: rgba(34, 211, 238, 0.6);
+      font-size: 12px;
+    }
+
+    .chat-input-bar {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 999px;
+      padding: 5px 6px 5px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .chat-placeholder {
+      font-size: 10px;
+      color: #64748b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 250px;
+    }
+
+    .chat-send-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #0284c7;
+      border: 1px solid #38bdf8;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.7);
+    }
+
+    /* -------------------------------------------------------------
+       CENTER TRANSITION ARROW & CLUSTER
+       ------------------------------------------------------------- */
+    .center-transition-hub {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 0 10px;
+    }
+
+    .transition-caption-top {
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #22d3ee;
+      margin-bottom: 8px;
+    }
+
+    .transition-narrative {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f1f5f9;
+      line-height: 1.4;
+      max-width: 220px;
+      margin-bottom: 24px;
+    }
+
+    .floating-cluster-stage {
+      position: relative;
+      width: 220px;
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .arrow-vector-wrapper {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .neon-arrow-svg {
+      width: 180px;
+      height: 48px;
+      filter: drop-shadow(0 0 15px rgba(34, 211, 238, 0.8)) drop-shadow(0 0 30px rgba(14, 165, 233, 0.5));
+    }
+
+    .float-icon-bubble {
+      position: absolute;
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
+      z-index: 5;
+    }
+
+    .bubble-pdf {
+      top: -6px;
+      left: 15px;
+      background: rgba(239, 68, 68, 0.25);
+      border: 1px solid rgba(239, 68, 68, 0.6);
+      color: #fca5a5;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.4);
+    }
+
+    .bubble-ai {
+      top: 6px;
+      right: 15px;
+      background: rgba(34, 211, 238, 0.25);
+      border: 1px solid rgba(34, 211, 238, 0.6);
+      color: #38bdf8;
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.4);
+    }
+
+    .bubble-analyze {
+      bottom: 2px;
+      left: 10px;
+      background: rgba(14, 165, 233, 0.25);
+      border: 1px solid rgba(14, 165, 233, 0.6);
+      color: #38bdf8;
+      box-shadow: 0 0 14px rgba(14, 165, 233, 0.4);
+    }
+
+    .bubble-summary {
+      bottom: -2px;
+      right: 15px;
+      background: rgba(168, 85, 247, 0.25);
+      border: 1px solid rgba(168, 85, 247, 0.6);
+      color: #d8b4fe;
+      box-shadow: 0 0 14px rgba(168, 85, 247, 0.4);
+    }
+
+    .sparkle-dot {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #22d3ee;
+      box-shadow: 0 0 8px #22d3ee;
+    }
+
+    .sparkle-1 { top: 30%; left: 10%; }
+    .sparkle-2 { top: 20%; right: 8%; }
+    .sparkle-3 { bottom: 25%; left: 45%; }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Backdrops -->
+  <div class="grid-backdrop"></div>
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- Master Presentation Board Frame -->
+  <div class="presentation-board">
+    
+    <!-- Top Brand Header -->
+    <header class="board-header">
+      <div class="board-title-group">
+        <span class="brand-logo-pill">VOZX AI</span>
+        <h1 class="board-headline">PDF Assistant Architecture Storyboard</h1>
+      </div>
+      <div class="board-badge">Design Specification Presentation • Empty vs. Populated State</div>
+    </header>
+
+    <!-- 3-Column Storyboard Layout -->
+    <div class="storyboard-layout">
+
+      <!-- =========================================================
+           PANEL 1: NEW USER - INITIAL LOG-IN (EMPTY STATE)
+           ========================================================= -->
+      <div class="panel-column">
+        <div class="panel-label empty-label">PANEL 1: NEW USER - INITIAL LOG-IN (EMPTY STATE)</div>
+        
+        <div class="phone-container">
+          <div class="phone-inner">
+
+            <!-- Top Section -->
+            <div>
+              <!-- Status Bar -->
+              <div class="phone-status-bar">
+                <span>9:41</span>
+                <div class="status-icons">
+                  <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor">
+                    <rect x="0" y="7" width="2.5" height="3" rx="0.5" />
+                    <rect x="3.5" y="5" width="2.5" height="5" rx="0.5" />
+                    <rect x="7" y="2.5" width="2.5" height="7.5" rx="0.5" />
+                    <rect x="10.5" y="0" width="2.5" height="10" rx="0.5" />
+                  </svg>
+                  <svg width="13" height="10" viewBox="0 0 13 10" fill="currentColor">
+                    <path d="M6.5 2C8.8 2 10.9 2.9 12.4 4.5L6.5 10L0.6 4.5C2.1 2.9 4.2 2 6.5 2Z" />
+                  </svg>
+                  <svg width="18" height="9" viewBox="0 0 22 11" fill="none" stroke="currentColor">
+                    <rect x="1" y="1" width="17" height="9" rx="2.5" stroke-width="1.2" />
+                    <rect x="3" y="3" width="10" height="5" rx="1.2" fill="currentColor" />
+                    <path d="M19.5 4V7" stroke-width="1.2" stroke-linecap="round" />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Screen App Header -->
+              <div class="screen-header">
+                <div class="circle-back">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                </div>
+                <div class="brand-center">
+                  <span>VOZX AI</span>
+                  <div class="cyan-dot"></div>
+                </div>
+                <div class="profile-circle">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Title & Subtitle -->
+              <div class="title-banner">
+                <h2 class="main-screen-title">PDF Assistant</h2>
+                <p class="main-screen-subtitle">Upload, read, understand, and ask anything about your PDFs with AI.</p>
+              </div>
+
+              <!-- Upload PDF Dropzone Card -->
+              <div class="upload-dropzone-card">
+                <div class="upload-icon-circle">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+                    <path d="M12 12v9"></path>
+                    <path d="m16 16-4-4-4 4"></path>
+                  </svg>
+                </div>
+                <div class="upload-title">Upload PDF</div>
+                <div class="upload-sub">Tap to upload or drag & drop</div>
+                <div class="upload-tag">Supports PDF only • Max 50MB</div>
+              </div>
+
+              <!-- Recent PDFs Section Header -->
+              <div class="section-header-row">
+                <span class="section-heading-text">Recent PDFs</span>
+                <span class="section-view-all">View all &gt;</span>
+              </div>
+
+              <!-- Empty State Card -->
+              <div class="empty-recent-card">
+                <div class="empty-folder-svg-wrapper">
+                  <svg width="84" height="70" viewBox="0 0 84 70" fill="none">
+                    <defs>
+                      <filter id="folderGlow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="3" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                      </filter>
+                    </defs>
+                    <!-- Back folder flap -->
+                    <path d="M6 16C6 12.6863 8.68629 10 12 10H30L38 17H72C75.3137 17 78 19.6863 78 23V58C78 61.3137 75.3137 64 72 64H12C8.68629 64 6 61.3137 6 58V16Z" fill="#091b33" stroke="#22d3ee" stroke-opacity="0.5" stroke-width="1.6"/>
+                    <!-- Document inside with folded corner and subtle glow -->
+                    <g filter="url(#folderGlow)">
+                      <path d="M26 6C26 4.89543 26.8954 4 28 4H50L60 14V42C60 43.1046 59.1046 44 58 44H28C26.8954 44 26 43.1046 26 42V6Z" fill="#ffffff" fill-opacity="0.95"/>
+                      <path d="M50 4V14H60L50 4Z" fill="#94a3b8"/>
+                    </g>
+                    <!-- Front translucent glowing folder pocket -->
+                    <path d="M6 28H78V58C78 61.3137 75.3137 64 72 64H12C8.68629 64 6 61.3137 6 58V28Z" fill="#132f52" fill-opacity="0.75" stroke="#38bdf8" stroke-opacity="0.85" stroke-width="1.8"/>
+                    <!-- Frosted Question mark ? -->
+                    <text x="42" y="51" font-family="'Plus Jakarta Sans', sans-serif" font-size="20" font-weight="800" fill="#ffffff" text-anchor="middle" fill-opacity="0.9">?</text>
+                  </svg>
+                </div>
+                <div class="empty-headline">Nothing here yet.</div>
+                <div class="empty-body">Your recent PDFs will be shown here once you upload them.</div>
+              </div>
+
+              <!-- AI Summary Card -->
+              <div class="ai-summary-card">
+                <div class="ai-summary-left">
+                  <div class="ai-summary-icon">
+                    <span>[p]</span>
+                  </div>
+                  <div>
+                    <div class="ai-summary-title">AI Summary</div>
+                    <div class="ai-summary-sub">Get a quick summary of any PDF in seconds.</div>
+                  </div>
+                </div>
+                <div class="ai-summary-arrow">&gt;</div>
+              </div>
+            </div>
+
+            <!-- Bottom Chat Query Bar -->
+            <div class="chat-section">
+              <div class="chat-heading-row">
+                <span class="chat-heading">Ask questions about your PDF</span>
+                <span class="chat-star-icon">✦</span>
+              </div>
+              <div class="chat-input-bar">
+                <span class="chat-placeholder">e.g. What are the key points in this document?</span>
+                <div class="chat-send-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="19" x2="12" y2="5"></line>
+                    <polyline points="5 12 12 5 19 12"></polyline>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- =========================================================
+           CENTER COLUMN: TRANSITION FLOW & NEON ARROW
+           ========================================================= -->
+      <div class="center-transition-hub">
+        <div class="transition-caption-top">Transition Flow</div>
+        <div class="transition-narrative">PDFs are uploaded and analyzed...</div>
+
+        <div class="floating-cluster-stage">
+          <!-- Floating Badges -->
+          <div class="float-icon-bubble bubble-pdf">📄 PDF</div>
+          <div class="float-icon-bubble bubble-ai">✨ AI</div>
+          <div class="float-icon-bubble bubble-analyze">📊 ANALYZE</div>
+          <div class="float-icon-bubble bubble-summary">⚡ SUMMARY</div>
+
+          <!-- Ambient Sparkles -->
+          <div class="sparkle-dot sparkle-1"></div>
+          <div class="sparkle-dot sparkle-2"></div>
+          <div class="sparkle-dot sparkle-3"></div>
+
+          <!-- Horizontal Glowing Cyan Transition Arrow -->
+          <div class="arrow-vector-wrapper">
+            <svg class="neon-arrow-svg" viewBox="0 0 180 48" fill="none">
+              <defs>
+                <linearGradient id="arrowGlowGradPDF" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.3"/>
+                  <stop offset="35%" stop-color="#22d3ee" stop-opacity="0.9"/>
+                  <stop offset="80%" stop-color="#38bdf8"/>
+                  <stop offset="100%" stop-color="#67e8f9"/>
+                </linearGradient>
+              </defs>
+              <rect x="0" y="20" width="138" height="8" rx="4" fill="url(#arrowGlowGradPDF)"/>
+              <path d="M132 8l38 16-38 16-6-6 24-10-24-10 6-6z" fill="#38bdf8"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- =========================================================
+           PANEL 2: ACTIVE USER - AFTER UPLOAD (POPULATED STATE)
+           ========================================================= -->
+      <div class="panel-column">
+        <div class="panel-label populated-label">PANEL 2: ACTIVE USER - AFTER UPLOAD (POPULATED STATE)</div>
+        
+        <div class="phone-container">
+          <div class="phone-inner">
+
+            <!-- Top Section -->
+            <div>
+              <!-- Status Bar -->
+              <div class="phone-status-bar">
+                <span>9:41</span>
+                <div class="status-icons">
+                  <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor">
+                    <rect x="0" y="7" width="2.5" height="3" rx="0.5" />
+                    <rect x="3.5" y="5" width="2.5" height="5" rx="0.5" />
+                    <rect x="7" y="2.5" width="2.5" height="7.5" rx="0.5" />
+                    <rect x="10.5" y="0" width="2.5" height="10" rx="0.5" />
+                  </svg>
+                  <svg width="13" height="10" viewBox="0 0 13 10" fill="currentColor">
+                    <path d="M6.5 2C8.8 2 10.9 2.9 12.4 4.5L6.5 10L0.6 4.5C2.1 2.9 4.2 2 6.5 2Z" />
+                  </svg>
+                  <svg width="18" height="9" viewBox="0 0 22 11" fill="none" stroke="currentColor">
+                    <rect x="1" y="1" width="17" height="9" rx="2.5" stroke-width="1.2" />
+                    <rect x="3" y="3" width="10" height="5" rx="1.2" fill="currentColor" />
+                    <path d="M19.5 4V7" stroke-width="1.2" stroke-linecap="round" />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Screen App Header -->
+              <div class="screen-header">
+                <div class="circle-back">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                </div>
+                <div class="brand-center">
+                  <span>VOZX AI</span>
+                  <div class="cyan-dot"></div>
+                </div>
+                <div class="profile-circle">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Title & Subtitle -->
+              <div class="title-banner">
+                <h2 class="main-screen-title">PDF Assistant</h2>
+                <p class="main-screen-subtitle">Upload, read, understand, and ask anything about your PDFs with AI.</p>
+              </div>
+
+              <!-- Upload PDF Dropzone Card -->
+              <div class="upload-dropzone-card">
+                <div class="upload-icon-circle">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+                    <path d="M12 12v9"></path>
+                    <path d="m16 16-4-4-4 4"></path>
+                  </svg>
+                </div>
+                <div class="upload-title">Upload PDF</div>
+                <div class="upload-sub">Tap to upload or drag & drop</div>
+                <div class="upload-tag">Supports PDF only • Max 50MB</div>
+              </div>
+
+              <!-- Recent PDFs Section Header -->
+              <div class="section-header-row">
+                <span class="section-heading-text">Recent PDFs</span>
+                <span class="section-view-all">View all &gt;</span>
+              </div>
+
+              <!-- Populated PDF File Cards List (4 distinct items) -->
+              <div class="populated-pdf-list">
+                
+                <!-- Item 1: Machine Learning Notes.pdf -->
+                <div class="pdf-file-card">
+                  <div class="pdf-file-left">
+                    <div class="pdf-icon-badge">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                      </svg>
+                      <span>PDF</span>
+                    </div>
+                    <div class="pdf-info-group">
+                      <div class="pdf-title">Machine Learning Notes.pdf</div>
+                      <div class="pdf-meta">4.2 MB • 2 hours ago</div>
+                    </div>
+                  </div>
+                  <div class="pdf-more-btn">•••</div>
+                </div>
+
+                <!-- Item 2: Project Report - PrintFlow.pdf -->
+                <div class="pdf-file-card">
+                  <div class="pdf-file-left">
+                    <div class="pdf-icon-badge">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                      </svg>
+                      <span>PDF</span>
+                    </div>
+                    <div class="pdf-info-group">
+                      <div class="pdf-title">Project Report - PrintFlow.pdf</div>
+                      <div class="pdf-meta">8.7 MB • Yesterday</div>
+                    </div>
+                  </div>
+                  <div class="pdf-more-btn">•••</div>
+                </div>
+
+                <!-- Item 3: Semester Syllabus.pdf -->
+                <div class="pdf-file-card">
+                  <div class="pdf-file-left">
+                    <div class="pdf-icon-badge">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                      </svg>
+                      <span>PDF</span>
+                    </div>
+                    <div class="pdf-info-group">
+                      <div class="pdf-title">Semester Syllabus.pdf</div>
+                      <div class="pdf-meta">1.8 MB • Sep 18, 2026</div>
+                    </div>
+                  </div>
+                  <div class="pdf-more-btn">•••</div>
+                </div>
+
+                <!-- Item 4: Car AI Research.pdf -->
+                <div class="pdf-file-card">
+                  <div class="pdf-file-left">
+                    <div class="pdf-icon-badge">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                      </svg>
+                      <span>PDF</span>
+                    </div>
+                    <div class="pdf-info-group">
+                      <div class="pdf-title">Car AI Research.pdf</div>
+                      <div class="pdf-meta">12.4 MB • Sep 15, 2026</div>
+                    </div>
+                  </div>
+                  <div class="pdf-more-btn">•••</div>
+                </div>
+
+              </div>
+
+              <!-- AI Summary Card -->
+              <div class="ai-summary-card">
+                <div class="ai-summary-left">
+                  <div class="ai-summary-icon">
+                    <span>[p]</span>
+                  </div>
+                  <div>
+                    <div class="ai-summary-title">AI Summary</div>
+                    <div class="ai-summary-sub">Get a quick summary of any PDF in seconds.</div>
+                  </div>
+                </div>
+                <div class="ai-summary-arrow">&gt;</div>
+              </div>
+            </div>
+
+            <!-- Bottom Chat Query Bar -->
+            <div class="chat-section">
+              <div class="chat-heading-row">
+                <span class="chat-heading">Ask questions about your PDF</span>
+                <span class="chat-star-icon">✦</span>
+              </div>
+              <div class="chat-input-bar">
+                <span class="chat-placeholder">e.g. What are the key points in this document?</span>
+                <div class="chat-send-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="19" x2="12" y2="5"></line>
+                    <polyline points="5 12 12 5 19 12"></polyline>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
