@@ -202,7 +202,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <span>Log Out of VOZX AI</span>
           </button>
         </div>
-       </div>`
+       </div>`,
+      false
     );
 
     setTimeout(() => {
@@ -296,10 +297,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2400);
   }
 
-  function openSheet(title, contentHtml) {
+  function openSheet(title, contentHtml, showDismissBtn = true) {
     if (!modalOverlay) return;
     sheetTitle.textContent = title;
     sheetBody.innerHTML = contentHtml;
+    if (sheetCloseBtn) {
+      sheetCloseBtn.textContent = 'Dismiss';
+      sheetCloseBtn.style.display = showDismissBtn ? 'block' : 'none';
+    }
     modalOverlay.classList.add('active');
   }
 
@@ -309,6 +314,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (sheetCloseBtn) sheetCloseBtn.addEventListener('click', closeSheet);
+  const sheetCloseHeaderBtn = document.getElementById('sheetCloseHeaderBtn');
+  if (sheetCloseHeaderBtn) sheetCloseHeaderBtn.addEventListener('click', closeSheet);
   if (modalOverlay) {
     modalOverlay.addEventListener('click', (e) => {
       if (e.target === modalOverlay) closeSheet();
@@ -758,20 +765,24 @@ document.addEventListener('DOMContentLoaded', () => {
     settingsBtn.addEventListener('click', () => {
       openSheet(
         'System Settings',
-        `<div style="display: flex; flex-direction: column; gap: 12px; font-size: 13px; color: #cbd5e1;">
-          <div style="display: flex; justify-content: space-between;">
-            <span>Dark Neon Theme</span>
-            <span style="color: #38bdf8; font-weight: 600;">Active</span>
+        `<div class="settings-modal-content">
+          <div class="settings-row">
+            <span class="settings-row-label">Dark Neon Theme</span>
+            <span class="settings-badge-active">Active</span>
           </div>
-          <div style="display: flex; justify-content: space-between;">
-            <span>Multi-Screen Navigation</span>
-            <span style="color: #10b981; font-weight: 600;">SPA Enabled</span>
+          <div class="settings-row">
+            <span class="settings-row-label">Multi-Screen Navigation</span>
+            <span class="settings-badge-green">SPA Enabled</span>
           </div>
-          <div style="display: flex; justify-content: space-between;">
-            <span>Episodic Memory Sync</span>
-            <span style="color: #38bdf8; font-weight: 600;">2,410 Entities</span>
+          <div class="settings-row">
+            <span class="settings-row-label">Episodic Memory Sync</span>
+            <span class="settings-badge-blue">2,410 Entities</span>
           </div>
-          <div style="margin-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 10px;">
+          <div class="settings-row">
+            <span class="settings-row-label">Active Account</span>
+            <span style="color: #94a3b8; font-size: 12px;">varun.reddy@gmail.com</span>
+          </div>
+          <div style="margin-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 12px; width: 100%;">
             <button id="settingsLogoutBtn" class="profile-logout-btn">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -781,9 +792,11 @@ document.addEventListener('DOMContentLoaded', () => {
               <span>Sign Out of VOZX AI</span>
             </button>
           </div>
-         </div>`
+         </div>`,
+        true
       );
 
+      if (sheetCloseBtn) sheetCloseBtn.textContent = 'Done';
       document.getElementById('settingsLogoutBtn')?.addEventListener('click', performLogout);
     });
   }
