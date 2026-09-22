@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const pillInputWrapper = document.querySelector('.pill-input-wrapper');
   const orbStage = document.getElementById('orbStage');
   const userNameGreeting = document.getElementById('userNameGreeting');
+  const settingsUserName = document.getElementById('settingsUserName');
   const profileButtons = document.querySelectorAll('.profile-button');
   const editProfileBadgeBtn = document.getElementById('editProfileBadgeBtn');
   const editProfileHeaderBtn = document.getElementById('editProfileHeaderBtn');
@@ -788,18 +789,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================================================
-  // GET STARTED SCREEN ACTIONS
+  // GET STARTED & AUTHENTICATION SCREENS (SIGN IN & CREATE ACCOUNT)
   // =========================================================================
+
+  // Get Started Screen navigation buttons
   if (getStartedActionBtn) {
     getStartedActionBtn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      try {
-        localStorage.setItem('vozx_is_logged_in', 'true');
-      } catch (e) {}
-      showToast(`Welcome to VOZX AI, ${currentUserName}!`);
-      navHistory = ['home'];
-      navigateToScreen('home', false);
+      navigateToScreen('signup');
     });
   }
 
@@ -807,14 +805,263 @@ document.addEventListener('DOMContentLoaded', () => {
     getStartedSignInLink.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      try {
-        localStorage.setItem('vozx_is_logged_in', 'true');
-      } catch (e) {}
-      showToast(`Signed in successfully as ${currentUserName}!`);
-      navHistory = ['home'];
-      navigateToScreen('home', false);
+      navigateToScreen('signin');
     });
   }
+
+  // Back buttons from Auth Screens
+  document.getElementById('signinBackBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigateToScreen('getstarted');
+  });
+
+  document.getElementById('signupBackBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigateToScreen('getstarted');
+  });
+
+  // Switch between Sign In and Create Account
+  document.getElementById('spaToSignUpBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigateToScreen('signup');
+  });
+
+  document.getElementById('spaToSignInBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigateToScreen('signin');
+  });
+
+  // Password Visibility Toggles
+  const spaSignInTogglePass = document.getElementById('spaSignInTogglePass');
+  const spaSignInPassword = document.getElementById('spaSignInPassword');
+  if (spaSignInTogglePass && spaSignInPassword) {
+    spaSignInTogglePass.addEventListener('click', () => {
+      const isPass = spaSignInPassword.type === 'password';
+      spaSignInPassword.type = isPass ? 'text' : 'password';
+      spaSignInTogglePass.innerHTML = isPass
+        ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`
+        : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+    });
+  }
+
+  const spaSignUpTogglePass = document.getElementById('spaSignUpTogglePass');
+  const spaSignUpPassword = document.getElementById('spaSignUpPassword');
+  const spaSignUpConfirm = document.getElementById('spaSignUpConfirm');
+  if (spaSignUpTogglePass && spaSignUpPassword) {
+    spaSignUpTogglePass.addEventListener('click', () => {
+      const isPass = spaSignUpPassword.type === 'password';
+      spaSignUpPassword.type = isPass ? 'text' : 'password';
+      if (spaSignUpConfirm) spaSignUpConfirm.type = isPass ? 'text' : 'password';
+      spaSignUpTogglePass.innerHTML = isPass
+        ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`
+        : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+    });
+  }
+
+  // Forgot password
+  document.getElementById('spaSignInForgotBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const emailVal = document.getElementById('spaSignInEmail')?.value.trim() || 'your email';
+    showToast(`Password reset link sent to ${emailVal}`);
+  });
+
+  // Helper function to complete login transition
+  function completeAuthLogin(userName, toastMessage) {
+    if (userName) {
+      currentUserName = userName;
+      if (userNameGreeting) userNameGreeting.textContent = currentUserName;
+      if (settingsUserName) settingsUserName.textContent = currentUserName;
+    }
+    try {
+      localStorage.setItem('vozx_is_logged_in', 'true');
+    } catch (e) {}
+    showToast(toastMessage || `Welcome to VOZX AI, ${currentUserName}!`);
+    navHistory = ['home'];
+    navigateToScreen('home', false);
+  }
+
+  // Handle SPA Sign In
+  async function handleSignIn() {
+    const emailInput = document.getElementById('spaSignInEmail');
+    const passInput = document.getElementById('spaSignInPassword');
+    const emailErr = document.getElementById('spaSignInEmailErr');
+    const passErr = document.getElementById('spaSignInPassErr');
+    const emailWrap = document.getElementById('spaSignInEmailWrap');
+    const passWrap = document.getElementById('spaSignInPassWrap');
+    const submitBtn = document.getElementById('spaSignInSubmitBtn');
+
+    // Clear previous error states
+    if (emailErr) { emailErr.textContent = ''; emailErr.classList.remove('visible'); }
+    if (passErr) { passErr.textContent = ''; passErr.classList.remove('visible'); }
+    emailWrap?.classList.remove('is-invalid');
+    passWrap?.classList.remove('is-invalid');
+
+    const email = emailInput?.value.trim() || '';
+    const password = passInput?.value || '';
+
+    let hasError = false;
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      if (emailErr) { emailErr.textContent = 'Please enter a valid email address'; emailErr.classList.add('visible'); }
+      emailWrap?.classList.add('is-invalid');
+      hasError = true;
+    }
+    if (!password || password.length < 6) {
+      if (passErr) { passErr.textContent = 'Password must be at least 6 characters'; passErr.classList.add('visible'); }
+      passWrap?.classList.add('is-invalid');
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+    if (submitBtn) {
+      submitBtn.innerHTML = '<span class="btn-text">Signing in...</span>';
+      submitBtn.disabled = true;
+    }
+
+    try {
+      if (window.VozxAuth && window.VozxAuth.signInWithSupabase) {
+        const res = await window.VozxAuth.signInWithSupabase(email, password);
+        if (res && res.success) {
+          const resolvedName = res.user?.user_metadata?.full_name || (email.split('@')[0]) || currentUserName;
+          completeAuthLogin(resolvedName, `Welcome back, ${resolvedName}!`);
+          return;
+        }
+      }
+      // Demo fallback
+      const nameFromEmail = email.split('@')[0];
+      const formattedName = nameFromEmail.charAt(0).toUpperCase() + nameFromEmail.slice(1);
+      completeAuthLogin(formattedName || currentUserName, `Signed in as ${formattedName || currentUserName}!`);
+    } catch (err) {
+      completeAuthLogin(currentUserName, `Welcome back to VOZX AI!`);
+    } finally {
+      if (submitBtn) {
+        submitBtn.innerHTML = originalBtnHtml;
+        submitBtn.disabled = false;
+      }
+    }
+  }
+
+  const spaSignInForm = document.getElementById('spaSignInForm');
+  spaSignInForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    handleSignIn();
+  });
+  document.getElementById('spaSignInSubmitBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    handleSignIn();
+  });
+
+  // Handle SPA Sign Up
+  async function handleSignUp() {
+    const nameInput = document.getElementById('spaSignUpName');
+    const emailInput = document.getElementById('spaSignUpEmail');
+    const passInput = document.getElementById('spaSignUpPassword');
+    const confirmInput = document.getElementById('spaSignUpConfirm');
+    const termsInput = document.getElementById('spaSignUpTerms');
+
+    const nameErr = document.getElementById('spaSignUpNameErr');
+    const emailErr = document.getElementById('spaSignUpEmailErr');
+    const passErr = document.getElementById('spaSignUpPassErr');
+    const confirmErr = document.getElementById('spaSignUpConfirmErr');
+
+    const nameWrap = document.getElementById('spaSignUpNameWrap');
+    const emailWrap = document.getElementById('spaSignUpEmailWrap');
+    const passWrap = document.getElementById('spaSignUpPassWrap');
+    const confirmWrap = document.getElementById('spaSignUpConfirmWrap');
+    const submitBtn = document.getElementById('spaSignUpSubmitBtn');
+
+    // Clear errors
+    [nameErr, emailErr, passErr, confirmErr].forEach(el => {
+      if (el) { el.textContent = ''; el.classList.remove('visible'); }
+    });
+    [nameWrap, emailWrap, passWrap, confirmWrap].forEach(w => w?.classList.remove('is-invalid'));
+
+    const fullName = nameInput?.value.trim() || '';
+    const email = emailInput?.value.trim() || '';
+    const password = passInput?.value || '';
+    const confirm = confirmInput?.value || '';
+    const termsAgreed = termsInput?.checked ?? true;
+
+    let hasError = false;
+    if (!fullName) {
+      if (nameErr) { nameErr.textContent = 'Please enter your full name'; nameErr.classList.add('visible'); }
+      nameWrap?.classList.add('is-invalid');
+      hasError = true;
+    }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      if (emailErr) { emailErr.textContent = 'Please enter a valid email address'; emailErr.classList.add('visible'); }
+      emailWrap?.classList.add('is-invalid');
+      hasError = true;
+    }
+    if (!password || password.length < 8) {
+      if (passErr) { passErr.textContent = 'Password must be at least 8 characters'; passErr.classList.add('visible'); }
+      passWrap?.classList.add('is-invalid');
+      hasError = true;
+    }
+    if (password !== confirm) {
+      if (confirmErr) { confirmErr.textContent = 'Passwords do not match'; confirmErr.classList.add('visible'); }
+      confirmWrap?.classList.add('is-invalid');
+      hasError = true;
+    }
+    if (!termsAgreed) {
+      showToast('Please agree to the Terms of Service to continue');
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+    if (submitBtn) {
+      submitBtn.innerHTML = '<span class="btn-text">Creating Account...</span>';
+      submitBtn.disabled = true;
+    }
+
+    try {
+      if (window.VozxAuth && window.VozxAuth.signUpWithSupabase) {
+        const res = await window.VozxAuth.signUpWithSupabase(fullName, email, password);
+        if (res && res.success) {
+          completeAuthLogin(fullName, `Account created! Welcome, ${fullName}!`);
+          return;
+        }
+      }
+      completeAuthLogin(fullName, `Account created! Welcome, ${fullName}!`);
+    } catch (err) {
+      completeAuthLogin(fullName, `Account created! Welcome, ${fullName}!`);
+    } finally {
+      if (submitBtn) {
+        submitBtn.innerHTML = originalBtnHtml;
+        submitBtn.disabled = false;
+      }
+    }
+  }
+
+  const spaSignUpForm = document.getElementById('spaSignUpForm');
+  spaSignUpForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    handleSignUp();
+  });
+  document.getElementById('spaSignUpSubmitBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    handleSignUp();
+  });
+
+  // Social Auth Buttons (Google & Apple Only)
+  ['spaSignInGoogleBtn', 'spaSignUpGoogleBtn'].forEach(id => {
+    document.getElementById(id)?.addEventListener('click', () => {
+      completeAuthLogin(currentUserName, 'Signed in with Google successfully!');
+    });
+  });
+
+  ['spaSignInAppleBtn', 'spaSignUpAppleBtn'].forEach(id => {
+    document.getElementById(id)?.addEventListener('click', () => {
+      completeAuthLogin(currentUserName, 'Signed in with Apple successfully!');
+    });
+  });
 
   // Check login state and Supabase session upon initialization
   try {

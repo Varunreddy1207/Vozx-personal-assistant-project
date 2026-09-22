@@ -1768,11 +1768,225 @@
         <!-- 5. Secondary Auth & Presentation Links -->
         <div class="getstarted-footer-links">
           <div class="bottom-auth-link">
-            Already have an account? <span id="getStartedSignInLink" class="link-accent">Sign In</span>
+            Already have an account? <button type="button" id="getStartedSignInLink" class="link-accent inline-auth-btn">Sign In</button>
           </div>
           <a href="onboarding.html" class="getstarted-onboarding-link" title="Open Full 8-Screen Onboarding Presentation">
             <span>✨</span> View Full 8-Screen Onboarding Flow &rarr;
           </a>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           SCREEN 9: DEDICATED SIGN IN SCREEN (SPA)
+           ================================================================= -->
+      <section id="screenSignIn" class="app-screen" data-screen="signin" aria-label="Sign In">
+        <div class="auth-card-container">
+          <!-- Top Header with Back button -->
+          <div class="auth-top-header">
+            <button type="button" class="back-circle-btn" id="signinBackBtn" aria-label="Back to Get Started" title="Back">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+            </button>
+            <div class="brand-wrapper">
+              <span class="brand-name" style="font-size: 18px;">VOZX AI</span>
+              <span class="brand-dot"></span>
+            </div>
+            <div style="width: 40px;"></div>
+          </div>
+
+          <!-- Avatar Badge -->
+          <div class="auth-avatar-section">
+            <div class="auth-avatar-ring">
+              <div class="auth-avatar-inner">VR</div>
+            </div>
+            <span class="auth-status-chip">AI Ready</span>
+          </div>
+
+          <!-- Title Block -->
+          <div class="auth-title-block">
+            <h2 class="auth-main-title">Welcome Back</h2>
+            <p class="auth-sub-title">Sign in to continue with your AI-powered personal assistant.</p>
+          </div>
+
+          <!-- Sign In Form -->
+          <form id="spaSignInForm" class="auth-form" novalidate>
+            <div class="auth-input-field" id="spaSignInEmailWrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                <path d="M22 6l-10 7L2 6"></path>
+              </svg>
+              <input type="email" id="spaSignInEmail" class="auth-text-input" placeholder="Email Address" value="varun.reddy@gmail.com" required autocomplete="email">
+            </div>
+            <div class="auth-error-hint" id="spaSignInEmailErr"></div>
+
+            <div class="auth-input-field" id="spaSignInPassWrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <input type="password" id="spaSignInPassword" class="auth-text-input" placeholder="Password" value="VozxAI#2026" required autocomplete="current-password">
+              <button type="button" class="auth-eye-btn" id="spaSignInTogglePass" aria-label="Toggle Password Visibility">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+            <div class="auth-error-hint" id="spaSignInPassErr"></div>
+
+            <div class="auth-options-row">
+              <label class="auth-checkbox-label">
+                <input type="checkbox" id="spaSignInRemember" checked>
+                <span>Remember me</span>
+              </label>
+              <button type="button" class="auth-forgot-link" id="spaSignInForgotBtn">Forgot Password?</button>
+            </div>
+
+            <button type="submit" class="cyan-action-btn auth-submit-btn" id="spaSignInSubmitBtn">
+              <span class="btn-text">Sign In &rarr;</span>
+            </button>
+          </form>
+
+          <!-- Social Grid (Google & Apple Only) -->
+          <div class="auth-divider"><span>or continue with</span></div>
+          <div class="auth-social-row">
+            <button type="button" class="auth-social-btn" id="spaSignInGoogleBtn" title="Continue with Google">
+              <svg width="18" height="18" viewBox="0 0 24 24">
+                <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z"/>
+                <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/>
+                <path fill="#FBBC05" d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 10.6 0 12s.6 2.7 1.6 4.7l3.7-1.9z"/>
+                <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16c1.9 3.7 5.8 7 10.4 7z"/>
+              </svg>
+              <span>Google</span>
+            </button>
+            <button type="button" class="auth-social-btn" id="spaSignInAppleBtn" title="Continue with Apple">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.62-.75 1.04-1.8 0.92-2.85-.9.04-1.99.6-2.63 1.35-.57.65-.98 1.7-0.85 2.73.99.08 2.01-.52 2.56-1.23z"/>
+              </svg>
+              <span>Apple</span>
+            </button>
+          </div>
+
+          <!-- Toggle to Sign Up -->
+          <div class="auth-bottom-switch">
+            Don't have an account? <button type="button" class="auth-switch-link" id="spaToSignUpBtn">Create Account</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           SCREEN 10: DEDICATED CREATE ACCOUNT SCREEN (SPA)
+           ================================================================= -->
+      <section id="screenSignUp" class="app-screen" data-screen="signup" aria-label="Create Your Account">
+        <div class="auth-card-container">
+          <!-- Top Header with Back button -->
+          <div class="auth-top-header">
+            <button type="button" class="back-circle-btn" id="signupBackBtn" aria-label="Back to Get Started" title="Back">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+            </button>
+            <div class="brand-wrapper">
+              <span class="brand-name" style="font-size: 18px;">VOZX AI</span>
+              <span class="brand-dot"></span>
+            </div>
+            <div style="width: 40px;"></div>
+          </div>
+
+          <!-- Title Block -->
+          <div class="auth-title-block" style="margin-top: 8px;">
+            <h2 class="auth-main-title">Create Your Account</h2>
+            <p class="auth-sub-title">Join VOZX and unlock your AI-powered productivity</p>
+          </div>
+
+          <!-- Sign Up Form -->
+          <form id="spaSignUpForm" class="auth-form" novalidate>
+            <!-- Full Name -->
+            <div class="auth-input-field" id="spaSignUpNameWrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <input type="text" id="spaSignUpName" class="auth-text-input" placeholder="Full Name" value="Varun Reddy" required autocomplete="name">
+            </div>
+            <div class="auth-error-hint" id="spaSignUpNameErr"></div>
+
+            <!-- Email -->
+            <div class="auth-input-field" id="spaSignUpEmailWrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                <path d="M22 6l-10 7L2 6"></path>
+              </svg>
+              <input type="email" id="spaSignUpEmail" class="auth-text-input" placeholder="Email Address" value="varun.reddy@gmail.com" required autocomplete="email">
+            </div>
+            <div class="auth-error-hint" id="spaSignUpEmailErr"></div>
+
+            <!-- Password -->
+            <div class="auth-input-field" id="spaSignUpPassWrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <input type="password" id="spaSignUpPassword" class="auth-text-input" placeholder="Password (min. 8 chars)" value="VozxAI#2026" required autocomplete="new-password">
+              <button type="button" class="auth-eye-btn" id="spaSignUpTogglePass" aria-label="Toggle Password Visibility">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+            <div class="auth-error-hint" id="spaSignUpPassErr"></div>
+
+            <!-- Confirm Password -->
+            <div class="auth-input-field" id="spaSignUpConfirmWrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <input type="password" id="spaSignUpConfirm" class="auth-text-input" placeholder="Confirm Password" value="VozxAI#2026" required autocomplete="new-password">
+            </div>
+            <div class="auth-error-hint" id="spaSignUpConfirmErr"></div>
+
+            <!-- Terms Checkbox -->
+            <div class="auth-options-row" style="margin-top: 4px;">
+              <label class="auth-checkbox-label">
+                <input type="checkbox" id="spaSignUpTerms" checked>
+                <span>I agree to the Terms of Service and Privacy Policy</span>
+              </label>
+            </div>
+
+            <button type="submit" class="cyan-action-btn auth-submit-btn" id="spaSignUpSubmitBtn">
+              <span class="btn-text">Create Account &rarr;</span>
+            </button>
+          </form>
+
+          <!-- Social Grid (Google & Apple Only) -->
+          <div class="auth-divider"><span>or continue with</span></div>
+          <div class="auth-social-row">
+            <button type="button" class="auth-social-btn" id="spaSignUpGoogleBtn" title="Continue with Google">
+              <svg width="18" height="18" viewBox="0 0 24 24">
+                <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.9 5 12 5z"/>
+                <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/>
+                <path fill="#FBBC05" d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.6 7.3C.6 9.3 0 10.6 0 12s.6 2.7 1.6 4.7l3.7-1.9z"/>
+                <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.2L1.6 16c1.9 3.7 5.8 7 10.4 7z"/>
+              </svg>
+              <span>Google</span>
+            </button>
+            <button type="button" class="auth-social-btn" id="spaSignUpAppleBtn" title="Continue with Apple">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.62-.75 1.04-1.8 0.92-2.85-.9.04-1.99.6-2.63 1.35-.57.65-.98 1.7-0.85 2.73.99.08 2.01-.52 2.56-1.23z"/>
+              </svg>
+              <span>Apple</span>
+            </button>
+          </div>
+
+          <!-- Toggle to Sign In -->
+          <div class="auth-bottom-switch">
+            Already have an account? <button type="button" class="auth-switch-link" id="spaToSignInBtn">Sign In</button>
+          </div>
         </div>
       </section>
 
