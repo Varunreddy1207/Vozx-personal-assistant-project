@@ -51,6 +51,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     targetScreen.classList.add('active');
 
+    // Dismiss any modals and overlays if navigating to offline screen
+    if (targetScreenId === 'offline') {
+      if (modalOverlay) modalOverlay.classList.remove('active');
+      const profileModal = document.getElementById('profileEditModal');
+      if (profileModal) profileModal.classList.remove('active');
+      const settingsModal = document.getElementById('settingsModal');
+      if (settingsModal) settingsModal.classList.remove('active');
+      const delModal = document.getElementById('deleteConfirmModal');
+      if (delModal) delModal.classList.remove('active');
+      const switcherModal = document.getElementById('mainAccountSwitcherModal');
+      if (switcherModal) switcherModal.classList.remove('active');
+    }
+
     // Manage text bar visibility with animation
     const bottomBar = document.querySelector('.bottom-bar-container');
     if (bottomBar) {
@@ -111,6 +124,15 @@ document.addEventListener('DOMContentLoaded', () => {
       e.stopPropagation();
       const target = card.dataset.screenTarget;
       if (!target) return;
+
+      // If offline, redirect to offline diagnostic screen for features requiring network
+      if (typeof isCurrentlyOffline !== 'undefined' && isCurrentlyOffline) {
+        if (target === 'voice' || target === 'chat' || target === 'pdf' || target === 'email') {
+          navigateToScreen('offline');
+          showToast('📡 This feature requires an active internet connection.');
+          return;
+        }
+      }
 
       if (target === 'voice') {
         activateVoiceMode();
@@ -570,6 +592,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!chatInput) return;
     const query = chatInput.value.trim();
     if (!query) return;
+
+    // Guard if offline
+    if (typeof isCurrentlyOffline !== 'undefined' && isCurrentlyOffline) {
+      navigateToScreen('offline');
+      showToast('📡 You are currently offline. Reconnect to chat with VOZX AI.');
+      return;
+    }
 
     chatInput.value = '';
     sendBtn?.classList.remove('active-ready');
@@ -1630,7 +1659,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================================================
-  // OFFLINE / NO INTERNET CONTROLLER & CONNECTIVITY LIFECYCLE
+  // OFFLINE / NO INTERNET CONTROLLER & MULTI-LAYER RESILIENCE SYSTEM
   // =========================================================================
   const offlineBackBtn = document.getElementById('offlineBackBtn');
   const offlineRetryBtn = document.getElementById('offlineRetryBtn');
@@ -1640,6 +1669,45 @@ document.addEventListener('DOMContentLoaded', () => {
   const offlineGuidanceCard = document.querySelector('.offline-guidance-card');
 
   let isOfflineModeActive = false;
+  let isCurrentlyOffline = false;
+  let isCheckingNetwork = false;
+
+  // Active network probe with timeout & fallback (checks if real internet packets resolve)
+  async function checkActualInternet(timeoutMs = 2200) {
+    if (!navigator.onLine) return false;
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+      // Primary: Google DNS query endpoint (resolves in ~100-200ms)
+      await fetch('https://dns.google/resolve?name=example.com&type=A&_t=' + Date.now(), {
+        method: 'GET',
+        mode: 'no-cors',
+        cache: 'no-store',
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+      return true;
+    } catch (err) {
+      clearTimeout(timeoutId);
+      // Secondary fallback probe: Google favicon
+      try {
+        const ctrl2 = new AbortController();
+        const tm2 = setTimeout(() => ctrl2.abort(), 1500);
+        await fetch('https://www.google.com/favicon.ico?_t=' + Date.now(), {
+          method: 'HEAD',
+          mode: 'no-cors',
+          cache: 'no-store',
+          signal: ctrl2.signal
+        });
+        clearTimeout(tm2);
+        return true;
+      } catch (err2) {
+        return false;
+      }
+    }
+  }
 
   function updateOfflineState(isOffline, navigateIfOffline = false) {
     if (headerOfflinePill) {
@@ -1647,11 +1715,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (isOffline) {
-      isOfflineModeActive = true;
-      if (navigateIfOffline) {
+      isCurrentlyOffline = true;
+      if (navigateIfOffline && !isOfflineModeActive) {
         navigateToScreen('offline');
       }
     } else {
+      isCurrentlyOffline = false;
       isOfflineModeActive = false;
       const currentActive = document.querySelector('.app-screen.active');
       if (currentActive && currentActive.dataset.screen === 'offline') {
@@ -1661,14 +1730,57 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Browser Network Events
+  async function syncNetworkStatus(forceNavigate = true) {
+    if (isCheckingNetwork) return;
+    isCheckingNetwork = true;
+    try {
+      const online = await checkActualInternet();
+      if (!online) {
+        if (!isCurrentlyOffline) {
+          isCurrentlyOffline = true;
+          updateOfflineState(true, forceNavigate);
+          showToast('📡 Connection lost. Switched to offline mode.');
+        } else if (forceNavigate && !isOfflineModeActive) {
+          const currentActive = document.querySelector('.app-screen.active');
+          if (currentActive && currentActive.dataset.screen !== 'offline') {
+            navigateToScreen('offline');
+          }
+        }
+      } else {
+        if (isCurrentlyOffline) {
+          isCurrentlyOffline = false;
+          updateOfflineState(false);
+        }
+      }
+    } catch (e) {
+    } finally {
+      isCheckingNetwork = false;
+    }
+  }
+
+  // Active continuous heartbeat probe (every 2.5s)
+  // Essential for machines with VMware/WSL/VPN virtual adapters where navigator.onLine never turns false
+  setInterval(() => {
+    syncNetworkStatus(true);
+  }, 2500);
+
+  // Probe immediately on window focus or visibility change
+  window.addEventListener('focus', () => syncNetworkStatus(true));
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      syncNetworkStatus(true);
+    }
+  });
+
+  // Native Browser Network Events
   window.addEventListener('offline', () => {
+    isCurrentlyOffline = true;
     updateOfflineState(true, true);
     showToast('📡 Connection lost. Switched to offline mode.');
   });
 
   window.addEventListener('online', () => {
-    updateOfflineState(false);
+    syncNetworkStatus(false);
   });
 
   // Header Offline Pill opens diagnostics
@@ -1709,22 +1821,7 @@ document.addEventListener('DOMContentLoaded', () => {
       offlineRetryBtn.classList.add('checking');
       if (offlineRetryBtnText) offlineRetryBtnText.textContent = 'Checking...';
 
-      let connected = navigator.onLine;
-
-      // Probe lightweight fetch if browser reports online
-      if (connected) {
-        try {
-          await fetch('https://dns.google/resolve?name=example.com&type=A&_t=' + Date.now(), {
-            method: 'GET',
-            mode: 'no-cors',
-            cache: 'no-store'
-          });
-          connected = true;
-        } catch (err) {
-          // If offline or blocked, check navigator.onLine fallback
-          connected = navigator.onLine;
-        }
-      }
+      const connected = await checkActualInternet(3000);
 
       setTimeout(() => {
         offlineRetryBtn.classList.remove('checking');
@@ -1732,8 +1829,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (connected) {
           showToast('✨ Connection restored! Welcome back.');
+          isCurrentlyOffline = false;
+          isOfflineModeActive = false;
           updateOfflineState(false);
         } else {
+          isCurrentlyOffline = true;
           if (offlineGuidanceCard) {
             offlineGuidanceCard.classList.remove('offline-shake');
             void offlineGuidanceCard.offsetWidth; // Trigger reflow
@@ -1741,21 +1841,29 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           showToast('⚠️ Still offline. Please check your network connection.');
         }
-      }, 700);
+      }, 600);
     });
   }
 
-  // Check initial offline status on startup
+  // Check connectivity on startup:
   if (!navigator.onLine) {
-    updateOfflineState(true, false);
+    isCurrentlyOffline = true;
+    updateOfflineState(true, true);
+  } else {
+    // Run probe immediately on startup
+    syncNetworkStatus(true);
   }
 
-  // Global developer / test helpers
+  // Global developer & testing helpers
   window.simulateOffline = function(enable = true) {
-    updateOfflineState(enable, enable);
+    isCurrentlyOffline = enable;
     if (enable) {
+      isOfflineModeActive = false;
+      updateOfflineState(true, true);
       showToast('📡 Simulated Offline Mode');
     } else {
+      isOfflineModeActive = false;
+      updateOfflineState(false);
       showToast('✨ Simulated Online Mode: Connected');
     }
   };
