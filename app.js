@@ -119,12 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
           navigateToScreen('chat');
           chatInput?.focus();
         }, 220);
-      } else if (target === 'email') {
-        if (localStorage.getItem('vozx_email_linked') !== 'true') {
-          window.location.href = 'email-onboarding.html';
-        } else {
-          window.location.href = 'email-onboarding.html?step=4';
-        }
       } else {
         navigateToScreen(target);
       }
@@ -1355,6 +1349,28 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast(`✨ Connected ${emailVal}! Inbox ready.`);
     });
   }
+
+  // Bind Add Mail buttons to show the embedded Link Email interface
+  const mainScreenAddMailBtn = document.getElementById('mainScreenAddMailBtn');
+  const mainSwitcherAddAccountBtn = document.getElementById('mainSwitcherAddAccountBtn');
+
+  if (mainScreenAddMailBtn) {
+    mainScreenAddMailBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      setScreenEmptyState('email', true);
+      embeddedEmailInput?.focus();
+    });
+  }
+
+  if (mainSwitcherAddAccountBtn) {
+    mainSwitcherAddAccountBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeMainSwitcher();
+      setScreenEmptyState('email', true);
+      embeddedEmailInput?.focus();
+    });
+  }
+
   const emptyAddFirstMemoryBtn = document.getElementById('emptyAddFirstMemoryBtn');
   if (emptyAddFirstMemoryBtn) {
     emptyAddFirstMemoryBtn.addEventListener('click', () => {

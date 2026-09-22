@@ -3350,6 +3350,19 @@ body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
+.email-dashboard-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.email-grid-left,
+.email-grid-right {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .active-account-badge {
   display: flex;
   align-items: center;
@@ -4540,28 +4553,29 @@ body {
 
   /* Desktop Screen 6: Email Assistant (2-Column Split) */
   #screenEmail.active {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    grid-template-areas:
-      "header header"
-      "banner banner"
-      "accounts accounts"
-      "triage emails";
-    gap: 20px 32px;
-    align-items: start;
+    display: block;
+    max-width: 1240px;
+    margin: 0 auto;
+    width: 100%;
   }
 
-  #screenEmail .screen-top-header { grid-area: header; }
-  #screenEmail .screen-title-banner { grid-area: banner; margin-bottom: 4px; }
-  #screenEmail .connected-accounts-status-bar { grid-area: accounts; margin-bottom: 4px; }
-  #screenEmail .email-quick-triage-grid {
-    grid-area: triage;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+  .email-dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 28px;
+    align-items: start;
+    margin-top: 14px;
   }
-  #screenEmail #emailPopulatedView,
-  #screenEmail #emailEmptyView { grid-area: emails; }
+
+  #screenEmail #emailEmptyView .link-email-hero-block {
+    margin-top: 16px;
+    margin-bottom: 24px;
+  }
+
+  #screenEmail #emailEmptyView .link-email-glass-card {
+    max-width: 540px;
+    margin: 0 auto 30px auto;
+  }
 
   /* Desktop Chat Screen */
   #screenChat {

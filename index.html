@@ -1432,13 +1432,13 @@
             </button>
 
             <div class="account-actions-group">
-              <a href="email-onboarding.html" class="add-mail-pill-btn" id="mainScreenAddMailBtn" title="Connect another email address">
+              <button type="button" class="add-mail-pill-btn" id="mainScreenAddMailBtn" title="Connect another email address">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
                 <span>Add Mail</span>
-              </a>
+              </button>
             </div>
           </div>
 
@@ -1450,95 +1450,104 @@
             <button class="filter-pill-btn" data-email-tab="drafts">Drafts 2</button>
           </div>
 
-          <!-- AI Compose Card -->
-          <div class="feature-glass-card" id="aiComposeCard">
-            <div class="feature-glass-left">
-              <div class="feature-icon-box purple">✨</div>
-              <div>
-                <div class="feature-card-title">AI Compose</div>
-                <div class="feature-card-sub">Write a professional email in seconds.</div>
+          <!-- Responsive 2-Column Dashboard Grid -->
+          <div class="email-dashboard-grid">
+            <!-- Left Column: AI Compose, Summary, Suggestions -->
+            <div class="email-grid-left">
+              <!-- AI Compose Card -->
+              <div class="feature-glass-card" id="aiComposeCard">
+                <div class="feature-glass-left">
+                  <div class="feature-icon-box purple">✨</div>
+                  <div>
+                    <div class="feature-card-title">AI Compose</div>
+                    <div class="feature-card-sub">Write a professional email in seconds.</div>
+                  </div>
+                </div>
+                <span style="color: #94a3b8; font-weight: 600;">&gt;</span>
+              </div>
+
+              <!-- Email Summary Card -->
+              <div class="feature-glass-card" id="emailSummaryCard">
+                <div class="feature-glass-left">
+                  <div class="feature-icon-box blue">✉️</div>
+                  <div>
+                    <div class="feature-card-title">Email Summary</div>
+                    <div class="feature-card-sub">You have 12 unread emails, 3 important and 2 meeting invites.</div>
+                  </div>
+                </div>
+                <span style="color: #38bdf8; font-size: 11px;">View details &gt;</span>
+              </div>
+
+              <!-- Smart Reply Suggestions Header -->
+              <div class="subscreen-section-header">
+                <span class="subscreen-section-title" style="display: flex; align-items: center; gap: 5px;">
+                  💡 Smart Reply Suggestions
+                </span>
+                <span style="color: #94a3b8; font-weight: 600;">&gt;</span>
+              </div>
+
+              <!-- Smart Reply Pills -->
+              <div class="smart-replies-row" style="margin-bottom: 12px;">
+                <button class="smart-reply-chip" data-email-reply="Think I'll take a look.">"Think I'll take a look."</button>
+                <button class="smart-reply-chip" data-email-reply="Sounds good, let's do it.">"Sounds good, let's do it."</button>
+                <button class="smart-reply-chip" data-email-reply="I'm on it, will update soon.">"I'm on it, will update soon."</button>
               </div>
             </div>
-            <span style="color: #94a3b8; font-weight: 600;">&gt;</span>
-          </div>
 
-          <!-- Email Summary Card -->
-          <div class="feature-glass-card" id="emailSummaryCard">
-            <div class="feature-glass-left">
-              <div class="feature-icon-box blue">✉️</div>
-              <div>
-                <div class="feature-card-title">Email Summary</div>
-                <div class="feature-card-sub">You have 12 unread emails, 3 important and 2 meeting invites.</div>
+            <!-- Right Column: Recent Emails -->
+            <div class="email-grid-right">
+              <!-- Recent Emails Header -->
+              <div class="subscreen-section-header">
+                <span class="subscreen-section-title">Recent Emails</span>
+                <span class="subscreen-view-all">View all &gt;</span>
               </div>
-            </div>
-            <span style="color: #38bdf8; font-size: 11px;">View details &gt;</span>
-          </div>
 
-          <!-- Smart Reply Suggestions Header -->
-          <div class="subscreen-section-header">
-            <span class="subscreen-section-title" style="display: flex; align-items: center; gap: 5px;">
-              💡 Smart Reply Suggestions
-            </span>
-            <span style="color: #94a3b8; font-weight: 600;">&gt;</span>
-          </div>
+              <!-- Recent Emails List -->
+              <div class="pdf-items-list">
+                <div class="email-preview-item" data-email="fee">
+                  <div class="email-left">
+                    <span class="unread-dot" style="background: #ef4444; box-shadow: 0 0 6px #ef4444;"></span>
+                    <div>
+                      <div class="email-title">University Fee Reminder</div>
+                      <div style="font-size: 10px; color: #64748b;">accounts@sguniversity.ac.in</div>
+                    </div>
+                  </div>
+                  <span class="email-time">2h ago</span>
+                </div>
 
-          <!-- Smart Reply Pills -->
-          <div class="smart-replies-row" style="margin-bottom: 12px;">
-            <button class="smart-reply-chip" data-email-reply="Think I'll take a look.">"Think I'll take a look."</button>
-            <button class="smart-reply-chip" data-email-reply="Sounds good, let's do it.">"Sounds good, let's do it."</button>
-            <button class="smart-reply-chip" data-email-reply="I'm on it, will update soon.">"I'm on it, will update soon."</button>
-          </div>
+                <div class="email-preview-item" data-email="printflow">
+                  <div class="email-left">
+                    <span class="unread-dot" style="background: #38bdf8;"></span>
+                    <div>
+                      <div class="email-title">PrintFlow - Client Inquiry</div>
+                      <div style="font-size: 10px; color: #64748b;">client@printflow.in</div>
+                    </div>
+                  </div>
+                  <span class="email-time">5h ago</span>
+                </div>
 
-          <!-- Recent Emails Header -->
-          <div class="subscreen-section-header">
-            <span class="subscreen-section-title">Recent Emails</span>
-            <span class="subscreen-view-all">View all &gt;</span>
-          </div>
+                <div class="email-preview-item" data-email="meeting">
+                  <div class="email-left">
+                    <span class="unread-dot" style="background: #3b82f6;"></span>
+                    <div>
+                      <div class="email-title">Team Meeting Tomorrow</div>
+                      <div style="font-size: 10px; color: #64748b;">team@vozx.ai</div>
+                    </div>
+                  </div>
+                  <span class="email-time">7h ago</span>
+                </div>
 
-          <!-- Recent Emails List -->
-          <div class="pdf-items-list">
-            <div class="email-preview-item" data-email="fee">
-              <div class="email-left">
-                <span class="unread-dot" style="background: #ef4444; box-shadow: 0 0 6px #ef4444;"></span>
-                <div>
-                  <div class="email-title">University Fee Reminder</div>
-                  <div style="font-size: 10px; color: #64748b;">accounts@sguniversity.ac.in</div>
+                <div class="email-preview-item" data-email="update">
+                  <div class="email-left">
+                    <span class="unread-dot" style="background: #64748b; box-shadow: none;"></span>
+                    <div>
+                      <div class="email-title">Project Update</div>
+                      <div style="font-size: 10px; color: #64748b;">mentor@college.edu</div>
+                    </div>
+                  </div>
+                  <span class="email-time">1d ago</span>
                 </div>
               </div>
-              <span class="email-time">2h ago</span>
-            </div>
-
-            <div class="email-preview-item" data-email="printflow">
-              <div class="email-left">
-                <span class="unread-dot" style="background: #38bdf8;"></span>
-                <div>
-                  <div class="email-title">PrintFlow - Client Inquiry</div>
-                  <div style="font-size: 10px; color: #64748b;">client@printflow.in</div>
-                </div>
-              </div>
-              <span class="email-time">5h ago</span>
-            </div>
-
-            <div class="email-preview-item" data-email="meeting">
-              <div class="email-left">
-                <span class="unread-dot" style="background: #3b82f6;"></span>
-                <div>
-                  <div class="email-title">Team Meeting Tomorrow</div>
-                  <div style="font-size: 10px; color: #64748b;">team@vozx.ai</div>
-                </div>
-              </div>
-              <span class="email-time">7h ago</span>
-            </div>
-
-            <div class="email-preview-item" data-email="update">
-              <div class="email-left">
-                <span class="unread-dot" style="background: #64748b; box-shadow: none;"></span>
-                <div>
-                  <div class="email-title">Project Update</div>
-                  <div style="font-size: 10px; color: #64748b;">mentor@college.edu</div>
-                </div>
-              </div>
-              <span class="email-time">1d ago</span>
             </div>
           </div>
         </div>
@@ -1894,13 +1903,13 @@
           <!-- Dynamically rendered accounts list -->
         </div>
 
-        <a href="email-onboarding.html" class="switcher-add-btn" id="mainSwitcherAddAccountBtn">
+        <button type="button" class="switcher-add-btn" id="mainSwitcherAddAccountBtn">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
           <span>Add Another Email Account</span>
-        </a>
+        </button>
       </div>
     </div>
 

@@ -129,37 +129,44 @@ html, body {
 }
 
 /* ==========================================================================
-   PHONE HARDWARE FRAME (Matching Reference Screen Exact Ratio)
+   RESPONSIVE VIEWPORT CONTAINER
    ========================================================================== */
-.phone-frame {
+.phone-frame,
+.email-viewport-container {
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 412px;
-  height: 890px;
-  max-height: calc(100vh - 20px);
+  max-width: 1240px;
+  min-height: 90vh;
   background: #050816;
-  border-radius: 46px;
-  border: 1.6px solid rgba(34, 211, 238, 0.38);
+  border-radius: 24px;
+  border: 1px solid rgba(34, 211, 238, 0.25);
   box-shadow: 
-    0 0 0 1px rgba(2, 132, 199, 0.15),
-    0 0 45px rgba(34, 211, 238, 0.18),
-    0 25px 60px rgba(0, 0, 0, 0.85),
-    inset 0 0 20px rgba(34, 211, 238, 0.06);
+    0 0 0 1px rgba(2, 132, 199, 0.12),
+    0 0 35px rgba(34, 211, 238, 0.12),
+    0 25px 60px rgba(0, 0, 0, 0.85);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+  .phone-frame,
+  .email-viewport-container {
+    max-width: 100%;
+    min-height: 100vh;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    margin: 0;
+  }
 }
 
 .screen-perimeter-border {
-  position: absolute;
-  inset: 0;
-  border-radius: 46px;
-  pointer-events: none;
-  box-shadow: inset 0 0 25px rgba(34, 211, 238, 0.08);
-  z-index: 1;
+  display: none !important;
 }
 
 .sweeping-plasma-arc {
@@ -167,7 +174,7 @@ html, body {
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  border-radius: 46px;
+  border-radius: 24px;
   background: 
     radial-gradient(ellipse 130% 65% at -10% 25%, rgba(34, 211, 238, 0.35) 0%, rgba(14, 165, 233, 0.16) 35%, transparent 68%),
     radial-gradient(ellipse 85% 55% at 110% 75%, rgba(168, 85, 247, 0.24) 0%, rgba(34, 211, 238, 0.1) 40%, transparent 72%),
@@ -175,33 +182,9 @@ html, body {
   mix-blend-mode: screen;
 }
 
-/* Phone Top Status Bar */
+/* Phone Top Status Bar - Completely Removed */
 .phone-status-notch {
-  position: relative;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 28px 4px;
-  font-size: 13.5px;
-  font-weight: 600;
-  color: #cbd5e1;
-  letter-spacing: 0.2px;
-}
-
-.dynamic-island-pill {
-  width: 82px;
-  height: 18px;
-  background: #020409;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.status-right-icons {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  color: #cbd5e1;
+  display: none !important;
 }
 
 /* Multi-Screen Viewport */
@@ -2104,16 +2087,61 @@ html, body {
   display: none !important;
 }
 
-/* Responsive */
-@media (max-width: 440px) {
+/* Responsive Breakpoints */
+@media (max-width: 640px) {
   body {
     padding: 0;
   }
-  .phone-frame {
+  .phone-frame,
+  .email-viewport-container {
     border-radius: 0;
     min-height: 100vh;
     border: none;
     box-shadow: none;
+  }
+}
+
+@media (min-width: 1025px) {
+  body {
+    padding: 24px 32px;
+    align-items: stretch;
+  }
+
+  .phone-frame,
+  .email-viewport-container {
+    max-width: 1240px;
+    margin: 0 auto;
+    border-radius: 24px;
+    min-height: 88vh;
+  }
+
+  /* Centered wizard cards for onboarding steps 1, 2, 3 */
+  #screen1LinkEmail .hero-email-stage,
+  #screen1LinkEmail .link-email-glass-card,
+  #screen2OtpVerify .otp-card-stage,
+  #screen3Syncing .sync-card-stage {
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Desktop Dashboard Layout for Screen 4 */
+  #screen4Dashboard .dash-scroll-content {
+    max-width: 1240px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  #screen4Dashboard .dash-heading-block {
+    margin-bottom: 12px;
+  }
+
+  #screen4Dashboard .connected-accounts-bar {
+    margin-bottom: 14px;
+  }
+
+  #screen4Dashboard .dash-category-tabs {
+    margin-bottom: 18px;
   }
 }
 
