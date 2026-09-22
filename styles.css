@@ -5546,6 +5546,11 @@ body {
   padding-top: 0 !important;
 }
 
+.phone-viewport-container.offline-active .bottom-bar-container {
+  display: none !important;
+  pointer-events: none !important;
+}
+
 /* Bottom Planetary Horizon */
 .offline-planet-container {
   width: 100%;

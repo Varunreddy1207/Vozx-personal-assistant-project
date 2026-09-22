@@ -40,8 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // MULTI-SCREEN NAVIGATION CONTROLLER (SPA)
   // =========================================================================
   let navHistory = ['home'];
+  let isCurrentlyOffline = false;
 
   function navigateToScreen(targetScreenId, pushHistory = true) {
+    // Lock-in: User cannot navigate to website screens without an active internet connection
+    if (isCurrentlyOffline && targetScreenId !== 'offline') {
+      const offlineScreen = document.querySelector(`.app-screen[data-screen="offline"]`);
+      if (offlineScreen && !offlineScreen.classList.contains('active')) {
+        targetScreenId = 'offline';
+      } else {
+        showToast('📡 No internet connection. Reconnect to access VOZX AI.');
+        return;
+      }
+    }
+
     const targetScreen = document.querySelector(`.app-screen[data-screen="${targetScreenId}"]`);
     if (!targetScreen) return;
 
@@ -101,6 +113,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function goBack() {
+    // User cannot go back without internet
+    if (isCurrentlyOffline) {
+      showToast('📡 No internet connection. Reconnect to access VOZX AI.');
+      return;
+    }
     if (navHistory.length > 1) {
       navHistory.pop(); // Remove current screen
       const prevScreenId = navHistory[navHistory.length - 1];
@@ -109,6 +126,18 @@ document.addEventListener('DOMContentLoaded', () => {
       navigateToScreen('home', false);
     }
   }
+
+  // Intercept browser back / popstate navigation when offline
+  window.addEventListener('popstate', () => {
+    if (isCurrentlyOffline) {
+      history.pushState(null, '', window.location.href);
+      const offlineScreen = document.querySelector(`.app-screen[data-screen="offline"]`);
+      if (offlineScreen && !offlineScreen.classList.contains('active')) {
+        navigateToScreen('offline', false);
+      }
+      showToast('📡 No internet connection. Reconnect to access VOZX AI.');
+    }
+  });
 
   // Bind All Header Back Buttons
   navBackButtons.forEach(btn => {
@@ -1663,12 +1692,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================================================
   const offlineRetryBtn = document.getElementById('offlineRetryBtn');
   const offlineRetryBtnText = document.getElementById('offlineRetryBtnText');
-  const offlineContinueBtn = document.getElementById('offlineContinueBtn');
   const headerOfflinePill = document.getElementById('headerOfflinePill');
   const offlineGuidanceCard = document.querySelector('.offline-guidance-card');
 
-  let isOfflineModeActive = false;
-  let isCurrentlyOffline = false;
   let isCheckingNetwork = false;
 
   // Active network probe with timeout & fallback (checks if real internet packets resolve)
@@ -1715,16 +1741,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (isOffline) {
       isCurrentlyOffline = true;
-      if (navigateIfOffline && !isOfflineModeActive) {
+      if (navigateIfOffline) {
         navigateToScreen('offline');
       }
     } else {
       isCurrentlyOffline = false;
-      isOfflineModeActive = false;
       const currentActive = document.querySelector('.app-screen.active');
       if (currentActive && currentActive.dataset.screen === 'offline') {
         showToast('✨ Internet restored! You are back online.');
-        goBack();
+        const prevScreen = (navHistory.length > 1 && navHistory[navHistory.length - 1] !== 'offline')
+          ? navHistory[navHistory.length - 1]
+          : 'home';
+        navigateToScreen(prevScreen, false);
       }
     }
   }
@@ -1739,7 +1767,7 @@ document.addEventListener('DOMContentLoaded', () => {
           isCurrentlyOffline = true;
           updateOfflineState(true, forceNavigate);
           showToast('📡 Connection lost. Switched to offline mode.');
-        } else if (forceNavigate && !isOfflineModeActive) {
+        } else if (forceNavigate) {
           const currentActive = document.querySelector('.app-screen.active');
           if (currentActive && currentActive.dataset.screen !== 'offline') {
             navigateToScreen('offline');
@@ -1790,19 +1818,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Continue Offline: Navigates back while keeping offline indicator in header
-  if (offlineContinueBtn) {
-    offlineContinueBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      isOfflineModeActive = true;
-      if (headerOfflinePill) {
-        headerOfflinePill.style.display = 'inline-flex';
-      }
-      showToast('Offline Mode: Accessing local cached data.');
-      goBack();
-    });
-  }
-
   // Retry Connection Button
   if (offlineRetryBtn) {
     offlineRetryBtn.addEventListener('click', async (e) => {
@@ -1821,8 +1836,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (connected) {
           showToast('✨ Connection restored! Welcome back.');
           isCurrentlyOffline = false;
-          isOfflineModeActive = false;
           updateOfflineState(false);
+          const prevScreen = (navHistory.length > 1 && navHistory[navHistory.length - 1] !== 'offline')
+            ? navHistory[navHistory.length - 1]
+            : 'home';
+          navigateToScreen(prevScreen, false);
         } else {
           isCurrentlyOffline = true;
           if (offlineGuidanceCard) {
@@ -1849,11 +1867,9 @@ document.addEventListener('DOMContentLoaded', () => {
   window.simulateOffline = function(enable = true) {
     isCurrentlyOffline = enable;
     if (enable) {
-      isOfflineModeActive = false;
       updateOfflineState(true, true);
       showToast('📡 Simulated Offline Mode');
     } else {
-      isOfflineModeActive = false;
       updateOfflineState(false);
       showToast('✨ Simulated Online Mode: Connected');
     }
