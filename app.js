@@ -192,16 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
           <button id="saveNameBtn" class="name-save-btn">Save Changes</button>
           <button id="cancelNameBtn" class="name-cancel-btn">Cancel</button>
         </div>
-        <div style="margin-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 12px; width: 100%;">
-          <button id="modalLogoutBtn" class="profile-logout-btn">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-              <polyline points="16 17 21 12 16 7"></polyline>
-              <line x1="21" y1="12" x2="9" y2="12"></line>
-            </svg>
-            <span>Log Out of VOZX AI</span>
-          </button>
-        </div>
        </div>`,
       false
     );
@@ -216,7 +206,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const saveBtn = document.getElementById('saveNameBtn');
     const cancelBtn = document.getElementById('cancelNameBtn');
-    const modalLogoutBtn = document.getElementById('modalLogoutBtn');
     const inputField = document.getElementById('nameInputField');
 
     const handleSave = () => {
@@ -236,7 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     saveBtn?.addEventListener('click', handleSave);
     cancelBtn?.addEventListener('click', closeSheet);
-    modalLogoutBtn?.addEventListener('click', performLogout);
     inputField?.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -260,13 +248,6 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast('Logged out of VOZX AI');
     navHistory = ['getstarted'];
     navigateToScreen('getstarted', false);
-  }
-
-  if (logoutHeaderBtn) {
-    logoutHeaderBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      performLogout();
-    });
   }
 
   if (editProfileHeaderBtn) {
