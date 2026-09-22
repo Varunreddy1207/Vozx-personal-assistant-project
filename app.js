@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const sheetTitle = document.getElementById('sheetTitle');
   const sheetBody = document.getElementById('sheetBody');
   const sheetCloseBtn = document.getElementById('sheetCloseBtn');
-  const toggleDeviceViewBtn = document.getElementById('toggleDeviceView');
 
   // =========================================================================
   // MULTI-SCREEN NAVIGATION CONTROLLER (SPA)
@@ -846,16 +845,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   } catch (e) {}
-
-  // Desktop Frame Preview Switcher
-  if (toggleDeviceViewBtn) {
-    toggleDeviceViewBtn.addEventListener('click', () => {
-      document.body.classList.toggle('fullscreen-mode');
-      const isFull = document.body.classList.contains('fullscreen-mode');
-      toggleDeviceViewBtn.textContent = isFull ? '📱 Mobile Frame' : '🖥️ Full View';
-      toggleDeviceViewBtn.classList.toggle('active', isFull);
-    });
-  }
 
   // Energy Vortex Interaction & Voice Mode Toggle
   if (orbStage) {

@@ -30,9 +30,12 @@ body {
   color: var(--text-white);
   font-family: var(--font-family);
   min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: flex-start;
   overflow-x: hidden;
   position: relative;
@@ -66,115 +69,56 @@ body {
   z-index: 1;
 }
 
-/* Desktop Controls Toolbar */
-.device-controls-bar {
-  z-index: 10;
-  margin-top: 14px;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 6px 14px;
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 9999px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-}
-
-.control-btn {
-  background: transparent;
-  border: none;
-  color: #94a3b8;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 5px 12px;
-  border-radius: 9999px;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.control-btn:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.control-btn.active {
-  background: rgba(56, 189, 248, 0.18);
-  color: var(--neon-cyan);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-}
-
-/* Phone Viewport Container */
+/* ==========================================================================
+   APPLICATION VIEWPORT SHELL & RESPONSIVE LAYOUT SYSTEM
+   Adapts across Desktop (>= 1025px), Tablet (641px - 1024px), Mobile (<= 640px)
+   ========================================================================== */
+.app-viewport-container,
 .phone-viewport-container {
   position: relative;
   z-index: 5;
   width: 100%;
-  max-width: 412px;
-  min-height: 870px;
-  height: calc(100vh - 65px);
-  max-height: 915px;
-  margin: 6px auto 20px;
+  min-height: 100vh;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
   background-color: var(--bg-deep-black);
-  border-radius: 46px;
-  overflow: hidden;
-  box-shadow: 
-    0 0 0 2px rgba(255, 255, 255, 0.08),
-    0 0 0 10px #111724,
-    0 30px 70px -15px rgba(0, 0, 0, 0.95),
-    0 0 55px rgba(56, 189, 248, 0.14);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
-/* Responsive Fullscreen on Mobile Devices or Full View Mode */
-body.fullscreen-mode .phone-viewport-container,
-@media (max-width: 480px) {
-  .device-controls-bar {
-    display: none;
-  }
-  .phone-viewport-container {
-    max-width: 100%;
-    height: 100vh;
-    max-height: 100vh;
-    margin: 0;
-    border-radius: 0;
-    box-shadow: none;
-  }
-}
-
-/* Hardware Notch & Status Bar */
-.phone-notch-bar {
-  height: 38px;
+/* Scrollable Screen Content Container */
+.screen-scroll-view {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 189, 248, 0.25) transparent;
+  position: relative;
+  z-index: 5;
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #cbd5e1;
+  box-sizing: border-box;
+}
+
+.screen-scroll-view::-webkit-scrollbar {
+  width: 6px;
+}
+.screen-scroll-view::-webkit-scrollbar-track {
   background: transparent;
-  flex-shrink: 0;
-  z-index: 40;
 }
-
-.notch-pill {
-  width: 105px;
-  height: 24px;
-  background: #000000;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+.screen-scroll-view::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.2);
+  border-radius: 999px;
 }
-
-.notch-icons {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.screen-scroll-view::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.45);
 }
 
 /* Scrollable Screen View */
@@ -201,6 +145,8 @@ body.fullscreen-mode .phone-viewport-container,
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
   padding-top: 4px;
   padding-bottom: 8px;
   z-index: 20;
@@ -2080,16 +2026,19 @@ body.fullscreen-mode .phone-viewport-container,
 .app-screen {
   display: none;
   opacity: 0;
-  transform: translateX(12px);
+  transform: translateY(6px);
   transition: opacity 0.25s ease, transform 0.25s ease;
   width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .app-screen.active {
   display: flex;
   flex-direction: column;
   opacity: 1;
-  transform: translateX(0);
+  transform: translateY(0);
 }
 
 /* Dedicated Screen Header */
@@ -2097,6 +2046,8 @@ body.fullscreen-mode .phone-viewport-container,
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
   padding: 6px 2px 10px;
   margin-bottom: 4px;
 }
@@ -4263,6 +4214,371 @@ body.fullscreen-mode .phone-viewport-container,
 /* Generic Utility for toggling visibility */
 .hidden {
   display: none !important;
+}
+
+/* ==========================================================================
+   MULTI-DEVICE RESPONSIVE SYSTEM (DESKTOP, TABLET, MOBILE)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. MOBILE BASE VIEWPORT (<= 640px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .screen-scroll-view {
+    padding: 10px 14px 115px 14px;
+  }
+
+  .grid-menu-section {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    max-height: 500px;
+  }
+
+  .action-card {
+    min-height: 88px;
+    padding: 12px 8px;
+  }
+
+  .hero-section {
+    margin: 16px 0 22px 0;
+  }
+
+  #orbStage {
+    width: 150px;
+    height: 150px;
+  }
+
+  .hero-headline {
+    font-size: 24px;
+    line-height: 1.25;
+  }
+
+  .hero-greeting {
+    font-size: 14px;
+  }
+
+  .bottom-bar-container {
+    padding: 10px 12px 16px 12px;
+  }
+
+  .pill-input-wrapper {
+    max-width: 100%;
+    height: 52px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. TABLET VIEWPORT (641px - 1024px)
+   -------------------------------------------------------------------------- */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .screen-scroll-view {
+    padding: 20px 32px 125px 32px;
+  }
+
+  .app-screen {
+    max-width: 860px;
+  }
+
+  .header-section,
+  .screen-top-header {
+    padding: 10px 0 16px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .hero-section {
+    margin: 24px 0 32px 0;
+  }
+
+  #orbStage {
+    width: 190px;
+    height: 190px;
+  }
+
+  .hero-headline {
+    font-size: 32px;
+  }
+
+  .hero-greeting {
+    font-size: 16px;
+  }
+
+  .grid-menu-section {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 12px !important;
+    max-height: 500px;
+    margin-bottom: 28px;
+  }
+
+  .action-card {
+    min-height: 102px;
+    padding: 14px 10px;
+    border-radius: 18px;
+  }
+
+  .action-card .card-icon-bubble {
+    width: 40px;
+    height: 40px;
+  }
+
+  .action-card .action-label {
+    font-size: 13px;
+  }
+
+  .recent-section {
+    margin-bottom: 30px;
+    padding: 18px 22px;
+  }
+
+  .bottom-bar-container {
+    padding: 14px 24px 22px 24px;
+  }
+
+  .pill-input-wrapper {
+    max-width: 640px;
+  }
+
+  .notes-folders-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  #screenFiles .cloud-services-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  #screenFiles .files-categories-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. DESKTOP VIEWPORT (>= 1025px)
+   -------------------------------------------------------------------------- */
+@media (min-width: 1025px) {
+  .screen-scroll-view {
+    padding: 24px 48px 135px 48px;
+  }
+
+  .app-screen {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  /* Desktop Header */
+  .header-section,
+  .screen-top-header {
+    padding: 14px 0 24px;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .brand-name {
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+
+  /* Desktop Hero Section */
+  .hero-section {
+    margin: 36px 0 44px 0;
+  }
+
+  #orbStage {
+    width: 240px;
+    height: 240px;
+  }
+
+  .hero-headline {
+    font-size: 42px;
+    letter-spacing: -0.6px;
+    line-height: 1.22;
+  }
+
+  .hero-greeting {
+    font-size: 19px;
+    margin-bottom: 10px;
+  }
+
+  /* 4-Column Action Grid (2 rows of 4 cards) */
+  .grid-menu-section {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 18px !important;
+    margin-bottom: 40px !important;
+    max-height: 600px;
+  }
+
+  .action-card {
+    min-height: 118px;
+    padding: 18px 16px;
+    border-radius: 20px;
+  }
+
+  .action-card .card-icon-bubble {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+  }
+
+  .action-card .action-label {
+    font-size: 14.5px;
+    font-weight: 700;
+  }
+
+  /* Desktop Recent Activity */
+  .recent-section {
+    margin-bottom: 38px;
+    padding: 22px 28px;
+    border-radius: 22px;
+  }
+
+  .recent-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  /* Desktop Floating Bottom Dock */
+  .bottom-bar-container {
+    padding: 16px 24px 26px 24px;
+  }
+
+  .pill-input-wrapper {
+    max-width: 760px;
+    height: 58px;
+  }
+
+  .input-field {
+    font-size: 15px;
+  }
+
+  /* Screen Title Banner */
+  .screen-title-banner {
+    margin-bottom: 26px;
+  }
+
+  .screen-main-title {
+    font-size: 28px;
+  }
+
+  .screen-main-subtitle {
+    font-size: 14px;
+  }
+
+  /* Desktop Screen 1: PDF Assistant (2-Column Split) */
+  #screenPdf.active {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    grid-template-areas:
+      "header header"
+      "banner banner"
+      "upload summary"
+      "recent qa";
+    gap: 20px 32px;
+    align-items: start;
+  }
+
+  #screenPdf .screen-top-header { grid-area: header; }
+  #screenPdf .screen-title-banner { grid-area: banner; margin-bottom: 4px; }
+  #screenPdf .pdf-upload-dropzone { grid-area: upload; }
+  #screenPdf #pdfPopulatedView,
+  #screenPdf #pdfEmptyView { grid-area: recent; }
+  #screenPdf #pdfSummaryCard { grid-area: summary; }
+  #screenPdf .pdf-qa-input-row { grid-area: qa; }
+
+  /* Desktop Screen 3: Planner (2-Column Split: Calendar Left, Tasks Right) */
+  #screenPlanner.active {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    grid-template-areas:
+      "header header"
+      "banner banner"
+      "calendar tasks";
+    gap: 20px 32px;
+    align-items: start;
+  }
+
+  #screenPlanner .screen-top-header { grid-area: header; }
+  #screenPlanner .screen-title-banner { grid-area: banner; margin-bottom: 4px; }
+  #screenPlanner .planner-cal-card { grid-area: calendar; }
+  #screenPlanner #plannerPopulatedView,
+  #screenPlanner #plannerEmptyView { grid-area: tasks; }
+
+  /* Desktop Screen 4: Notes (4-Column Folders, 2-Column Notes) */
+  #screenNotes .notes-folders-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 16px !important;
+  }
+
+  #screenNotes .notes-list-items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  /* Desktop Screen 2: Memory Vault (2-Column Grid) */
+  #memoryPopulatedView .remembered-items-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  /* Desktop Screen 5: Files (3-Column Cloud, 4-Column Categories, 2-Column Files) */
+  #screenFiles .cloud-services-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 16px;
+  }
+
+  #screenFiles .files-categories-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 16px;
+  }
+
+  #screenFiles .recent-files-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  /* Desktop Screen 6: Email Assistant (2-Column Split) */
+  #screenEmail.active {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    grid-template-areas:
+      "header header"
+      "banner banner"
+      "accounts accounts"
+      "triage emails";
+    gap: 20px 32px;
+    align-items: start;
+  }
+
+  #screenEmail .screen-top-header { grid-area: header; }
+  #screenEmail .screen-title-banner { grid-area: banner; margin-bottom: 4px; }
+  #screenEmail .connected-accounts-status-bar { grid-area: accounts; margin-bottom: 4px; }
+  #screenEmail .email-quick-triage-grid {
+    grid-area: triage;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  #screenEmail #emailPopulatedView,
+  #screenEmail #emailEmptyView { grid-area: emails; }
+
+  /* Desktop Chat Screen */
+  #screenChat {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* Desktop Get Started Screen */
+  #screenGetStarted .welcome-screen-inner {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 34px 30px;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(56, 189, 248, 0.22);
+    border-radius: 28px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(56, 189, 248, 0.1);
+  }
 }
 
 
