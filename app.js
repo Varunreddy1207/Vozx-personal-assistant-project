@@ -63,11 +63,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Toggle subscreen and chat active classes on viewport for optimal vertical scrolling & full-screen bg
+    // Toggle subscreen, chat, and offline active classes on viewport
     const phoneViewport = document.querySelector('.phone-viewport-container');
     if (phoneViewport) {
       phoneViewport.classList.toggle('subscreen-active', targetScreenId !== 'home' && targetScreenId !== 'chat');
       phoneViewport.classList.toggle('chat-active', targetScreenId === 'chat');
+      phoneViewport.classList.toggle('offline-active', targetScreenId === 'offline');
     }
 
     // Maintain navigation history stack
@@ -1627,4 +1628,139 @@ document.addEventListener('DOMContentLoaded', () => {
   if (phoneViewportInit && initialActive) {
     phoneViewportInit.classList.toggle('chat-active', initialActive.dataset.screen === 'chat');
   }
+
+  // =========================================================================
+  // OFFLINE / NO INTERNET CONTROLLER & CONNECTIVITY LIFECYCLE
+  // =========================================================================
+  const offlineBackBtn = document.getElementById('offlineBackBtn');
+  const offlineRetryBtn = document.getElementById('offlineRetryBtn');
+  const offlineRetryBtnText = document.getElementById('offlineRetryBtnText');
+  const offlineContinueBtn = document.getElementById('offlineContinueBtn');
+  const headerOfflinePill = document.getElementById('headerOfflinePill');
+  const offlineGuidanceCard = document.querySelector('.offline-guidance-card');
+
+  let isOfflineModeActive = false;
+
+  function updateOfflineState(isOffline, navigateIfOffline = false) {
+    if (headerOfflinePill) {
+      headerOfflinePill.style.display = isOffline ? 'inline-flex' : 'none';
+    }
+
+    if (isOffline) {
+      isOfflineModeActive = true;
+      if (navigateIfOffline) {
+        navigateToScreen('offline');
+      }
+    } else {
+      isOfflineModeActive = false;
+      const currentActive = document.querySelector('.app-screen.active');
+      if (currentActive && currentActive.dataset.screen === 'offline') {
+        showToast('✨ Internet restored! You are back online.');
+        goBack();
+      }
+    }
+  }
+
+  // Browser Network Events
+  window.addEventListener('offline', () => {
+    updateOfflineState(true, true);
+    showToast('📡 Connection lost. Switched to offline mode.');
+  });
+
+  window.addEventListener('online', () => {
+    updateOfflineState(false);
+  });
+
+  // Header Offline Pill opens diagnostics
+  if (headerOfflinePill) {
+    headerOfflinePill.addEventListener('click', (e) => {
+      e.stopPropagation();
+      navigateToScreen('offline');
+    });
+  }
+
+  // Offline Back Button
+  if (offlineBackBtn) {
+    offlineBackBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      goBack();
+    });
+  }
+
+  // Continue Offline: Navigates back while keeping offline indicator in header
+  if (offlineContinueBtn) {
+    offlineContinueBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      isOfflineModeActive = true;
+      if (headerOfflinePill) {
+        headerOfflinePill.style.display = 'inline-flex';
+      }
+      showToast('Offline Mode: Accessing local cached data.');
+      goBack();
+    });
+  }
+
+  // Retry Connection Button
+  if (offlineRetryBtn) {
+    offlineRetryBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      if (offlineRetryBtn.classList.contains('checking')) return;
+
+      offlineRetryBtn.classList.add('checking');
+      if (offlineRetryBtnText) offlineRetryBtnText.textContent = 'Checking...';
+
+      let connected = navigator.onLine;
+
+      // Probe lightweight fetch if browser reports online
+      if (connected) {
+        try {
+          await fetch('https://dns.google/resolve?name=example.com&type=A&_t=' + Date.now(), {
+            method: 'GET',
+            mode: 'no-cors',
+            cache: 'no-store'
+          });
+          connected = true;
+        } catch (err) {
+          // If offline or blocked, check navigator.onLine fallback
+          connected = navigator.onLine;
+        }
+      }
+
+      setTimeout(() => {
+        offlineRetryBtn.classList.remove('checking');
+        if (offlineRetryBtnText) offlineRetryBtnText.textContent = 'Try Again';
+
+        if (connected) {
+          showToast('✨ Connection restored! Welcome back.');
+          updateOfflineState(false);
+        } else {
+          if (offlineGuidanceCard) {
+            offlineGuidanceCard.classList.remove('offline-shake');
+            void offlineGuidanceCard.offsetWidth; // Trigger reflow
+            offlineGuidanceCard.classList.add('offline-shake');
+          }
+          showToast('⚠️ Still offline. Please check your network connection.');
+        }
+      }, 700);
+    });
+  }
+
+  // Check initial offline status on startup
+  if (!navigator.onLine) {
+    updateOfflineState(true, false);
+  }
+
+  // Global developer / test helpers
+  window.simulateOffline = function(enable = true) {
+    updateOfflineState(enable, enable);
+    if (enable) {
+      showToast('📡 Simulated Offline Mode');
+    } else {
+      showToast('✨ Simulated Online Mode: Connected');
+    }
+  };
+
+  window.openOfflineScreen = function() {
+    navigateToScreen('offline');
+  };
 });
