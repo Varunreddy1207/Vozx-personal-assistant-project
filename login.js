@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Social Buttons
   const googleBtn = document.getElementById('googleLoginBtn');
   const appleBtn = document.getElementById('appleLoginBtn');
-  const msftBtn = document.getElementById('msftLoginBtn');
 
   // Avatar presets for switching
   const avatarPresets = [
@@ -362,7 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Social Login Mock
-  [googleBtn, appleBtn, msftBtn].forEach((btn) => {
+  [googleBtn, appleBtn].forEach((btn) => {
     if (!btn) return;
     btn.addEventListener('click', () => {
       const provider = btn.getAttribute('title') || 'Provider';

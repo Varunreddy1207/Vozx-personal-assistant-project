@@ -416,7 +416,7 @@ export default function VozxLoginPage({ onLoginSuccess, onNavigateToSignUp, onSh
         </div>
 
         {/* Social Grid */}
-        <div className="grid grid-cols-3 gap-3 mb-4">
+        <div className="grid grid-cols-2 gap-3 mb-4">
           <button
             type="button"
             onClick={() => onShowToast && onShowToast('Connecting via Google OAuth...', 'info')}
@@ -438,19 +438,6 @@ export default function VozxLoginPage({ onLoginSuccess, onNavigateToSignUp, onSh
           >
             <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24">
               <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.62-.75 1.04-1.8 0.92-2.85-.9.04-1.99.6-2.63 1.35-.57.65-.98 1.7-0.85 2.73.99.08 2.01-.52 2.56-1.23z"/>
-            </svg>
-          </button>
-          <button
-            type="button"
-            onClick={() => onShowToast && onShowToast('Connecting via Microsoft...', 'info')}
-            className="h-11 rounded-2xl bg-white/5 border border-white/10 hover:border-cyan-400/40 hover:bg-cyan-400/10 flex items-center justify-center transition-all"
-            title="Microsoft"
-          >
-            <svg className="w-4 h-4" viewBox="0 0 24 24">
-              <rect x="1" y="1" width="10" height="10" fill="#F25022"/>
-              <rect x="13" y="1" width="10" height="10" fill="#7FBA00"/>
-              <rect x="1" y="13" width="10" height="10" fill="#00A4EF"/>
-              <rect x="13" y="13" width="10" height="10" fill="#FFB900"/>
             </svg>
           </button>
         </div>
