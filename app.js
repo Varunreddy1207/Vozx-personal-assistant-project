@@ -255,10 +255,9 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('vozx_is_logged_in', 'false');
       }
     } catch (e) {}
-    showToast('Logged out of VOZX AI. Redirecting...');
-    setTimeout(() => {
-      window.location.href = 'onboarding.html';
-    }, 280);
+    showToast('Logged out of VOZX AI');
+    navHistory = ['getstarted'];
+    navigateToScreen('getstarted', false);
   }
 
   if (logoutHeaderBtn) {
@@ -829,13 +828,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (settingsUserName) settingsUserName.textContent = currentUserName;
           }
         } else if (localStorage.getItem('vozx_is_logged_in') === 'false') {
-          window.location.href = 'onboarding.html';
+          navHistory = ['getstarted'];
+          navigateToScreen('getstarted', false);
         }
       });
     } else {
       const isLoggedOut = localStorage.getItem('vozx_is_logged_in') === 'false';
       if (isLoggedOut) {
-        window.location.href = 'onboarding.html';
+        navHistory = ['getstarted'];
+        navigateToScreen('getstarted', false);
       }
     }
   } catch (e) {}
