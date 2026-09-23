@@ -180,10 +180,10 @@ body {
 
 /* Clickable Brand Logo Icon in front of VOZX AI */
 .brand-header-logo {
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  min-height: 28px;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
   border-radius: 50%;
   object-fit: contain;
   cursor: pointer;
@@ -4782,10 +4782,10 @@ body {
   }
 
   .brand-header-logo {
-    width: 30px;
-    height: 30px;
-    min-width: 30px;
-    min-height: 30px;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
   }
 
   .brand-name {
@@ -4927,10 +4927,10 @@ body {
   }
 
   .brand-header-logo {
-    width: 34px;
-    height: 34px;
-    min-width: 34px;
-    min-height: 34px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
   }
 
   .brand-name {
@@ -6176,8 +6176,8 @@ body {
 .splash-v-emblem-wrap {
   position: relative;
   z-index: 3;
-  width: 80px;
-  height: 80px;
+  width: 84px;
+  height: 84px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6310,8 +6310,8 @@ body {
   }
 
   .splash-v-emblem-wrap {
-    width: 90px;
-    height: 90px;
+    width: 92px;
+    height: 92px;
   }
 
   .splash-status-title {
@@ -6356,8 +6356,8 @@ body {
   }
 
   .splash-v-emblem-wrap {
-    width: 98px;
-    height: 98px;
+    width: 100px;
+    height: 100px;
   }
 
   .splash-status-title {

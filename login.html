@@ -67,17 +67,7 @@
         </button>
 
         <div class="brand-v-container" title="VOZX AI">
-          <svg class="brand-v-logo" viewBox="0 0 32 32" width="28" height="28">
-            <defs>
-              <linearGradient id="vLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#ffffff"/>
-                <stop offset="35%" stop-color="#22d3ee"/>
-                <stop offset="70%" stop-color="#0284c7"/>
-                <stop offset="100%" stop-color="#050816"/>
-              </linearGradient>
-            </defs>
-            <path d="M4 6 L16 26 L28 6 L22 6 L16 18 L10 6 Z" fill="url(#vLogoGrad)" filter="drop-shadow(0 0 8px rgba(34, 211, 238, 0.7))"/>
-          </svg>
+          <img src="assets/vozx-logo-icon.png" alt="VOZX AI Logo" class="brand-v-logo-img" style="width: 30px; height: 30px; object-fit: contain; border-radius: 50%; filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.7));" />
         </div>
 
         <div class="header-placeholder-right"></div>
@@ -286,7 +276,9 @@
   <script>
     if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
+        navigator.serviceWorker.register('./sw.js').then((reg) => {
+          reg.update().catch(() => {});
+        }).catch(() => {});
       });
     }
   </script>

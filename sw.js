@@ -1,14 +1,16 @@
 /* ==========================================================================
    VOZX AI - Progressive Web App Service Worker (Offline Resilience)
+   Network-First for HTML/CSS/JS ensuring instant updates on Mobile & Tablet
    ========================================================================== */
 
-const CACHE_NAME = 'vozx-ai-v10';
+const CACHE_NAME = 'vozx-ai-v11';
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './styles.css',
-  './styles.css?v=9.0',
+  './styles.css?v=10.0',
   './app.js',
+  './app.js?v=10.0',
   './supabaseClient.js',
   './assets/vozx-brand-intro-clean.png',
   './assets/vozx-logo-icon.png',
@@ -21,12 +23,13 @@ const PRECACHE_ASSETS = [
 ];
 
 self.addEventListener('install', (e) => {
+  self.skipWaiting();
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(PRECACHE_ASSETS).catch((err) => {
         console.warn('Precache notice:', err);
       });
-    }).then(() => self.skipWaiting())
+    })
   );
 });
 
@@ -41,7 +44,6 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  // Only handle GET requests for app shell & static assets
   if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
 
@@ -55,24 +57,49 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
+  // 1. NETWORK FIRST for HTML navigation (guarantees mobile & tab users get newest HTML immediately)
+  if (e.request.mode === 'navigate' || e.request.headers.get('accept')?.includes('text/html')) {
+    e.respondWith(
+      fetch(e.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const clone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(e.request, clone));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match('./index.html') || caches.match('./'))
+    );
+    return;
+  }
+
+  // 2. NETWORK FIRST for CSS and JS
+  if (url.pathname.endsWith('.css') || url.pathname.endsWith('.js')) {
+    e.respondWith(
+      fetch(e.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const clone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(e.request, clone));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(e.request))
+    );
+    return;
+  }
+
+  // 3. CACHE FIRST for static image assets
   e.respondWith(
     caches.match(e.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        // Stale-while-revalidate in background if online
-        fetch(e.request).then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            caches.open(CACHE_NAME).then((cache) => cache.put(e.request, networkResponse));
-          }
-        }).catch(() => {});
-        return cachedResponse;
-      }
-      return fetch(e.request).catch(() => {
-        // Fallback to cached index.html for navigation requests when offline
-        if (e.request.headers.get('accept')?.includes('text/html')) {
-          return caches.match('./index.html') || caches.match('./');
+      if (cachedResponse) return cachedResponse;
+      return fetch(e.request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const clone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(e.request, clone));
         }
+        return networkResponse;
       });
     })
   );
 });
-

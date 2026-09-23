@@ -60,23 +60,7 @@
                 <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                   <!-- Metallic 3D "V" Logo -->
                   <div class="metallic-v-logo-wrapper">
-                    <svg class="metallic-v-svg" viewBox="0 0 100 100" fill="none">
-                      <defs>
-                        <linearGradient id="v-grad-left" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stop-color="#ffffff"/>
-                          <stop offset="40%" stop-color="#38bdf8"/>
-                          <stop offset="100%" stop-color="#0284c7"/>
-                        </linearGradient>
-                        <linearGradient id="v-grad-right" x1="100%" y1="0%" x2="0%" y2="100%">
-                          <stop offset="0%" stop-color="#ffffff"/>
-                          <stop offset="40%" stop-color="#c084fc"/>
-                          <stop offset="100%" stop-color="#1e3a8a"/>
-                        </linearGradient>
-                      </defs>
-                      <path d="M12 20L45 84L55 84L28 20Z" fill="url(#v-grad-left)"/>
-                      <path d="M88 20L55 84L45 84L72 20Z" fill="url(#v-grad-right)"/>
-                      <path d="M28 20L50 68L72 20L55 20L50 32L45 20Z" fill="#ffffff" opacity="0.85"/>
-                    </svg>
+                    <img src="assets/vozx-logo-icon.png" alt="VOZX AI Logo" style="width: 76px; height: 76px; object-fit: contain; border-radius: 50%; margin-bottom: 8px; filter: drop-shadow(0 0 16px rgba(0, 240, 255, 0.6));" />
                     <h2 class="brand-vozx-title">VOZX</h2>
                     <span class="brand-vozx-sub">YOUR AI PERSONAL ASSISTANT</span>
                   </div>
@@ -635,10 +619,7 @@
 
                 <!-- Promotional Card -->
                 <div class="allset-promo-card">
-                  <svg width="40" height="40" viewBox="0 0 100 100" fill="none" style="margin-bottom: 6px;">
-                    <path d="M12 20L45 84L55 84L28 20Z" fill="url(#v-grad-left)"/>
-                    <path d="M88 20L55 84L45 84L72 20Z" fill="url(#v-grad-right)"/>
-                  </svg>
+                  <img src="assets/vozx-logo-icon.png" alt="VOZX AI Logo" style="width: 44px; height: 44px; object-fit: contain; border-radius: 50%; margin-bottom: 6px; filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.5));" />
                   <h4 style="font-size: 14px; font-weight: 800; color: #ffffff; letter-spacing: 1.2px; margin-bottom: 2px;">VOZX</h4>
                   <span style="font-size: 9.5px; color: #94a3b8; letter-spacing: 0.5px;">Smarter Today, Bigger Tomorrow</span>
                 </div>
@@ -696,7 +677,9 @@
   <script>
     if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
+        navigator.serviceWorker.register('./sw.js').then((reg) => {
+          reg.update().catch(() => {});
+        }).catch(() => {});
       });
     }
   </script>
