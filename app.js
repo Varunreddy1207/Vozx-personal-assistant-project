@@ -1881,55 +1881,113 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // =========================================================================
   // APPLICATION LAUNCH SPLASH & WORKSPACE LOADING SCREEN CONTROLLER
+  // Stage 1: Brand Intro Screen (#appBrandIntroScreen) - ~1.8s
+  // Stage 2: Workspace Loading Screen (#appSplashScreen) - ~2.0s
+  // Stage 3: Home Dashboard (#screenHome)
   // =========================================================================
+  const appBrandIntroScreen = document.getElementById('appBrandIntroScreen');
   const appSplashScreen = document.getElementById('appSplashScreen');
   const bottomBarContainer = document.querySelector('.bottom-bar-container');
 
   function initAppSplashScreen() {
-    if (!appSplashScreen) return;
-
     // Initially hide bottom floating input dock during splash loading
     if (bottomBarContainer) {
       bottomBarContainer.classList.add('bar-hidden');
       bottomBarContainer.classList.remove('bar-visible');
     }
 
-    // Display splash for 2.2 seconds, then dissolve smoothly into Home Dashboard
-    const SPLASH_DURATION_MS = 2200;
-    const FADE_DURATION_MS = 600;
+    const BRAND_INTRO_DURATION_MS = 1800;
+    const BRAND_FADE_DURATION_MS = 500;
+    const WORKSPACE_DURATION_MS = 2000;
+    const WORKSPACE_FADE_DURATION_MS = 600;
 
-    setTimeout(() => {
-      appSplashScreen.classList.add('splash-fade-out');
+    if (appBrandIntroScreen) {
+      // Stage 1: Show Brand Intro Logo Screen
+      appBrandIntroScreen.style.display = 'flex';
+      appBrandIntroScreen.classList.remove('brand-intro-fade-out');
+
+      // Ensure Workspace Loading screen is ready behind it
+      if (appSplashScreen) {
+        appSplashScreen.style.display = 'flex';
+        appSplashScreen.classList.remove('splash-fade-out');
+      }
 
       setTimeout(() => {
-        appSplashScreen.style.display = 'none';
+        // Dissolve Brand Intro Screen into Workspace Loading Screen
+        appBrandIntroScreen.classList.add('brand-intro-fade-out');
 
-        // Check if user is logged out or should be on home
-        const isLoggedOut = localStorage.getItem('vozx_is_logged_in') === 'false';
-        if (isLoggedOut) {
-          navHistory = ['getstarted'];
-          navigateToScreen('getstarted', false);
-        } else {
-          // Ensure Home screen is active and bottom dock is visible
-          const screenHome = document.getElementById('screenHome');
-          if (screenHome) {
-            const activeScreen = document.querySelector('.app-screen.active');
-            if (!activeScreen || activeScreen.id === 'screenHome') {
-              appScreens.forEach(s => s.classList.remove('active'));
-              screenHome.classList.add('active');
+        setTimeout(() => {
+          appBrandIntroScreen.style.display = 'none';
+
+          // Stage 2: Workspace Loading Screen runs
+          setTimeout(() => {
+            if (appSplashScreen) {
+              appSplashScreen.classList.add('splash-fade-out');
+
+              // Stage 3: Transition to Home Dashboard
+              setTimeout(() => {
+                appSplashScreen.style.display = 'none';
+                revealHomeScreen();
+              }, WORKSPACE_FADE_DURATION_MS);
+            } else {
+              revealHomeScreen();
             }
-          }
-          if (bottomBarContainer) {
-            bottomBarContainer.classList.remove('bar-hidden');
-            bottomBarContainer.classList.add('bar-visible');
-          }
-        }
-      }, FADE_DURATION_MS);
-    }, SPLASH_DURATION_MS);
+          }, WORKSPACE_DURATION_MS);
+        }, BRAND_FADE_DURATION_MS);
+      }, BRAND_INTRO_DURATION_MS);
+    } else if (appSplashScreen) {
+      // Fallback if Brand Intro is not in DOM
+      appSplashScreen.style.display = 'flex';
+      appSplashScreen.classList.remove('splash-fade-out');
+      setTimeout(() => {
+        appSplashScreen.classList.add('splash-fade-out');
+        setTimeout(() => {
+          appSplashScreen.style.display = 'none';
+          revealHomeScreen();
+        }, WORKSPACE_FADE_DURATION_MS);
+      }, WORKSPACE_DURATION_MS);
+    } else {
+      revealHomeScreen();
+    }
   }
 
-  // Developer helper to replay the splash screen anytime
-  window.showSplashScreen = function(durationMs = 2200) {
+  function revealHomeScreen() {
+    // Check if user is logged out or should be on home
+    const isLoggedOut = localStorage.getItem('vozx_is_logged_in') === 'false';
+    if (isLoggedOut) {
+      navHistory = ['getstarted'];
+      navigateToScreen('getstarted', false);
+    } else {
+      // Ensure Home screen is active and bottom dock is visible
+      const screenHome = document.getElementById('screenHome');
+      if (screenHome) {
+        const activeScreen = document.querySelector('.app-screen.active');
+        if (!activeScreen || activeScreen.id === 'screenHome') {
+          appScreens.forEach(s => s.classList.remove('active'));
+          screenHome.classList.add('active');
+        }
+      }
+      if (bottomBarContainer) {
+        bottomBarContainer.classList.remove('bar-hidden');
+        bottomBarContainer.classList.add('bar-visible');
+      }
+    }
+  }
+
+  // Developer helpers to replay screens anytime in console
+  window.showBrandIntro = function(durationMs = 1800) {
+    if (!appBrandIntroScreen) return;
+    appBrandIntroScreen.style.display = 'flex';
+    appBrandIntroScreen.classList.remove('brand-intro-fade-out');
+    setTimeout(() => {
+      appBrandIntroScreen.classList.add('brand-intro-fade-out');
+      setTimeout(() => {
+        appBrandIntroScreen.style.display = 'none';
+      }, 500);
+    }, durationMs);
+  };
+
+  window.showSplashScreen = function(durationMs = 2000) {
     if (!appSplashScreen) return;
     appSplashScreen.style.display = 'flex';
     appSplashScreen.classList.remove('splash-fade-out');
@@ -1949,6 +2007,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }, durationMs);
   };
 
+  window.showFullLaunchSequence = function() {
+    initAppSplashScreen();
+  };
+
   initAppSplashScreen();
 });
+
 
