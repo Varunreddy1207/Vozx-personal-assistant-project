@@ -2965,287 +2965,321 @@ body {
   box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
 }
 
-/* Screen Get Started - Welcome Hero Robot Card */
-.welcome-robot-card {
-  width: 100%;
+/* ==========================================================================
+   SCREEN GET STARTED - COSMIC VOZX COMPANION UI
+   ========================================================================== */
+#screenGetStarted {
   position: relative;
-  border-radius: 22px;
-  background: #060b18;
-  border: 1.5px solid rgba(56, 189, 248, 0.28);
-  box-shadow: 
-    0 10px 32px rgba(0, 0, 0, 0.85),
-    0 0 25px rgba(14, 165, 233, 0.2),
-    inset 0 0 16px rgba(56, 189, 248, 0.08);
   overflow: hidden;
-  margin: 4px 0 18px;
-  display: flex;
+  width: 100%;
+  min-height: calc(100vh - 40px);
+  display: none;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.welcome-robot-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(56, 189, 248, 0.45);
-  box-shadow: 
-    0 14px 40px rgba(0, 0, 0, 0.9),
-    0 0 35px rgba(56, 189, 248, 0.3);
-}
-
-.welcome-robot-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-  border-radius: 20px;
-}
-
-.welcome-heading-block {
   text-align: center;
-  margin-bottom: 20px;
+  background: #000206;
+  padding: 24px 20px 30px;
+  box-sizing: border-box;
 }
 
-.welcome-main-title {
-  font-size: 26px;
-  font-weight: 800;
-  color: #ffffff;
-  letter-spacing: -0.3px;
-  margin-bottom: 6px;
-  line-height: 1.25;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-}
-
-.welcome-sub-desc {
-  font-size: 13.5px;
-  color: #f1f5f9;
-  line-height: 1.48;
-  max-width: 320px;
-  margin: 0 auto;
-  font-weight: 400;
-}
-
-.welcome-features-list {
+#screenGetStarted.active {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 24px;
-  padding: 0 4px;
 }
 
-.welcome-feature-item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  transition: transform 0.2s ease;
-}
-
-.welcome-feature-item:hover {
-  transform: translateX(3px);
-}
-
-.welcome-feature-icon-box {
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.welcome-feature-icon-img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 10px rgba(56, 189, 248, 0.4));
-  transition: transform 0.25s ease;
-}
-
-.welcome-feature-item:hover .welcome-feature-icon-img {
-  transform: scale(1.08);
-}
-
-.welcome-feature-text {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.welcome-feature-text .feature-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: #94b8db;
-  letter-spacing: 0.15px;
-}
-
-.welcome-feature-text .feature-subtitle {
-  font-size: 13.5px;
-  color: #f8fafc;
-  font-weight: 400;
-  line-height: 1.35;
-}
-
-/* Concentric Radar Rings & Sparkle Button */
-.get-started-btn-wrapper {
-  position: relative;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 4px;
-  margin-bottom: 14px;
-}
-
-.btn-radar-ring {
+/* Cosmic Ambient Arcs Backdrop */
+.getstarted-cosmic-bg {
   position: absolute;
-  top: 50%;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.getstarted-arcs-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.getstarted-ambient-glow {
+  position: absolute;
+  top: 36%;
   left: 50%;
   transform: translate(-50%, -50%);
+  width: 440px;
+  height: 440px;
   border-radius: 50%;
-  border: 1.5px solid rgba(56, 189, 248, 0.3);
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.16) 0%, rgba(168, 85, 247, 0.1) 40%, transparent 72%);
+  filter: blur(45px);
   pointer-events: none;
-  z-index: 0;
 }
 
-.btn-radar-ring.r1 {
-  width: 130px;
-  height: 130px;
-  opacity: 0.45;
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
-  animation: radar-orbit 4s infinite ease-in-out;
-}
-
-.btn-radar-ring.r2 {
-  width: 88px;
-  height: 88px;
-  opacity: 0.75;
-  box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
-  animation: radar-orbit 4s infinite ease-in-out 1.2s;
-}
-
-@keyframes radar-orbit {
-  0%, 100% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.45;
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.08);
-    opacity: 0.8;
-  }
-}
-
-.get-started-primary-btn {
+/* Content Stack */
+.getstarted-content-card {
   position: relative;
   z-index: 2;
   width: 100%;
-  height: 52px;
-  border-radius: 9999px;
-  background: linear-gradient(90deg, #0284c7 0%, #0ea5e9 48%, #38bdf8 100%) !important;
-  border: 1.2px solid rgba(255, 255, 255, 0.38) !important;
-  box-shadow: 
-    0 4px 22px rgba(2, 132, 199, 0.65), 
-    0 0 32px rgba(56, 189, 248, 0.45),
-    inset 0 1px 2px rgba(255, 255, 255, 0.5) !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 700;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  padding: 0 48px;
-}
-
-.get-started-primary-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 6px 28px rgba(56, 189, 248, 0.8), 
-    0 0 42px rgba(56, 189, 248, 0.55),
-    inset 0 1px 3px rgba(255, 255, 255, 0.65) !important;
-}
-
-.get-started-primary-btn:active {
-  transform: scale(0.97);
-}
-
-.btn-sparkle-wrap {
-  position: absolute;
-  right: 22px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.btn-sparkle-svg {
-  filter: drop-shadow(0 0 6px #7dd3fc);
-  animation: sparkle-pulse 2.4s infinite ease-in-out;
-}
-
-@keyframes sparkle-pulse {
-  0%, 100% {
-    transform: scale(1) rotate(0deg);
-    opacity: 0.88;
-  }
-  50% {
-    transform: scale(1.22) rotate(15deg);
-    opacity: 1;
-    filter: drop-shadow(0 0 10px #38bdf8);
-  }
-}
-
-/* Secondary Auth & Navigation Links */
-.getstarted-footer-links {
+  max-width: 420px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  margin-top: 14px;
+  justify-content: center;
 }
 
-.bottom-auth-link {
-  font-size: 11.5px;
-  color: #94a3b8;
-  text-align: center;
+/* 1. Concentric Glowing VOZX Emblem */
+.getstarted-hero-emblem-wrap {
+  position: relative;
+  width: 145px;
+  height: 145px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px auto;
 }
 
-.link-accent {
-  color: #38bdf8;
+.getstarted-emblem-halo {
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.28) 0%, rgba(168, 85, 247, 0.22) 50%, transparent 75%);
+  filter: blur(14px);
+  pointer-events: none;
+}
+
+.getstarted-v-emblem {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  filter: drop-shadow(0 0 18px rgba(0, 240, 255, 0.7)) drop-shadow(0 0 35px rgba(168, 85, 247, 0.5));
+  animation: gs-emblem-pulse 3s ease-in-out infinite alternate;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+@keyframes gs-emblem-pulse {
+  0% {
+    transform: scale(0.975);
+    filter: drop-shadow(0 0 16px rgba(0, 240, 255, 0.6)) drop-shadow(0 0 30px rgba(168, 85, 247, 0.4));
+  }
+  100% {
+    transform: scale(1.025);
+    filter: drop-shadow(0 0 24px rgba(0, 240, 255, 0.9)) drop-shadow(0 0 45px rgba(192, 132, 252, 0.65));
+  }
+}
+
+/* 2. Metallic 3D Chrome Brand Title & Laser Flare */
+.getstarted-brand-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+
+.getstarted-brand-title {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 44px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  margin: 0;
+  text-indent: 0.22em;
+  line-height: 1;
+  background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 25%, #94a3b8 55%, #cbd5e1 75%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.35)) drop-shadow(0 4px 18px rgba(168, 85, 247, 0.4));
+}
+
+.getstarted-laser-flare {
+  width: 140px;
+  height: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, transparent 0%, rgba(192, 132, 252, 0.4) 20%, #c084fc 50%, rgba(192, 132, 252, 0.4) 80%, transparent 100%);
+  box-shadow: 0 0 10px #c084fc, 0 0 22px rgba(192, 132, 252, 0.75);
+  margin-top: 6px;
+}
+
+/* 3. Dual-Tone Headline */
+.getstarted-headline-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  margin-bottom: 14px;
+}
+
+.getstarted-headline-white {
+  font-size: 26px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.getstarted-headline-gradient {
+  font-size: 28px;
   font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 1.25;
+  background: linear-gradient(90deg, #38bdf8 0%, #818cf8 45%, #c084fc 80%, #e879f9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 18px rgba(192, 132, 252, 0.65));
+}
+
+/* 4. Subtitle */
+.getstarted-sub-tagline {
+  font-size: 13.5px;
+  font-weight: 400;
+  color: #94a3b8;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  margin: 0 0 28px 0;
+  text-align: center;
+  max-width: 290px;
+}
+
+/* 5. Glowing Pill Action Button */
+.getstarted-action-wrap {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.getstarted-neon-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 260px;
+  height: 50px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #0d2250 0%, #1e1b4b 50%, #2e1065 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.75);
+  color: #ffffff;
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  box-shadow: 
+    0 0 20px rgba(168, 85, 247, 0.45), 
+    0 0 35px rgba(56, 189, 248, 0.25), 
+    inset 0 0 14px rgba(0, 240, 255, 0.15);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.getstarted-neon-pill-btn:hover {
+  transform: scale(1.035);
+  border-color: #00f0ff;
+  box-shadow: 
+    0 0 28px rgba(168, 85, 247, 0.75), 
+    0 0 50px rgba(0, 240, 255, 0.5), 
+    inset 0 0 18px rgba(0, 240, 255, 0.3);
+}
+
+.getstarted-neon-pill-btn:active {
+  transform: scale(0.97);
+}
+
+/* 6. Pagination / Progress Dots Row */
+.getstarted-dots-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin: 22px auto 14px auto;
+}
+
+.getstarted-dash-pill.active {
+  width: 18px;
+  height: 3.5px;
+  border-radius: 2px;
+  background: #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.85);
+}
+
+.getstarted-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(148, 163, 184, 0.35);
+}
+
+/* 7. Bottom Diamond Sparkle Star Accent */
+.getstarted-sparkle-star {
+  position: absolute;
+  right: 28px;
+  bottom: 28px;
+  pointer-events: none;
+  opacity: 0.8;
+  animation: gs-sparkle-twinkle 2.5s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 8px rgba(125, 211, 252, 0.8));
+}
+
+@keyframes gs-sparkle-twinkle {
+  0% {
+    transform: scale(0.85) rotate(0deg);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.15) rotate(15deg);
+    opacity: 0.95;
+  }
+}
+
+/* 8. Auth Switcher Link */
+.getstarted-auth-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.getstarted-signin-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #38bdf8;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 3px;
   transition: color 0.15s ease;
 }
 
-.link-accent:hover {
+.getstarted-signin-btn:hover {
   color: #7dd3fc;
   text-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
 }
 
-.getstarted-onboarding-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11.5px;
-  font-weight: 600;
-  color: #cbd5e1;
-  text-decoration: none;
-  padding: 6px 14px;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.2s ease;
+.auth-sep-dot {
+  color: #475569;
 }
 
-.getstarted-onboarding-link:hover {
-  background: rgba(56, 189, 248, 0.12);
-  border-color: rgba(56, 189, 248, 0.35);
-  color: #38bdf8;
-  box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
+.getstarted-flow-link {
+  color: #94a3b8;
+  font-size: 11.5px;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.getstarted-flow-link:hover {
+  color: #c084fc;
 }
 
 /* ==========================================================================
@@ -5169,15 +5203,33 @@ body {
 
   /* Desktop Get Started Screen */
   #screenGetStarted {
-    max-width: 480px;
-    margin: 30px auto;
-    padding: 34px 28px;
-    background: rgba(15, 23, 42, 0.65);
-    border: 1px solid rgba(56, 189, 248, 0.22);
+    max-width: 460px;
+    margin: 28px auto;
+    padding: 38px 28px 28px;
+    background: rgba(8, 14, 28, 0.88);
+    border: 1.5px solid rgba(56, 189, 248, 0.28);
     border-radius: 28px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(56, 189, 248, 0.1);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 45px rgba(56, 189, 248, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  #screenGetStarted .getstarted-hero-emblem-wrap {
+    width: 155px;
+    height: 155px;
+    margin-bottom: 16px;
+  }
+
+  #screenGetStarted .getstarted-brand-title {
+    font-size: 46px;
+  }
+
+  #screenGetStarted .getstarted-headline-white {
+    font-size: 28px;
+  }
+
+  #screenGetStarted .getstarted-headline-gradient {
+    font-size: 30px;
   }
 
   /* Desktop Auth Screens (Sign In & Sign Up) */

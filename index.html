@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>VOZX AI - Intelligent Assistant Ecosystem</title>
-  <link rel="stylesheet" href="styles.css?v=12.0">
+  <link rel="stylesheet" href="styles.css?v=15.0">
 </head>
 <body>
 
@@ -1780,49 +1780,10 @@
               <span class="btn-arrow">&rarr;</span>
             </button>
 
-            <!-- OR Divider -->
-            <div class="link-or-divider">
-              <span class="or-line"></span>
-              <span class="or-text">OR</span>
-              <span class="or-line"></span>
-            </div>
-
-            <!-- Outline Scan QR Code Button -->
-            <a href="email-onboarding.html" class="link-scan-qr-btn" id="embeddedScanQrBtn">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
-                <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
-                <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
-                <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
-                <rect x="7" y="7" width="3" height="3"></rect>
-                <rect x="14" y="7" width="3" height="3"></rect>
-                <rect x="7" y="14" width="3" height="3"></rect>
-                <rect x="14" y="14" width="3" height="3"></rect>
-              </svg>
-              <span>Scan QR Code</span>
-            </a>
-
             <!-- Footer Note -->
             <div class="link-footer-note">You can always connect your email later in settings.</div>
           </div>
 
-        </div>
-
-        <!-- Dedicated Email Compose Bar -->
-        <div class="email-compose-dock">
-          <input type="text" id="emailDockInput" class="email-compose-input" placeholder="Write your email...">
-          <div class="email-dock-actions">
-            <button style="background: transparent; border: none; color: #94a3b8; cursor: pointer; padding: 4px;" title="Attach file">
-              📎
-            </button>
-            <button class="email-send-pill" id="emailDockSendBtn">
-              <span>Send</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-            </button>
-          </div>
         </div>
       </section>
 
@@ -1856,65 +1817,99 @@
       </section>
 
       <!-- =================================================================
-           SCREEN 8: DEDICATED GET STARTED / WELCOME SCREEN (SHOWN AFTER LOGOUT)
+           SCREEN 8: DEDICATED GET STARTED / COMPANION WELCOME SCREEN
            ================================================================= -->
       <section id="screenGetStarted" class="app-screen" data-screen="getstarted" aria-label="Welcome and Get Started">
-        <!-- 1. Hero 3D Robot / Cyborg Visual Card -->
-        <div class="welcome-robot-card">
-          <img src="assets/robot_cyborg_hero.png" alt="VOZX AI Cyborg Neural Interface" class="welcome-robot-img" />
+        <!-- Cosmic Glowing Ambient Backdrop with Light Arcs -->
+        <div class="getstarted-cosmic-bg" aria-hidden="true">
+          <svg class="getstarted-arcs-svg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="gsArcTop" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#020617" stop-opacity="0" />
+                <stop offset="30%" stop-color="#0284c7" stop-opacity="0.4" />
+                <stop offset="70%" stop-color="#00f0ff" stop-opacity="0.9" />
+                <stop offset="100%" stop-color="#38bdf8" stop-opacity="1" />
+              </linearGradient>
+              <linearGradient id="gsArcBottom" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#020617" stop-opacity="0" />
+                <stop offset="40%" stop-color="#4f46e5" stop-opacity="0.35" />
+                <stop offset="75%" stop-color="#a855f7" stop-opacity="0.85" />
+                <stop offset="100%" stop-color="#c084fc" stop-opacity="1" />
+              </linearGradient>
+              <filter id="gsArcGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="8" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <path d="M -30 280 C 10 140, 90 40, 360 -20" fill="none" stroke="url(#gsArcTop)" stroke-width="3" filter="url(#gsArcGlow)" />
+            <path d="M 1030 720 C 960 860, 870 960, 620 1030" fill="none" stroke="url(#gsArcBottom)" stroke-width="3" filter="url(#gsArcGlow)" />
+          </svg>
+          <div class="getstarted-ambient-glow"></div>
         </div>
 
-        <!-- 2. Typography Heading & Subtitle -->
-        <div class="welcome-heading-block">
-          <h2 class="welcome-main-title">Meet VOZX AI</h2>
-          <p class="welcome-sub-desc">Your all-in-one AI assistant to boost efficiency, organize tasks, and spark intelligence.</p>
-        </div>
-
-        <!-- 3. Features Highlight List -->
-        <div class="welcome-features-list">
-          <div class="welcome-feature-item">
-            <div class="welcome-feature-icon-box">
-              <img src="assets/icon_smart_automations.png" alt="Smart Automations" class="welcome-feature-icon-img" />
-            </div>
-            <div class="welcome-feature-text">
-              <div class="feature-title">Smart Automations</div>
-              <div class="feature-subtitle">Effortless workflow orchestration</div>
-            </div>
+        <div class="getstarted-content-card">
+          <!-- 1. Glowing Concentric Futuristic VOZX Brand Emblem -->
+          <div class="getstarted-hero-emblem-wrap">
+            <div class="getstarted-emblem-halo" aria-hidden="true"></div>
+            <img src="assets/vozx-logo-icon.png" alt="VOZX Brand Emblem" class="getstarted-v-emblem" />
           </div>
 
-          <div class="welcome-feature-item">
-            <div class="welcome-feature-icon-box">
-              <img src="assets/icon_neural_voice.png" alt="Neural Voice &amp; Chat" class="welcome-feature-icon-img" />
-            </div>
-            <div class="welcome-feature-text">
-              <div class="feature-title">Neural Voice &amp; Chat</div>
-              <div class="feature-subtitle">Real-time vocal intelligence</div>
-            </div>
+          <!-- 2. Metallic 3D Chrome Brand Title & Purple Flare -->
+          <div class="getstarted-brand-block">
+            <h1 class="getstarted-brand-title">VOZX</h1>
+            <div class="getstarted-laser-flare" aria-hidden="true"></div>
           </div>
-        </div>
 
-        <!-- 4. Primary "Get Started →" Button with Radar Rings & Diamond Sparkle -->
-        <div class="get-started-btn-wrapper">
-          <div class="btn-radar-ring r1"></div>
-          <div class="btn-radar-ring r2"></div>
-          <button id="getStartedActionBtn" class="cyan-action-btn get-started-primary-btn" aria-label="Get Started">
-            <span class="btn-text">Get Started &rarr;</span>
-            <span class="btn-sparkle-wrap">
-              <svg class="btn-sparkle-svg" width="22" height="22" viewBox="0 0 24 24" fill="#cffafe">
-                <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z"/>
-              </svg>
-            </span>
-          </button>
-        </div>
-
-        <!-- 5. Secondary Auth & Presentation Links -->
-        <div class="getstarted-footer-links">
-          <div class="bottom-auth-link">
-            Already have an account? <button type="button" id="getStartedSignInLink" class="link-accent inline-auth-btn">Sign In</button>
+          <!-- 3. Dual-Tone Companion Headline -->
+          <div class="getstarted-headline-block">
+            <h2 class="getstarted-headline-white">Your Intelligent</h2>
+            <h2 class="getstarted-headline-gradient">AI Companion</h2>
           </div>
-          <a href="onboarding.html" class="getstarted-onboarding-link" title="Open Full 8-Screen Onboarding Presentation">
-            <span>✨</span> View Full 8-Screen Onboarding Flow &rarr;
-          </a>
+
+          <!-- 4. Poetic Subtitle -->
+          <p class="getstarted-sub-tagline">
+            Smarter tools. Greater focus.<br>
+            A more connected you.
+          </p>
+
+          <!-- 5. Neon Glowing Pill Action Button -->
+          <div class="getstarted-action-wrap">
+            <button id="getStartedActionBtn" class="getstarted-neon-pill-btn" aria-label="Get Started">
+              <span>Get Started &rarr;</span>
+            </button>
+          </div>
+
+          <!-- 6. 4-Segment Pagination / Progress Indicator -->
+          <div class="getstarted-dots-row" aria-hidden="true">
+            <span class="getstarted-dash-pill active"></span>
+            <span class="getstarted-dot"></span>
+            <span class="getstarted-dot"></span>
+            <span class="getstarted-dot"></span>
+          </div>
+
+          <!-- 7. Bottom Diamond Sparkle Accent -->
+          <div class="getstarted-sparkle-star" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="url(#sparkleStarGrad)">
+              <defs>
+                <linearGradient id="sparkleStarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#7dd3fc" />
+                  <stop offset="100%" stop-color="#c084fc" />
+                </linearGradient>
+              </defs>
+              <path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z" />
+            </svg>
+          </div>
+
+          <!-- 8. Auth Switcher Link -->
+          <div class="getstarted-auth-footer">
+            <span class="getstarted-auth-prompt">Already have an account?</span>
+            <button type="button" id="getStartedSignInLink" class="getstarted-signin-btn">Sign In</button>
+            <span class="auth-sep-dot">&middot;</span>
+            <a href="onboarding.html" class="getstarted-flow-link" title="Open Full 8-Screen Onboarding Presentation">Full Flow &rarr;</a>
+          </div>
         </div>
       </section>
 
@@ -2404,7 +2399,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabaseClient.js"></script>
-  <script src="app.js?v=12.0"></script>
+  <script src="app.js?v=15.0"></script>
   <script>
     if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
       window.addEventListener('load', () => {
