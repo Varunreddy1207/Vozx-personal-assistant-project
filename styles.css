@@ -5066,17 +5066,17 @@ body {
     margin-top: 14px;
   }
 
-  /* Desktop Email Assistant Bar Sizing */
+  /* Desktop Email Assistant Bar Sizing (Centered & Small Size) */
   #screenEmail .connected-accounts-bar {
     width: 100%;
-    max-width: 520px;
-    margin: 0 0 14px 0;
-    padding: 6px 12px;
-    border-radius: 12px;
+    max-width: 480px;
+    margin: 0 auto 16px auto;
+    padding: 6px 14px;
+    border-radius: 14px;
   }
 
   #screenEmail .active-account-email {
-    max-width: 260px;
+    max-width: 240px;
     font-size: 12px;
   }
 
@@ -5087,10 +5087,10 @@ body {
 
   #screenEmail .email-compose-dock {
     width: 100%;
-    max-width: 640px;
-    margin: 20px auto 12px auto;
-    padding: 3px 6px 3px 14px;
-    height: 46px;
+    max-width: 540px;
+    margin: 22px auto 14px auto;
+    padding: 3px 6px 3px 16px;
+    height: 44px;
   }
 
   #screenEmail .email-compose-input {
