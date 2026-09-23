@@ -5785,3 +5785,389 @@ body {
     max-height: 32px !important;
   }
 }
+
+/* ==========================================================================
+   APP LAUNCH SPLASH & WORKSPACE LOADING SCREEN
+   Faithfully matching reference image media_1790136331833.png
+   Responsive across Mobile (<= 640px), Tablet (641px - 1023px), Desktop (>= 1024px)
+   ========================================================================== */
+
+#appSplashScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: #000206;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 48px 24px 38px;
+  overflow: hidden;
+  box-sizing: border-box;
+  opacity: 1;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#appSplashScreen.splash-fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Cosmic Glowing Curved Light Arcs Layer */
+.splash-cosmic-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.splash-light-arcs-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.splash-ambient-radial-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.12) 0%, rgba(2, 132, 199, 0.05) 45%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+/* Splash Inner Content Stack */
+.splash-inner-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Top Branding */
+.splash-brand-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.splash-brand-logo {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  line-height: 1;
+}
+
+.brand-text-metallic {
+  background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 25%, #94a3b8 52%, #cbd5e1 75%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.25)) drop-shadow(0 4px 16px rgba(14, 165, 233, 0.3));
+}
+
+.brand-text-cyan {
+  background: linear-gradient(180deg, #e0f2fe 0%, #38bdf8 45%, #0284c7 90%, #0369a1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.85)) drop-shadow(0 0 32px rgba(14, 165, 233, 0.5));
+}
+
+.splash-brand-tagline {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  color: #94a3b8;
+  margin: 0;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* Center Loading Stage */
+.splash-center-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: -15px;
+}
+
+.splash-loader-orbital {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 26px;
+}
+
+.splash-ring-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+  animation: splash-spin 2.2s linear infinite;
+}
+
+.splash-ring-track {
+  fill: none;
+  stroke: rgba(14, 165, 233, 0.15);
+  stroke-width: 6;
+}
+
+.splash-ring-spinner {
+  fill: none;
+  stroke: url(#splashRingGrad);
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 414;
+  stroke-dashoffset: 140;
+}
+
+@keyframes splash-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Metallic 3D Faceted "V" Emblem */
+.splash-v-emblem-wrap {
+  position: relative;
+  z-index: 3;
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: splash-v-pulse 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes splash-v-pulse {
+  0% {
+    transform: scale(0.96);
+    opacity: 0.92;
+  }
+  100% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+
+.splash-v-emblem-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Status Text Block */
+.splash-status-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.splash-status-title {
+  font-size: 21px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.splash-status-sub {
+  font-size: 13.5px;
+  color: #94a3b8;
+  margin: 0;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* Bottom Progress Footer */
+.splash-footer-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.splash-dots-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.splash-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(148, 163, 184, 0.28);
+  transition: all 0.3s ease;
+}
+
+.splash-dot.dot-active {
+  width: 7px;
+  height: 7px;
+  background: #00f0ff;
+  box-shadow: 0 0 12px #00f0ff, 0 0 20px rgba(0, 240, 255, 0.7);
+  animation: splash-dot-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes splash-dot-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px #00f0ff;
+  }
+  50% {
+    transform: scale(1.25);
+    box-shadow: 0 0 18px #00f0ff, 0 0 30px rgba(56, 189, 248, 0.85);
+  }
+}
+
+.splash-footer-caption {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE ADAPTATIONS: TABLET & DESKTOP
+   -------------------------------------------------------------------------- */
+
+/* Tablet Viewport (641px - 1023px) */
+@media (min-width: 641px) and (max-width: 1023px) {
+  #appSplashScreen {
+    padding: 70px 32px 50px;
+  }
+
+  .splash-inner-content {
+    max-width: 600px;
+  }
+
+  .splash-brand-logo {
+    font-size: 46px;
+    letter-spacing: 0.18em;
+    gap: 12px;
+  }
+
+  .splash-brand-tagline {
+    font-size: 12px;
+    letter-spacing: 0.34em;
+  }
+
+  .splash-loader-orbital {
+    width: 155px;
+    height: 155px;
+    margin-bottom: 30px;
+  }
+
+  .splash-v-emblem-wrap {
+    width: 66px;
+    height: 66px;
+  }
+
+  .splash-status-title {
+    font-size: 24px;
+  }
+
+  .splash-status-sub {
+    font-size: 14.5px;
+  }
+
+  .splash-footer-caption {
+    font-size: 13px;
+  }
+}
+
+/* Desktop Viewport (>= 1024px) */
+@media (min-width: 1024px) {
+  #appSplashScreen {
+    padding: 90px 48px 60px;
+  }
+
+  .splash-inner-content {
+    max-width: 680px;
+  }
+
+  .splash-brand-logo {
+    font-size: 52px;
+    letter-spacing: 0.2em;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .splash-brand-tagline {
+    font-size: 13px;
+    letter-spacing: 0.36em;
+  }
+
+  .splash-loader-orbital {
+    width: 165px;
+    height: 165px;
+    margin-bottom: 32px;
+  }
+
+  .splash-v-emblem-wrap {
+    width: 72px;
+    height: 72px;
+  }
+
+  .splash-status-title {
+    font-size: 27px;
+  }
+
+  .splash-status-sub {
+    font-size: 15.5px;
+  }
+
+  .splash-dots-row {
+    gap: 10px;
+  }
+
+  .splash-dot {
+    width: 7px;
+    height: 7px;
+  }
+
+  .splash-dot.dot-active {
+    width: 8.5px;
+    height: 8.5px;
+  }
+
+  .splash-footer-caption {
+    font-size: 13.5px;
+  }
+}
+

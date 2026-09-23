@@ -2,12 +2,12 @@
    VOZX AI - Progressive Web App Service Worker (Offline Resilience)
    ========================================================================== */
 
-const CACHE_NAME = 'vozx-ai-v6';
+const CACHE_NAME = 'vozx-ai-v7';
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './styles.css',
-  './styles.css?v=5.1',
+  './styles.css?v=6.0',
   './app.js',
   './supabaseClient.js',
   './assets/offline-robot.png',

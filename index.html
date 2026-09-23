@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>VOZX AI - Intelligent Assistant Ecosystem</title>
-  <link rel="stylesheet" href="styles.css?v=5.1">
+  <link rel="stylesheet" href="styles.css?v=6.0">
 </head>
 <body>
 
@@ -13,6 +13,149 @@
 
   <!-- Subtle Futuristic Circuit Pattern Overlay -->
   <div class="circuit-bg-overlay"></div>
+
+  <!-- =========================================================================
+       APPLICATION LAUNCH SPLASH & WORKSPACE LOADING SCREEN
+       Faithfully matching visual reference media_1790136331833.png
+       Responsive across Mobile, Tablet, and Desktop
+       ========================================================================= -->
+  <div id="appSplashScreen" class="app-splash-screen" aria-label="Loading VOZX AI Workspace" role="status">
+    <!-- Cosmic Glowing Curved Light Arcs Background -->
+    <div class="splash-cosmic-backdrop" aria-hidden="true">
+      <svg class="splash-light-arcs-svg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="splashArcGradTop" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#020617" stop-opacity="0" />
+            <stop offset="25%" stop-color="#0369a1" stop-opacity="0.35" />
+            <stop offset="60%" stop-color="#0284c7" stop-opacity="0.8" />
+            <stop offset="100%" stop-color="#38bdf8" stop-opacity="1" />
+          </linearGradient>
+          <linearGradient id="splashArcGradBottom" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#020617" stop-opacity="0" />
+            <stop offset="35%" stop-color="#0284c7" stop-opacity="0.4" />
+            <stop offset="70%" stop-color="#00d2ff" stop-opacity="0.85" />
+            <stop offset="100%" stop-color="#7dd3fc" stop-opacity="1" />
+          </linearGradient>
+          <filter id="splashGlowTop" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="12" result="blur1" />
+            <feGaussianBlur stdDeviation="24" result="blur2" />
+            <feMerge>
+              <feMergeNode in="blur2" />
+              <feMergeNode in="blur1" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <filter id="splashGlowBottom" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="14" result="blur1" />
+            <feGaussianBlur stdDeviation="28" result="blur2" />
+            <feMerge>
+              <feMergeNode in="blur2" />
+              <feMergeNode in="blur1" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <!-- Top Left Curved Neon Arc -->
+        <path d="M -40 340 C 20 180, 130 50, 440 -30" fill="none" stroke="url(#splashArcGradTop)" stroke-width="4" filter="url(#splashGlowTop)" />
+        <path d="M -60 380 C 0 210, 100 80, 390 -10" fill="none" stroke="url(#splashArcGradTop)" stroke-width="2" opacity="0.6" filter="url(#splashGlowTop)" />
+        <!-- Bottom Right Curved Neon Arc -->
+        <path d="M 1040 660 C 970 830, 860 950, 540 1040" fill="none" stroke="url(#splashArcGradBottom)" stroke-width="4.5" filter="url(#splashGlowBottom)" />
+        <path d="M 1060 620 C 1000 800, 890 920, 590 1020" fill="none" stroke="url(#splashArcGradBottom)" stroke-width="2" opacity="0.6" filter="url(#splashGlowBottom)" />
+      </svg>
+      <div class="splash-ambient-radial-glow"></div>
+    </div>
+
+    <!-- Splash Content Stack -->
+    <div class="splash-inner-content">
+      <!-- 1. Top Branding -->
+      <div class="splash-brand-block">
+        <h1 class="splash-brand-logo">
+          <span class="brand-text-metallic">VOZX</span>
+          <span class="brand-text-cyan">AI</span>
+        </h1>
+        <p class="splash-brand-tagline">SMARTER TECH &nbsp;&middot;&nbsp; BRIGHTER FUTURE</p>
+      </div>
+
+      <!-- 2. Center Loading Stage: Orbital Neon Ring + 3D Metallic "V" Emblem -->
+      <div class="splash-center-stage">
+        <div class="splash-loader-orbital">
+          <!-- Animated Neon Cyan Gradient Arc Ring -->
+          <svg class="splash-ring-svg" viewBox="0 0 160 160">
+            <defs>
+              <linearGradient id="splashRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00f5ff" />
+                <stop offset="50%" stop-color="#0ea5e9" />
+                <stop offset="85%" stop-color="#0284c7" stop-opacity="0.2" />
+                <stop offset="100%" stop-color="#0284c7" stop-opacity="0" />
+              </linearGradient>
+              <filter id="splashRingGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="5" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <!-- Dark Track Circle -->
+            <circle class="splash-ring-track" cx="80" cy="80" r="66" />
+            <!-- Spinning Cyan Glow Arc -->
+            <circle class="splash-ring-spinner" cx="80" cy="80" r="66" filter="url(#splashRingGlow)" />
+          </svg>
+
+          <!-- Metallic 3D Faceted "V" Chevron Emblem -->
+          <div class="splash-v-emblem-wrap">
+            <svg class="splash-v-emblem-svg" viewBox="0 0 100 100" fill="none">
+              <defs>
+                <linearGradient id="vFacetLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff" />
+                  <stop offset="35%" stop-color="#cbd5e1" />
+                  <stop offset="70%" stop-color="#64748b" />
+                  <stop offset="100%" stop-color="#38bdf8" />
+                </linearGradient>
+                <linearGradient id="vFacetRight" x1="100%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff" />
+                  <stop offset="35%" stop-color="#e2e8f0" />
+                  <stop offset="70%" stop-color="#94a3b8" />
+                  <stop offset="100%" stop-color="#0284c7" />
+                </linearGradient>
+                <linearGradient id="vFacetInner" x1="50%" y1="0%" x2="50%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+                  <stop offset="50%" stop-color="#94a3b8" stop-opacity="0.6" />
+                  <stop offset="100%" stop-color="#0f172a" stop-opacity="0.4" />
+                </linearGradient>
+                <filter id="vEmblemGlow" x="-30%" y="-30%" width="160%" height="160%">
+                  <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#38bdf8" flood-opacity="0.5" />
+                </filter>
+              </defs>
+              <!-- Outer Left Wing -->
+              <path d="M 18 24 L 50 82 L 42 82 L 14 30 Z" fill="url(#vFacetLeft)" filter="url(#vEmblemGlow)" />
+              <!-- Outer Right Wing -->
+              <path d="M 82 24 L 50 82 L 58 82 L 86 30 Z" fill="url(#vFacetRight)" filter="url(#vEmblemGlow)" />
+              <!-- Inner Facet Bevel / Highlight -->
+              <path d="M 28 26 L 50 72 L 72 26 L 62 26 L 50 52 L 38 26 Z" fill="url(#vFacetInner)" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Status Heading & Subtitle -->
+        <div class="splash-status-block">
+          <h2 class="splash-status-title">Loading Your Workspace...</h2>
+          <p class="splash-status-sub">This won't take long</p>
+        </div>
+      </div>
+
+      <!-- 3. Bottom Progress Dots & Status Caption -->
+      <div class="splash-footer-block">
+        <div class="splash-dots-row" aria-hidden="true">
+          <span class="splash-dot dot-active"></span>
+          <span class="splash-dot"></span>
+          <span class="splash-dot"></span>
+          <span class="splash-dot"></span>
+        </div>
+        <p class="splash-footer-caption">Setting things up for you...</p>
+      </div>
+    </div>
+  </div>
 
   <!-- Main Application Viewport Shell (Responsive: Desktop, Tablet, Mobile) -->
   <main class="app-viewport-container phone-viewport-container">

@@ -1878,4 +1878,77 @@ document.addEventListener('DOMContentLoaded', () => {
   window.openOfflineScreen = function() {
     navigateToScreen('offline');
   };
+
+  // =========================================================================
+  // APPLICATION LAUNCH SPLASH & WORKSPACE LOADING SCREEN CONTROLLER
+  // =========================================================================
+  const appSplashScreen = document.getElementById('appSplashScreen');
+  const bottomBarContainer = document.querySelector('.bottom-bar-container');
+
+  function initAppSplashScreen() {
+    if (!appSplashScreen) return;
+
+    // Initially hide bottom floating input dock during splash loading
+    if (bottomBarContainer) {
+      bottomBarContainer.classList.add('bar-hidden');
+      bottomBarContainer.classList.remove('bar-visible');
+    }
+
+    // Display splash for 2.2 seconds, then dissolve smoothly into Home Dashboard
+    const SPLASH_DURATION_MS = 2200;
+    const FADE_DURATION_MS = 600;
+
+    setTimeout(() => {
+      appSplashScreen.classList.add('splash-fade-out');
+
+      setTimeout(() => {
+        appSplashScreen.style.display = 'none';
+
+        // Check if user is logged out or should be on home
+        const isLoggedOut = localStorage.getItem('vozx_is_logged_in') === 'false';
+        if (isLoggedOut) {
+          navHistory = ['getstarted'];
+          navigateToScreen('getstarted', false);
+        } else {
+          // Ensure Home screen is active and bottom dock is visible
+          const screenHome = document.getElementById('screenHome');
+          if (screenHome) {
+            const activeScreen = document.querySelector('.app-screen.active');
+            if (!activeScreen || activeScreen.id === 'screenHome') {
+              appScreens.forEach(s => s.classList.remove('active'));
+              screenHome.classList.add('active');
+            }
+          }
+          if (bottomBarContainer) {
+            bottomBarContainer.classList.remove('bar-hidden');
+            bottomBarContainer.classList.add('bar-visible');
+          }
+        }
+      }, FADE_DURATION_MS);
+    }, SPLASH_DURATION_MS);
+  }
+
+  // Developer helper to replay the splash screen anytime
+  window.showSplashScreen = function(durationMs = 2200) {
+    if (!appSplashScreen) return;
+    appSplashScreen.style.display = 'flex';
+    appSplashScreen.classList.remove('splash-fade-out');
+    if (bottomBarContainer) {
+      bottomBarContainer.classList.add('bar-hidden');
+      bottomBarContainer.classList.remove('bar-visible');
+    }
+    setTimeout(() => {
+      appSplashScreen.classList.add('splash-fade-out');
+      setTimeout(() => {
+        appSplashScreen.style.display = 'none';
+        if (bottomBarContainer) {
+          bottomBarContainer.classList.remove('bar-hidden');
+          bottomBarContainer.classList.add('bar-visible');
+        }
+      }, 600);
+    }, durationMs);
+  };
+
+  initAppSplashScreen();
 });
+
