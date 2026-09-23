@@ -1897,11 +1897,185 @@ document.addEventListener('DOMContentLoaded', () => {
   // APPLICATION LAUNCH SPLASH & WORKSPACE LOADING SCREEN CONTROLLER
   // Stage 1: Brand Intro Screen (#appBrandIntroScreen) - ~1.8s
   // Stage 2: Workspace Loading Screen (#appSplashScreen) - ~2.0s
-  // Stage 3: Home Dashboard (#screenHome)
+  // Stage 3: Smooth Flight of V Logo to Home Screen Top Header Logo
   // =========================================================================
   const appBrandIntroScreen = document.getElementById('appBrandIntroScreen');
   const appSplashScreen = document.getElementById('appSplashScreen');
   const bottomBarContainer = document.querySelector('.bottom-bar-container');
+
+  function animateLogoToHomeHeader(onComplete) {
+    const splashEmblem = document.querySelector('.splash-v-emblem-wrap') || document.querySelector('.splash-emblem-img');
+    const screenHome = document.getElementById('screenHome');
+    const targetLogo = document.querySelector('#screenHome .brand-header-logo');
+
+    // Ensure screenHome is in active DOM tree so target element has accurate layout
+    if (screenHome) {
+      const activeScreen = document.querySelector('.app-screen.active');
+      if (!activeScreen || activeScreen.id === 'screenHome') {
+        appScreens.forEach(s => s.classList.remove('active'));
+        screenHome.classList.add('active');
+      }
+    }
+
+    if (!splashEmblem) {
+      if (appSplashScreen) appSplashScreen.classList.add('splash-fade-out');
+      revealHomeScreen();
+      setTimeout(() => {
+        if (appSplashScreen) appSplashScreen.style.display = 'none';
+        if (typeof onComplete === 'function') onComplete();
+      }, 500);
+      return;
+    }
+
+    // Stop pulsing scale on splash emblem momentarily for exact unskewed measurement
+    splashEmblem.style.animation = 'none';
+    const sRect = splashEmblem.getBoundingClientRect();
+
+    const isMobile = window.innerWidth <= 640;
+    const isTablet = window.innerWidth > 640 && window.innerWidth < 1024;
+    const defaultEmblemSize = isMobile ? 84 : (isTablet ? 92 : 100);
+
+    const startLeft = sRect.width > 0 ? sRect.left : (window.innerWidth - defaultEmblemSize) / 2;
+    const startTop = sRect.height > 0 ? sRect.top : (window.innerHeight - defaultEmblemSize) / 2;
+    const startWidth = sRect.width > 0 ? sRect.width : defaultEmblemSize;
+    const startHeight = sRect.height > 0 ? sRect.height : defaultEmblemSize;
+
+    // Measure target header logo on screenHome
+    let targetLeft = 0;
+    let targetTop = 0;
+    let targetWidth = 0;
+
+    if (targetLogo) {
+      const tRect = targetLogo.getBoundingClientRect();
+      targetLeft = tRect.left;
+      targetTop = tRect.top;
+      targetWidth = tRect.width;
+    }
+
+    // Reliable layout fallback for mobile/tablet if not yet computed
+    if (!targetWidth || targetWidth === 0) {
+      if (isMobile) {
+        targetLeft = 20;
+        targetTop = 24;
+        targetWidth = 32;
+      } else if (isTablet) {
+        targetLeft = 24;
+        targetTop = 28;
+        targetWidth = 34;
+      } else {
+        const viewportContainer = document.querySelector('.phone-viewport-container') || document.body;
+        const vRect = viewportContainer.getBoundingClientRect();
+        targetLeft = (vRect && vRect.width > 0 ? vRect.left : 0) + 32;
+        targetTop = 32;
+        targetWidth = 38;
+      }
+    }
+
+    // Create high-precision flying proxy emblem attached to document.body
+    const flyingEl = document.createElement('div');
+    flyingEl.className = 'splash-flying-logo';
+    flyingEl.setAttribute('aria-hidden', 'true');
+    flyingEl.innerHTML = '<img src="assets/vozx-logo-icon.png" alt="" />';
+    flyingEl.style.top = `${startTop}px`;
+    flyingEl.style.left = `${startLeft}px`;
+    flyingEl.style.width = `${startWidth}px`;
+    flyingEl.style.height = `${startHeight}px`;
+
+    document.body.appendChild(flyingEl);
+
+    // Hide the static splash emblem and destination logo so there are no duplicates
+    splashEmblem.style.visibility = 'hidden';
+    if (targetLogo) {
+      targetLogo.style.opacity = '0';
+    }
+
+    // Softly dissolve splash inner ring and texts while keeping the dark splash background covering the home screen
+    const splashInner = appSplashScreen ? appSplashScreen.querySelector('.splash-inner-content') : null;
+    if (splashInner) {
+      splashInner.classList.add('splash-content-dissolve');
+    }
+
+    // Vector calculations for hardware-accelerated transform
+    const deltaX = targetLeft - startLeft;
+    const deltaY = targetTop - startTop;
+    const scale = targetWidth / startWidth;
+
+    let hasLanded = false;
+    const FLIGHT_MS = 720;
+
+    function onFlightLanded() {
+      if (hasLanded) return;
+      hasLanded = true;
+
+      // Remove flying proxy
+      if (flyingEl.parentNode) {
+        flyingEl.parentNode.removeChild(flyingEl);
+      }
+
+      // Restore static emblem for subsequent replays
+      splashEmblem.style.visibility = '';
+      splashEmblem.style.animation = '';
+
+      // Reveal destination header logo with docking pulse
+      if (targetLogo) {
+        targetLogo.style.opacity = '1';
+        targetLogo.classList.remove('logo-docked');
+        void targetLogo.offsetWidth;
+        targetLogo.classList.add('logo-docked');
+        setTimeout(() => targetLogo.classList.remove('logo-docked'), 800);
+      }
+
+      // REQUIREMENT: "after logo reaching the top of the home screen then home screen should come"
+      // Splash screen fades out NOW, revealing the active home screen underneath
+      if (appSplashScreen) {
+        appSplashScreen.classList.add('splash-fade-out');
+      }
+      revealHomeScreen();
+
+      setTimeout(() => {
+        if (appSplashScreen) {
+          appSplashScreen.style.display = 'none';
+          if (splashInner) {
+            splashInner.classList.remove('splash-content-dissolve');
+          }
+        }
+        if (typeof onComplete === 'function') {
+          onComplete();
+        }
+      }, 500);
+    }
+
+    // Use Web Animations API for 100% frame reliability on mobile Safari, Android Chrome, and Tablet
+    if (typeof flyingEl.animate === 'function') {
+      const anim = flyingEl.animate([
+        {
+          transform: 'translate3d(0, 0, 0) scale(1)',
+          boxShadow: '0 0 24px rgba(0, 240, 255, 0.75), 0 0 45px rgba(138, 43, 226, 0.4)',
+          filter: 'drop-shadow(0 0 16px rgba(0, 240, 255, 0.9))'
+        },
+        {
+          transform: `translate3d(${deltaX}px, ${deltaY}px, 0) scale(${scale})`,
+          boxShadow: '0 0 12px rgba(0, 240, 255, 0.85), 0 0 22px rgba(56, 189, 248, 0.5)',
+          filter: 'drop-shadow(0 0 8px rgba(0, 240, 255, 0.95))'
+        }
+      ], {
+        duration: FLIGHT_MS,
+        easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+        fill: 'forwards'
+      });
+
+      anim.onfinish = onFlightLanded;
+      // Fallback timer in case onfinish is deferred by browser
+      setTimeout(onFlightLanded, FLIGHT_MS + 40);
+    } else {
+      // CSS transition fallback
+      requestAnimationFrame(() => {
+        flyingEl.classList.add('flying-active');
+        flyingEl.style.transform = `translate3d(${deltaX}px, ${deltaY}px, 0) scale(${scale})`;
+      });
+      setTimeout(onFlightLanded, FLIGHT_MS);
+    }
+  }
 
   function initAppSplashScreen() {
     // Initially hide bottom floating input dock during splash loading
@@ -1913,7 +2087,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const BRAND_INTRO_DURATION_MS = 1800;
     const BRAND_FADE_DURATION_MS = 500;
     const WORKSPACE_DURATION_MS = 2000;
-    const WORKSPACE_FADE_DURATION_MS = 600;
 
     if (appBrandIntroScreen) {
       // Stage 1: Show Brand Intro Logo Screen
@@ -1924,6 +2097,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (appSplashScreen) {
         appSplashScreen.style.display = 'flex';
         appSplashScreen.classList.remove('splash-fade-out');
+        const splashEmblem = document.querySelector('.splash-v-emblem-wrap');
+        if (splashEmblem) splashEmblem.style.visibility = '';
       }
 
       setTimeout(() => {
@@ -1933,16 +2108,12 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
           appBrandIntroScreen.style.display = 'none';
 
-          // Stage 2: Workspace Loading Screen runs
+          // Stage 2: Workspace Loading Screen runs, then Logo flies to top header
           setTimeout(() => {
             if (appSplashScreen) {
-              appSplashScreen.classList.add('splash-fade-out');
-
-              // Stage 3: Transition to Home Dashboard
-              setTimeout(() => {
-                appSplashScreen.style.display = 'none';
+              animateLogoToHomeHeader(() => {
                 revealHomeScreen();
-              }, WORKSPACE_FADE_DURATION_MS);
+              });
             } else {
               revealHomeScreen();
             }
@@ -1953,12 +2124,12 @@ document.addEventListener('DOMContentLoaded', () => {
       // Fallback if Brand Intro is not in DOM
       appSplashScreen.style.display = 'flex';
       appSplashScreen.classList.remove('splash-fade-out');
+      const splashEmblem = document.querySelector('.splash-v-emblem-wrap');
+      if (splashEmblem) splashEmblem.style.visibility = '';
       setTimeout(() => {
-        appSplashScreen.classList.add('splash-fade-out');
-        setTimeout(() => {
-          appSplashScreen.style.display = 'none';
+        animateLogoToHomeHeader(() => {
           revealHomeScreen();
-        }, WORKSPACE_FADE_DURATION_MS);
+        });
       }, WORKSPACE_DURATION_MS);
     } else {
       revealHomeScreen();
@@ -2005,19 +2176,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!appSplashScreen) return;
     appSplashScreen.style.display = 'flex';
     appSplashScreen.classList.remove('splash-fade-out');
+    const splashEmblem = document.querySelector('.splash-v-emblem-wrap');
+    if (splashEmblem) splashEmblem.style.visibility = '';
     if (bottomBarContainer) {
       bottomBarContainer.classList.add('bar-hidden');
       bottomBarContainer.classList.remove('bar-visible');
     }
     setTimeout(() => {
-      appSplashScreen.classList.add('splash-fade-out');
-      setTimeout(() => {
-        appSplashScreen.style.display = 'none';
-        if (bottomBarContainer) {
-          bottomBarContainer.classList.remove('bar-hidden');
-          bottomBarContainer.classList.add('bar-visible');
-        }
-      }, 600);
+      animateLogoToHomeHeader(() => {
+        revealHomeScreen();
+      });
     }, durationMs);
   };
 

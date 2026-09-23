@@ -6387,3 +6387,81 @@ body {
   }
 }
 
+/* =========================================================================
+   DYNAMIC FLYING LOGO TRANSITION FROM SPLASH TO TOP HEADER
+   ========================================================================= */
+.splash-flying-logo {
+  position: fixed;
+  z-index: 10005;
+  pointer-events: none;
+  transform-origin: 0 0;
+  border-radius: 50%;
+  will-change: transform, box-shadow, filter;
+  transition: transform 0.72s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.72s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 24px rgba(0, 240, 255, 0.75), 0 0 45px rgba(138, 43, 226, 0.4);
+  filter: drop-shadow(0 0 16px rgba(0, 240, 255, 0.9));
+}
+
+.splash-flying-logo.flying-active {
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.85), 0 0 22px rgba(56, 189, 248, 0.5);
+  filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.95));
+}
+
+.splash-flying-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Header Logo Arrival / Docking Ripple & Glow */
+@keyframes logo-dock-arrival {
+  0% {
+    transform: scale(1.22);
+    filter: drop-shadow(0 0 16px #00f0ff) drop-shadow(0 0 30px rgba(0, 240, 255, 0.85));
+  }
+  40% {
+    transform: scale(0.95);
+    filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.7));
+  }
+  75% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.5));
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 4px rgba(0, 240, 255, 0.35));
+  }
+}
+
+.brand-header-logo.logo-docked {
+  animation: logo-dock-arrival 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-flying-logo {
+    transition: none !important;
+  }
+  .brand-header-logo.logo-docked {
+    animation: none !important;
+  }
+}
+
+/* Dissolve splash inner texts and orbital ring while logo ascends to the top */
+.splash-inner-content.splash-content-dissolve .splash-brand-block,
+.splash-inner-content.splash-content-dissolve .splash-ring-svg,
+.splash-inner-content.splash-content-dissolve .splash-status-block,
+.splash-inner-content.splash-content-dissolve .splash-footer-block {
+  opacity: 0 !important;
+  transform: scale(0.92);
+  transition: opacity 0.32s ease-out, transform 0.32s ease-out;
+  pointer-events: none;
+}
+
+
+
