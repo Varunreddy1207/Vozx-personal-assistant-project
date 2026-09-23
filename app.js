@@ -841,6 +841,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Brand Header Logo Click -> Refresh Page
+  document.querySelectorAll('.brand-header-logo').forEach((logo) => {
+    logo.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.reload();
+    });
+    logo.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        window.location.reload();
+      }
+    });
+  });
+
   // =========================================================================
   // GET STARTED & AUTHENTICATION SCREENS (SIGN IN & CREATE ACCOUNT)
   // =========================================================================
