@@ -71,7 +71,7 @@ body {
 
 /* ==========================================================================
    APPLICATION VIEWPORT SHELL & RESPONSIVE LAYOUT SYSTEM
-   Adapts across Desktop (>= 1025px), Tablet (641px - 1024px), Mobile (<= 640px)
+   Adapts across Desktop (>= 1024px), Tablet (641px - 1023px), Mobile (<= 640px)
    ========================================================================== */
 .app-viewport-container,
 .phone-viewport-container {
@@ -4729,9 +4729,9 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   2. TABLET VIEWPORT (641px - 1024px)
+   2. TABLET VIEWPORT (641px - 1023px)
    -------------------------------------------------------------------------- */
-@media (min-width: 641px) and (max-width: 1024px) {
+@media (min-width: 641px) and (max-width: 1023px) {
   .screen-scroll-view {
     padding: 16px 28px 150px 28px;
   }
@@ -4807,43 +4807,6 @@ body {
     gap: 20px;
   }
 
-  /* Tablet Email Assistant Bar Sizing */
-  #screenEmail .connected-accounts-bar {
-    width: 100%;
-    max-width: 480px;
-    margin: 0 0 12px 0;
-    padding: 6px 12px;
-    border-radius: 12px;
-  }
-
-  #screenEmail .active-account-email {
-    max-width: 220px;
-    font-size: 11.5px;
-  }
-
-  #screenEmail .add-mail-pill-btn {
-    padding: 4px 10px;
-    font-size: 11px;
-  }
-
-  #screenEmail .email-compose-dock {
-    width: 100%;
-    max-width: 580px;
-    align-self: center;
-    margin: 16px auto 10px auto;
-    padding: 3px 6px 3px 14px;
-    height: 44px;
-  }
-
-  #screenEmail .email-compose-input {
-    font-size: 12.5px;
-  }
-
-  #screenEmail .email-send-pill {
-    padding: 6px 13px;
-    font-size: 11px;
-  }
-
   #screenPlanner .planner-full-cal-grid {
     max-width: 640px;
   }
@@ -4860,26 +4823,6 @@ body {
     grid-template-columns: repeat(4, 1fr) !important;
   }
 
-  .email-dashboard-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-
-  #screenPlanner .planner-full-cal-grid {
-    max-width: 640px;
-  }
-
-  .notes-folders-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
-  }
-
-  #screenFiles .cloud-services-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
-  }
-
-  #screenFiles .files-categories-grid {
-    grid-template-columns: repeat(4, 1fr) !important;
-  }
 
   /* Tablet Auth Screens */
   #screenSignIn,
@@ -4921,9 +4864,9 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   3. DESKTOP VIEWPORT (>= 1025px)
+   3. DESKTOP VIEWPORT (>= 1024px)
    -------------------------------------------------------------------------- */
-@media (min-width: 1025px) {
+@media (min-width: 1024px) {
   .screen-scroll-view {
     padding: 24px 48px 135px 48px;
   }
@@ -5283,7 +5226,7 @@ body {
 /* ==========================================================================
    OFFLINE / NO INTERNET CONNECTION SCREEN STYLES
    Faithfully matching visual reference media_1790067714292.png
-   Responsive across Desktop (>= 1025px), Tablet (641px - 1024px), Mobile (<= 640px)
+   Responsive across Desktop (>= 1024px), Tablet (641px - 1023px), Mobile (<= 640px)
    ========================================================================== */
 
 /* Top Dashboard Header Offline Pill Badge */
@@ -5664,8 +5607,8 @@ body {
    RESPONSIVE ADAPTATIONS: DESKTOP, TABLET, AND SHORT SCREENS
    -------------------------------------------------------------------------- */
 
-/* Desktop Devices (>= 1025px) */
-@media (min-width: 1025px) {
+/* Desktop Devices (>= 1024px) */
+@media (min-width: 1024px) {
   #screenOffline {
     padding: 36px 24px;
     justify-content: center;
@@ -5702,8 +5645,8 @@ body {
   }
 }
 
-/* Tablet Devices (641px - 1024px) */
-@media (min-width: 641px) and (max-width: 1024px) {
+/* Tablet Devices (641px - 1023px) */
+@media (min-width: 641px) and (max-width: 1023px) {
   #screenOffline {
     padding: 24px 16px;
     justify-content: center;
