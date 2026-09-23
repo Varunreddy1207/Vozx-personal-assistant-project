@@ -4807,6 +4807,43 @@ body {
     gap: 20px;
   }
 
+  /* Tablet Email Assistant Bar Sizing */
+  #screenEmail .connected-accounts-bar {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 0 12px 0;
+    padding: 6px 12px;
+    border-radius: 12px;
+  }
+
+  #screenEmail .active-account-email {
+    max-width: 220px;
+    font-size: 11.5px;
+  }
+
+  #screenEmail .add-mail-pill-btn {
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+
+  #screenEmail .email-compose-dock {
+    width: 100%;
+    max-width: 580px;
+    align-self: center;
+    margin: 16px auto 10px auto;
+    padding: 3px 6px 3px 14px;
+    height: 44px;
+  }
+
+  #screenEmail .email-compose-input {
+    font-size: 12.5px;
+  }
+
+  #screenEmail .email-send-pill {
+    padding: 6px 13px;
+    font-size: 11px;
+  }
+
   #screenPlanner .planner-full-cal-grid {
     max-width: 640px;
   }
@@ -5084,6 +5121,42 @@ body {
     gap: 28px;
     align-items: start;
     margin-top: 14px;
+  }
+
+  /* Desktop Email Assistant Bar Sizing */
+  #screenEmail .connected-accounts-bar {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 0 14px 0;
+    padding: 6px 12px;
+    border-radius: 12px;
+  }
+
+  #screenEmail .active-account-email {
+    max-width: 260px;
+    font-size: 12px;
+  }
+
+  #screenEmail .add-mail-pill-btn {
+    padding: 5px 12px;
+    font-size: 11.5px;
+  }
+
+  #screenEmail .email-compose-dock {
+    width: 100%;
+    max-width: 640px;
+    margin: 20px auto 12px auto;
+    padding: 3px 6px 3px 14px;
+    height: 46px;
+  }
+
+  #screenEmail .email-compose-input {
+    font-size: 13px;
+  }
+
+  #screenEmail .email-send-pill {
+    padding: 6px 14px;
+    font-size: 11.5px;
   }
 
   #screenEmail #emailEmptyView .link-email-hero-block {
