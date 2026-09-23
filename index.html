@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>VOZX AI - Intelligent Assistant Ecosystem</title>
-  <link rel="stylesheet" href="styles.css?v=5.0">
+  <link rel="stylesheet" href="styles.css?v=5.1">
 </head>
 <body>
 
@@ -706,62 +706,65 @@
           <p class="screen-main-subtitle">Plan your goals, manage your time, make it happen.</p>
         </div>
 
-        <!-- Month Picker -->
-        <div class="planner-month-picker">
-          <button class="month-chevron-btn" id="prevMonthBtn">&lt;</button>
-          <span>September 2026</span>
-          <button class="month-chevron-btn" id="nextMonthBtn">&gt;</button>
-        </div>
+        <!-- Calendar Card Column (Month Picker & Dates Grid) -->
+        <div class="planner-cal-card">
+          <!-- Month Picker -->
+          <div class="planner-month-picker">
+            <button class="month-chevron-btn" id="prevMonthBtn">&lt;</button>
+            <span>September 2026</span>
+            <button class="month-chevron-btn" id="nextMonthBtn">&gt;</button>
+          </div>
 
-        <!-- Full Calendar Grid for September 2026 -->
-        <div class="planner-full-cal-grid">
-          <span class="cal-header-label">Sun</span>
-          <span class="cal-header-label">Mon</span>
-          <span class="cal-header-label">Tue</span>
-          <span class="cal-header-label">Wed</span>
-          <span class="cal-header-label">Thu</span>
-          <span class="cal-header-label">Fri</span>
-          <span class="cal-header-label">Sat</span>
+          <!-- Full Calendar Grid for September 2026 -->
+          <div class="planner-full-cal-grid">
+            <span class="cal-header-label">Sun</span>
+            <span class="cal-header-label">Mon</span>
+            <span class="cal-header-label">Tue</span>
+            <span class="cal-header-label">Wed</span>
+            <span class="cal-header-label">Thu</span>
+            <span class="cal-header-label">Fri</span>
+            <span class="cal-header-label">Sat</span>
 
-          <span class="cal-cell" style="opacity: 0.3;">30</span>
-          <span class="cal-cell" style="opacity: 0.3;">31</span>
-          <span class="cal-cell">1</span>
-          <span class="cal-cell">2</span>
-          <span class="cal-cell">3</span>
-          <span class="cal-cell">4</span>
-          <span class="cal-cell">5</span>
+            <span class="cal-cell" style="opacity: 0.3;">30</span>
+            <span class="cal-cell" style="opacity: 0.3;">31</span>
+            <span class="cal-cell">1</span>
+            <span class="cal-cell">2</span>
+            <span class="cal-cell">3</span>
+            <span class="cal-cell">4</span>
+            <span class="cal-cell">5</span>
 
-          <span class="cal-cell">6</span>
-          <span class="cal-cell">7</span>
-          <span class="cal-cell">8</span>
-          <span class="cal-cell">9</span>
-          <span class="cal-cell">10</span>
-          <span class="cal-cell">11</span>
-          <span class="cal-cell">12</span>
+            <span class="cal-cell">6</span>
+            <span class="cal-cell">7</span>
+            <span class="cal-cell">8</span>
+            <span class="cal-cell">9</span>
+            <span class="cal-cell">10</span>
+            <span class="cal-cell">11</span>
+            <span class="cal-cell">12</span>
 
-          <span class="cal-cell">13</span>
-          <span class="cal-cell">14</span>
-          <span class="cal-cell">15</span>
-          <span class="cal-cell">16</span>
-          <span class="cal-cell today-active" title="Today">17</span>
-          <span class="cal-cell">18</span>
-          <span class="cal-cell">19</span>
+            <span class="cal-cell">13</span>
+            <span class="cal-cell">14</span>
+            <span class="cal-cell">15</span>
+            <span class="cal-cell">16</span>
+            <span class="cal-cell today-active" title="Today">17</span>
+            <span class="cal-cell">18</span>
+            <span class="cal-cell">19</span>
 
-          <span class="cal-cell">20</span>
-          <span class="cal-cell">21</span>
-          <span class="cal-cell">22</span>
-          <span class="cal-cell">23</span>
-          <span class="cal-cell">24</span>
-          <span class="cal-cell">25</span>
-          <span class="cal-cell">26</span>
+            <span class="cal-cell">20</span>
+            <span class="cal-cell">21</span>
+            <span class="cal-cell">22</span>
+            <span class="cal-cell">23</span>
+            <span class="cal-cell">24</span>
+            <span class="cal-cell">25</span>
+            <span class="cal-cell">26</span>
 
-          <span class="cal-cell">27</span>
-          <span class="cal-cell">28</span>
-          <span class="cal-cell">29</span>
-          <span class="cal-cell">30</span>
-          <span class="cal-cell" style="opacity: 0.3;">1</span>
-          <span class="cal-cell" style="opacity: 0.3;">2</span>
-          <span class="cal-cell" style="opacity: 0.3;">3</span>
+            <span class="cal-cell">27</span>
+            <span class="cal-cell">28</span>
+            <span class="cal-cell">29</span>
+            <span class="cal-cell">30</span>
+            <span class="cal-cell" style="opacity: 0.3;">1</span>
+            <span class="cal-cell" style="opacity: 0.3;">2</span>
+            <span class="cal-cell" style="opacity: 0.3;">3</span>
+          </div>
         </div>
 
         <!-- Planner Populated View -->
