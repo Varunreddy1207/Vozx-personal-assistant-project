@@ -63,6 +63,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     targetScreen.classList.add('active');
 
+    // Track active screen in localStorage and toggle Get Started document class
+    try {
+      localStorage.setItem('vozx_current_screen', targetScreenId);
+      if (targetScreenId === 'getstarted') {
+        document.documentElement.classList.add('on-getstarted-screen');
+      } else {
+        document.documentElement.classList.remove('on-getstarted-screen');
+      }
+    } catch (e) {}
+
     // Dismiss any modals and overlays if navigating to offline screen
     if (targetScreenId === 'offline') {
       if (modalOverlay) modalOverlay.classList.remove('active');
@@ -296,6 +306,8 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         localStorage.setItem('vozx_is_logged_in', 'false');
       }
+      localStorage.setItem('vozx_current_screen', 'getstarted');
+      document.documentElement.classList.add('on-getstarted-screen');
     } catch (e) {}
     showToast('Logged out of VOZX AI');
     navHistory = ['getstarted'];
@@ -945,6 +957,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     try {
       localStorage.setItem('vozx_is_logged_in', 'true');
+      localStorage.setItem('vozx_current_screen', 'home');
+      document.documentElement.classList.remove('on-getstarted-screen');
     } catch (e) {}
     showToast(toastMessage || `Welcome to VOZX AI, ${currentUserName}!`);
     navHistory = ['home'];
@@ -1141,14 +1155,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (userNameGreeting) userNameGreeting.textContent = currentUserName;
             if (settingsUserName) settingsUserName.textContent = currentUserName;
           }
-        } else if (localStorage.getItem('vozx_is_logged_in') === 'false') {
+        } else if (localStorage.getItem('vozx_is_logged_in') === 'false' || localStorage.getItem('vozx_current_screen') === 'getstarted') {
           navHistory = ['getstarted'];
           navigateToScreen('getstarted', false);
         }
       });
     } else {
       const isLoggedOut = localStorage.getItem('vozx_is_logged_in') === 'false';
-      if (isLoggedOut) {
+      const currentScreen = localStorage.getItem('vozx_current_screen');
+      if (isLoggedOut || currentScreen === 'getstarted') {
         navHistory = ['getstarted'];
         navigateToScreen('getstarted', false);
       }
@@ -2078,6 +2093,30 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function initAppSplashScreen() {
+    const isLoggedOut = localStorage.getItem('vozx_is_logged_in') === 'false';
+    const currentScreen = localStorage.getItem('vozx_current_screen');
+    const isGetStarted = (currentScreen === 'getstarted' || (isLoggedOut && (!currentScreen || currentScreen === 'getstarted')));
+
+    // REQUIREMENT: If user is on Get Started page and reloads, bypass "Loading Your Workspace"
+    // and Brand Intro screens completely on all devices (Desktop, Tablet, Mobile)
+    if (isGetStarted) {
+      if (appBrandIntroScreen) {
+        appBrandIntroScreen.style.display = 'none';
+        appBrandIntroScreen.classList.add('brand-intro-fade-out');
+      }
+      if (appSplashScreen) {
+        appSplashScreen.style.display = 'none';
+        appSplashScreen.classList.add('splash-fade-out');
+      }
+      if (bottomBarContainer) {
+        bottomBarContainer.classList.add('bar-hidden');
+        bottomBarContainer.classList.remove('bar-visible');
+      }
+      navHistory = ['getstarted'];
+      navigateToScreen('getstarted', false);
+      return;
+    }
+
     // Initially hide bottom floating input dock during splash loading
     if (bottomBarContainer) {
       bottomBarContainer.classList.add('bar-hidden');
@@ -2137,9 +2176,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function revealHomeScreen() {
-    // Check if user is logged out or should be on home
+    // Check if user is logged out or should be on getstarted
     const isLoggedOut = localStorage.getItem('vozx_is_logged_in') === 'false';
-    if (isLoggedOut) {
+    const currentScreen = localStorage.getItem('vozx_current_screen');
+    if (isLoggedOut || currentScreen === 'getstarted') {
       navHistory = ['getstarted'];
       navigateToScreen('getstarted', false);
     } else {
@@ -2161,6 +2201,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Developer helpers to replay screens anytime in console
   window.showBrandIntro = function(durationMs = 1800) {
+    document.documentElement.classList.remove('on-getstarted-screen');
     if (!appBrandIntroScreen) return;
     appBrandIntroScreen.style.display = 'flex';
     appBrandIntroScreen.classList.remove('brand-intro-fade-out');
@@ -2173,6 +2214,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   window.showSplashScreen = function(durationMs = 2000) {
+    document.documentElement.classList.remove('on-getstarted-screen');
     if (!appSplashScreen) return;
     appSplashScreen.style.display = 'flex';
     appSplashScreen.classList.remove('splash-fade-out');
@@ -2190,6 +2232,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   window.showFullLaunchSequence = function() {
+    document.documentElement.classList.remove('on-getstarted-screen');
     initAppSplashScreen();
   };
 

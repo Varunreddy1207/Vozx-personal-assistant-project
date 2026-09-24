@@ -509,6 +509,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         try {
           localStorage.setItem('vozx_is_logged_in', 'true');
+          localStorage.setItem('vozx_current_screen', 'home');
         } catch (err) {}
         window.location.href = 'index.html';
       });
@@ -537,6 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.stopPropagation();
     try {
       localStorage.setItem('vozx_is_logged_in', 'true');
+      localStorage.setItem('vozx_current_screen', 'home');
     } catch (err) {}
     window.location.href = 'index.html';
   });
@@ -546,6 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.stopPropagation();
     try {
       localStorage.setItem('vozx_is_logged_in', 'true');
+      localStorage.setItem('vozx_current_screen', 'home');
     } catch (err) {}
     window.location.href = 'index.html';
   });
@@ -555,6 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
     link.addEventListener('click', () => {
       try {
         localStorage.setItem('vozx_is_logged_in', 'true');
+        localStorage.setItem('vozx_current_screen', 'home');
       } catch (err) {}
     });
   });

@@ -329,6 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         localStorage.setItem('vozx_is_logged_in', 'true');
         localStorage.setItem('vozx_user_logged_in', 'true');
+        localStorage.setItem('vozx_current_screen', 'home');
         localStorage.setItem('vozx_user_email', loginEmail.value.trim());
         localStorage.setItem('vozx_user_name', userName);
         localStorage.setItem('vozx_remember_me', rememberMeCheckbox.checked ? 'true' : 'false');
@@ -371,6 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
           localStorage.setItem('vozx_is_logged_in', 'true');
           localStorage.setItem('vozx_user_logged_in', 'true');
+          localStorage.setItem('vozx_current_screen', 'home');
         } catch (e) {}
         showToast(`Authenticated via ${provider}! Launching VOZX...`, 'success');
         setTimeout(() => {

@@ -3,14 +3,14 @@
    Network-First for HTML/CSS/JS ensuring instant updates on Mobile & Tablet
    ========================================================================== */
 
-const CACHE_NAME = 'vozx-ai-v15';
+const CACHE_NAME = 'vozx-ai-v16';
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './styles.css',
-  './styles.css?v=15.0',
+  './styles.css?v=16.0',
   './app.js',
-  './app.js?v=15.0',
+  './app.js?v=16.0',
   './supabaseClient.js',
   './assets/vozx-brand-intro-clean.png',
   './assets/vozx-logo-icon.png',

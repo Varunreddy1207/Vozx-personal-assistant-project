@@ -6515,5 +6515,38 @@ body {
   pointer-events: none;
 }
 
+/* ==========================================================================
+   GET STARTED SCREEN STATE OVERRIDE (Reload & Instant Boot)
+   When user is on Get Started page and reloads the page:
+   - Suppresses "#appSplashScreen" ("Loading Your Workspace...") completely
+   - Suppresses "#appBrandIntroScreen" completely
+   - Renders "#screenGetStarted" immediately on all devices (Mobile, Tablet, Desktop)
+   - Keeps bottom floating input dock hidden
+   ========================================================================== */
+html.on-getstarted-screen #appBrandIntroScreen,
+html.on-getstarted-screen #appSplashScreen {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  animation: none !important;
+}
+
+html.on-getstarted-screen #screenHome {
+  display: none !important;
+}
+
+html.on-getstarted-screen #screenGetStarted {
+  display: flex !important;
+  opacity: 1 !important;
+}
+
+html.on-getstarted-screen .bottom-bar-container {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+
 
 

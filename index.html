@@ -4,7 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>VOZX AI - Intelligent Assistant Ecosystem</title>
-  <link rel="stylesheet" href="styles.css?v=15.0">
+  <link rel="stylesheet" href="styles.css?v=16.0">
+  <script>
+    (function() {
+      try {
+        var isLoggedOut = localStorage.getItem('vozx_is_logged_in') === 'false';
+        var currentScreen = localStorage.getItem('vozx_current_screen');
+        if (currentScreen === 'getstarted' || (isLoggedOut && (!currentScreen || currentScreen === 'getstarted'))) {
+          document.documentElement.classList.add('on-getstarted-screen');
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
 
@@ -2399,7 +2410,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabaseClient.js"></script>
-  <script src="app.js?v=15.0"></script>
+  <script src="app.js?v=16.0"></script>
   <script>
     if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
       window.addEventListener('load', () => {
