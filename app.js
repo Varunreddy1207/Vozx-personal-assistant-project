@@ -263,6 +263,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Open Chat Screen when Bottom Search Pill is Clicked / Focused
   if (chatInput) {
     chatInput.addEventListener('focus', () => {
+      // Do not navigate to chat while brand intro or splash loading screen is visible
+      const isSplashVisible = (appSplashScreen && appSplashScreen.style.display !== 'none' && !appSplashScreen.classList.contains('splash-fade-out')) ||
+                              (appBrandIntroScreen && appBrandIntroScreen.style.display !== 'none' && !appBrandIntroScreen.classList.contains('brand-intro-fade-out'));
+      if (isSplashVisible) return;
+
       const activeScreen = document.querySelector('.app-screen.active');
       if (activeScreen?.dataset.screen !== 'chat') {
         navigateToScreen('chat');
@@ -272,6 +277,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (pillInputWrapper) {
     pillInputWrapper.addEventListener('click', (e) => {
+      // Do not navigate to chat while brand intro or splash loading screen is visible
+      const isSplashVisible = (appSplashScreen && appSplashScreen.style.display !== 'none' && !appSplashScreen.classList.contains('splash-fade-out')) ||
+                              (appBrandIntroScreen && appBrandIntroScreen.style.display !== 'none' && !appBrandIntroScreen.classList.contains('brand-intro-fade-out'));
+      if (isSplashVisible) return;
+
       if (!e.target.closest('#eqButton') && !e.target.closest('#micBtn') && !e.target.closest('#sendBtn')) {
         const activeScreen = document.querySelector('.app-screen.active');
         if (activeScreen?.dataset.screen !== 'chat') {
@@ -810,8 +820,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (e) {}
 
-    // Initial greeting if empty
-    startNewChat(false);
+    // Initial greeting if empty - do not autofocus input during initial background boot
+    startNewChat(false, false);
   }
 
   // Copy text to clipboard with fallback and visual feedback
@@ -1212,7 +1222,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Create New Chat
-  function startNewChat(showNotification = true) {
+  function startNewChat(showNotification = true, shouldFocus = false) {
     chatSessionHistory = [];
     sessionStorage.removeItem(CHAT_STORAGE_KEY);
     if (!chatMessagesList) return;
@@ -1227,7 +1237,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (showNotification) {
       showToast('Started a new chat session');
     }
-    chatInput?.focus();
+    if (shouldFocus) {
+      chatInput?.focus();
+    }
   }
 
   // Delete Conversation
@@ -1243,7 +1255,10 @@ document.addEventListener('DOMContentLoaded', () => {
     saveChatHistory();
     renderAiBubble(freshNotice, time, false);
     showToast('Conversation cleared');
-    chatInput?.focus();
+    const activeScreen = document.querySelector('.app-screen.active');
+    if (activeScreen?.dataset.screen === 'chat') {
+      chatInput?.focus();
+    }
   }
 
   // Real-Time World Knowledge Retrieval via Wikipedia Engine
@@ -1594,7 +1609,7 @@ Would you like me to generate a complete solution, provide code examples, or exp
   // Wire Chat Header buttons (New Chat & Clear)
   chatNewBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
-    startNewChat(true);
+    startNewChat(true, true);
   });
 
   chatClearBtn?.addEventListener('click', (e) => {
@@ -2960,13 +2975,10 @@ Would you like me to generate a complete solution, provide code examples, or exp
     const screenHome = document.getElementById('screenHome');
     const targetLogo = document.querySelector('#screenHome .brand-header-logo');
 
-    // Ensure screenHome is in active DOM tree so target element has accurate layout
+    // Ensure screenHome is active in DOM tree so target element has accurate layout
     if (screenHome) {
-      const activeScreen = document.querySelector('.app-screen.active');
-      if (!activeScreen || activeScreen.id === 'screenHome') {
-        appScreens.forEach(s => s.classList.remove('active'));
-        screenHome.classList.add('active');
-      }
+      appScreens.forEach(s => s.classList.remove('active'));
+      screenHome.classList.add('active');
     }
 
     if (!splashEmblem) {
@@ -3154,6 +3166,10 @@ Would you like me to generate a complete solution, provide code examples, or exp
       return;
     }
 
+    // REQUIREMENT: When user opens the app, ensure Home screen is active underneath splash
+    navHistory = ['home'];
+    navigateToScreen('home', false);
+
     // Initially hide bottom floating input dock during splash loading
     if (bottomBarContainer) {
       bottomBarContainer.classList.add('bar-hidden');
@@ -3220,15 +3236,9 @@ Would you like me to generate a complete solution, provide code examples, or exp
       navHistory = ['getstarted'];
       navigateToScreen('getstarted', false);
     } else {
-      // Ensure Home screen is active and bottom dock is visible
-      const screenHome = document.getElementById('screenHome');
-      if (screenHome) {
-        const activeScreen = document.querySelector('.app-screen.active');
-        if (!activeScreen || activeScreen.id === 'screenHome') {
-          appScreens.forEach(s => s.classList.remove('active'));
-          screenHome.classList.add('active');
-        }
-      }
+      // REQUIREMENT: When user opens the app, after loading page, Home page must always come
+      navHistory = ['home'];
+      navigateToScreen('home', false);
       if (bottomBarContainer) {
         bottomBarContainer.classList.remove('bar-hidden');
         bottomBarContainer.classList.add('bar-visible');
