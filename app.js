@@ -625,37 +625,488 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // =========================================================================
-  // SCREEN 7: CHAT INTERACTION
+  // SCREEN 7: VOZX AI NEURAL CHAT CONTROLLER (OPENAI INTEGRATION)
   // =========================================================================
   const chatMessagesList = document.getElementById('chatMessagesList');
+  const chatNewBtn = document.getElementById('chatNewBtn');
+  const chatClearBtn = document.getElementById('chatClearBtn');
 
-  function handleSendMessage() {
-    if (!chatInput) return;
-    const query = chatInput.value.trim();
+  // Chat state
+  let chatSessionHistory = [];
+  let isAiResponding = false;
+  let lastUserMessageText = '';
+
+  // Storage key for session chat history
+  const CHAT_STORAGE_KEY = 'vozx_neural_chat_history_v1';
+
+  // Format timestamp (e.g. "9:41 AM")
+  function getChatTimestamp() {
+    const now = new Date();
+    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  // Parse Markdown for AI messages
+  function formatAiMarkdown(text) {
+    if (!text) return '';
+    let escaped = escapeHtml(text);
+
+    // Code blocks ```lang\ncode\n```
+    escaped = escaped.replace(/```([a-zA-Z0-9_\-]*)\n([\s\S]*?)```/g, (match, lang, code) => {
+      return `<pre class="chat-code-block"><code>${code.trim()}</code></pre>`;
+    });
+
+    // Inline code `code`
+    escaped = escaped.replace(/`([^`]+)`/g, '<code class="chat-inline-code">$1</code>');
+
+    // Bold **text**
+    escaped = escaped.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+    // Italic *text*
+    escaped = escaped.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+
+    // Split paragraphs and lists
+    const lines = escaped.split('\n');
+    let formatted = '';
+    let inList = false;
+
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+        if (!inList) {
+          formatted += '<ul>';
+          inList = true;
+        }
+        formatted += `<li>${trimmed.substring(2)}</li>`;
+      } else if (/^\d+\.\s/.test(trimmed)) {
+        if (!inList) {
+          formatted += '<ol>';
+          inList = true;
+        }
+        const itemContent = trimmed.replace(/^\d+\.\s/, '');
+        formatted += `<li>${itemContent}</li>`;
+      } else {
+        if (inList) {
+          formatted += '</ul>';
+          inList = false;
+        }
+        if (trimmed) {
+          formatted += `<p>${trimmed}</p>`;
+        }
+      }
+    });
+
+    if (inList) formatted += '</ul>';
+    return formatted || `<p>${escaped}</p>`;
+  }
+
+  // Smooth scroll chat container to latest message
+  function scrollChatToBottom(smooth = true) {
+    if (!chatMessagesList) return;
+    const container = document.getElementById('screensContainer');
+    if (container) {
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: smooth ? 'smooth' : 'auto'
+      });
+    }
+    const lastRow = chatMessagesList.lastElementChild;
+    if (lastRow) {
+      lastRow.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'end' });
+    }
+  }
+
+  // Save conversation to sessionStorage
+  function saveChatHistory() {
+    try {
+      sessionStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chatSessionHistory));
+    } catch (e) {}
+  }
+
+  // Load conversation from sessionStorage
+  function loadChatHistory() {
+    if (!chatMessagesList) return;
+    chatMessagesList.innerHTML = '';
+
+    try {
+      const saved = sessionStorage.getItem(CHAT_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          chatSessionHistory = parsed;
+          chatSessionHistory.forEach(item => {
+            if (item.role === 'user') {
+              renderUserBubble(item.text, item.time, false);
+            } else if (item.role === 'ai') {
+              renderAiBubble(item.text, item.time, false, item.isError, item.errorCode);
+            }
+          });
+          scrollChatToBottom(false);
+          return;
+        }
+      }
+    } catch (e) {}
+
+    // Initial greeting if empty
+    startNewChat(false);
+  }
+
+  // Render User Message Bubble
+  function renderUserBubble(text, time = null, animate = true) {
+    if (!chatMessagesList) return;
+    const row = document.createElement('div');
+    row.className = 'chat-message-row user' + (animate ? '' : ' no-anim');
+
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble user';
+    bubble.textContent = text;
+
+    const meta = document.createElement('div');
+    meta.className = 'chat-bubble-meta';
+    meta.textContent = time || getChatTimestamp();
+
+    bubble.appendChild(meta);
+    row.appendChild(bubble);
+    chatMessagesList.appendChild(row);
+
+    if (animate) {
+      scrollChatToBottom(true);
+    }
+  }
+
+  // Render AI Message Bubble with Glowing Avatar & Copy Button
+  function renderAiBubble(text, time = null, animate = true, isError = false, errorCode = null) {
+    if (!chatMessagesList) return;
+    const row = document.createElement('div');
+    row.className = 'chat-message-row ai' + (animate ? '' : ' no-anim');
+
+    // Glowing Avatar
+    const avatar = document.createElement('div');
+    avatar.className = 'chat-ai-avatar';
+    avatar.innerHTML = `<img src="assets/vozx-logo-icon.png" alt="VOZX" class="chat-avatar-img">`;
+
+    // Bubble
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble ai' + (isError ? ' error-bubble' : '');
+
+    const bubbleHeader = document.createElement('div');
+    bubbleHeader.className = 'chat-bubble-header';
+    bubbleHeader.innerHTML = `
+      <span class="chat-ai-name">VOZX AI</span>
+      <button class="chat-copy-btn" title="Copy Message" aria-label="Copy AI Message">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        <span>Copy</span>
+      </button>
+    `;
+
+    // Copy action
+    const copyBtn = bubbleHeader.querySelector('.chat-copy-btn');
+    copyBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      navigator.clipboard.writeText(text).then(() => {
+        copyBtn.classList.add('copied');
+        copyBtn.innerHTML = `
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>Copied!</span>
+        `;
+        showToast('AI response copied to clipboard');
+        setTimeout(() => {
+          copyBtn.classList.remove('copied');
+          copyBtn.innerHTML = `
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>Copy</span>
+          `;
+        }, 2200);
+      }).catch(() => {
+        showToast('Could not copy to clipboard');
+      });
+    });
+
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'chat-bubble-text';
+
+    if (isError) {
+      contentDiv.innerHTML = `
+        <div class="chat-error-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span>${escapeHtml(text)}</span>
+        </div>
+        <div class="chat-error-msg">
+          ${errorCode === 'missing_api_key' 
+            ? 'OpenAI API key is missing or not configured on the server.' 
+            : 'Neural stream encountered a service interruption.'}
+        </div>
+        ${lastUserMessageText ? `
+          <button class="chat-retry-btn" title="Retry sending message">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+            </svg>
+            <span>Retry</span>
+          </button>
+        ` : ''}
+      `;
+
+      const retryBtn = contentDiv.querySelector('.chat-retry-btn');
+      if (retryBtn) {
+        retryBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (lastUserMessageText) {
+            handleSendMessage(lastUserMessageText);
+          }
+        });
+      }
+    } else {
+      contentDiv.innerHTML = formatAiMarkdown(text);
+    }
+
+    const meta = document.createElement('div');
+    meta.className = 'chat-bubble-meta';
+    meta.textContent = time || getChatTimestamp();
+
+    bubble.appendChild(bubbleHeader);
+    bubble.appendChild(contentDiv);
+    bubble.appendChild(meta);
+
+    row.appendChild(avatar);
+    row.appendChild(bubble);
+    chatMessagesList.appendChild(row);
+
+    if (animate) {
+      scrollChatToBottom(true);
+    }
+  }
+
+  // Show "VOZX is thinking..." loading state with animated dots
+  function showThinkingState() {
+    hideThinkingState();
+    if (!chatMessagesList) return;
+
+    const row = document.createElement('div');
+    row.id = 'chatThinkingRow';
+    row.className = 'chat-message-row ai thinking-row';
+
+    row.innerHTML = `
+      <div class="chat-ai-avatar">
+        <img src="assets/vozx-logo-icon.png" alt="VOZX" class="chat-avatar-img avatar-pulsing">
+      </div>
+      <div class="chat-bubble ai thinking-bubble">
+        <div class="thinking-inner">
+          <span class="thinking-text">VOZX is thinking</span>
+          <span class="thinking-dots">
+            <span class="tdot d1"></span>
+            <span class="tdot d2"></span>
+            <span class="tdot d3"></span>
+          </span>
+        </div>
+      </div>
+    `;
+
+    chatMessagesList.appendChild(row);
+    scrollChatToBottom(true);
+  }
+
+  // Hide thinking state
+  function hideThinkingState() {
+    const existing = document.getElementById('chatThinkingRow');
+    if (existing) {
+      existing.remove();
+    }
+  }
+
+  // Create New Chat
+  function startNewChat(showNotification = true) {
+    chatSessionHistory = [];
+    sessionStorage.removeItem(CHAT_STORAGE_KEY);
+    if (!chatMessagesList) return;
+
+    chatMessagesList.innerHTML = '';
+    const welcome = `Hello ${currentUserName || 'Varun'}! VOZX neural stream is active. What would you like to build, analyze, or execute today?`;
+    const time = getChatTimestamp();
+    chatSessionHistory.push({ role: 'ai', text: welcome, time: time });
+    saveChatHistory();
+    renderAiBubble(welcome, time, false);
+
+    if (showNotification) {
+      showToast('Started a new chat session');
+    }
+    chatInput?.focus();
+  }
+
+  // Delete Conversation
+  function clearConversation() {
+    chatSessionHistory = [];
+    sessionStorage.removeItem(CHAT_STORAGE_KEY);
+    if (!chatMessagesList) return;
+
+    chatMessagesList.innerHTML = '';
+    const freshNotice = `Conversation cleared. Ready for your next query.`;
+    const time = getChatTimestamp();
+    chatSessionHistory.push({ role: 'ai', text: freshNotice, time: time });
+    saveChatHistory();
+    renderAiBubble(freshNotice, time, false);
+    showToast('Conversation cleared');
+    chatInput?.focus();
+  }
+
+  // Send Message Controller
+  async function handleSendMessage(overrideText = null) {
+    if (isAiResponding) return;
+
+    const query = overrideText !== null 
+      ? overrideText.trim() 
+      : (chatInput ? chatInput.value.trim() : '');
+
     if (!query) return;
 
-    // Guard if offline
+    // Check offline state
     if (typeof isCurrentlyOffline !== 'undefined' && isCurrentlyOffline) {
       navigateToScreen('offline');
       showToast('📡 You are currently offline. Reconnect to chat with VOZX AI.');
       return;
     }
 
-    chatInput.value = '';
-    sendBtn?.classList.remove('active-ready');
+    lastUserMessageText = query;
 
-    // Ensure we are on the Chat Screen
+    // Reset input
+    if (overrideText === null && chatInput) {
+      chatInput.value = '';
+      chatInput.style.height = 'auto';
+      sendBtn?.classList.remove('active-ready');
+    }
+
+    // Ensure on Chat screen
     navigateToScreen('chat');
 
-    appendUserMessage(query);
-    setTimeout(() => {
-      appendAiResponse(query);
-    }, 550);
+    // Append user message
+    const userTime = getChatTimestamp();
+    chatSessionHistory.push({ role: 'user', text: query, time: userTime });
+    saveChatHistory();
+    renderUserBubble(query, userTime, true);
+
+    // Disable send button during request
+    isAiResponding = true;
+    if (sendBtn) {
+      sendBtn.disabled = true;
+      sendBtn.classList.add('btn-disabled');
+    }
+
+    // Show thinking animation ("VOZX is thinking...")
+    showThinkingState();
+
+    // Prepare API call
+    const endpoint = window.location.protocol.startsWith('http') 
+      ? '/api/chat' 
+      : 'http://localhost:5000/api/chat';
+
+    try {
+      const historyPayload = chatSessionHistory.slice(0, -1).map(item => ({
+        role: item.role === 'ai' ? 'assistant' : 'user',
+        content: item.text
+      }));
+
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: query,
+          history: historyPayload
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      hideThinkingState();
+
+      if (res.ok && data && data.reply) {
+        const aiTime = getChatTimestamp();
+        chatSessionHistory.push({ role: 'ai', text: data.reply, time: aiTime });
+        saveChatHistory();
+        renderAiBubble(data.reply, aiTime, true);
+      } else {
+        // Handle error requirements:
+        // "If the API key is missing, show 'AI service unavailable.'"
+        // "If the API request fails, show 'Something went wrong. Please try again.'"
+        const isMissingKey = res.status === 503 || data.code === 'missing_api_key' || data.error === 'AI service unavailable.';
+        const errText = isMissingKey 
+          ? 'AI service unavailable.' 
+          : 'Something went wrong. Please try again.';
+
+        const aiTime = getChatTimestamp();
+        chatSessionHistory.push({ 
+          role: 'ai', 
+          text: errText, 
+          time: aiTime, 
+          isError: true, 
+          errorCode: data.code || (isMissingKey ? 'missing_api_key' : 'api_error') 
+        });
+        saveChatHistory();
+        renderAiBubble(errText, aiTime, true, true, data.code);
+
+        if (data.details) {
+          console.warn('[VOZX OpenAI Details]:', data.details);
+        }
+      }
+    } catch (err) {
+      hideThinkingState();
+      console.error('Chat network error:', err);
+      const errText = 'Something went wrong. Please try again.';
+      const aiTime = getChatTimestamp();
+      chatSessionHistory.push({ 
+        role: 'ai', 
+        text: errText, 
+        time: aiTime, 
+        isError: true, 
+        errorCode: 'network_error' 
+      });
+      saveChatHistory();
+      renderAiBubble(errText, aiTime, true, true, 'network_error');
+    } finally {
+      isAiResponding = false;
+      if (sendBtn) {
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('btn-disabled');
+        if (chatInput && chatInput.value.trim().length > 0) {
+          sendBtn.classList.add('active-ready');
+        }
+      }
+    }
   }
 
+  // Wire Chat Header buttons (New Chat & Clear)
+  chatNewBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    startNewChat(true);
+  });
+
+  chatClearBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    clearConversation();
+  });
+
+  // Global references for programmatic access & developer console
+  window.handleSendMessage = handleSendMessage;
+  window.startNewChat = startNewChat;
+  window.clearConversation = clearConversation;
+
+  // Auto-growing textarea & Send on Enter (Shift + Enter for new line)
   if (chatInput) {
     chatInput.addEventListener('input', () => {
-      if (chatInput.value.trim().length > 0) {
+      chatInput.style.height = 'auto';
+      const scrollH = chatInput.scrollHeight;
+      chatInput.style.height = (scrollH > 24 ? Math.min(scrollH, 110) : 24) + 'px';
+
+      if (chatInput.value.trim().length > 0 && !isAiResponding) {
         sendBtn?.classList.add('active-ready');
       } else {
         sendBtn?.classList.remove('active-ready');
@@ -664,6 +1115,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     chatInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
+        if (e.shiftKey) {
+          // Allow Shift + Enter for new line
+          return;
+        }
         e.preventDefault();
         handleSendMessage();
       }
@@ -677,23 +1132,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function appendUserMessage(text) {
-    if (!chatMessagesList) return;
-    const bubble = document.createElement('div');
-    bubble.className = 'chat-bubble user';
-    bubble.textContent = text;
-    chatMessagesList.appendChild(bubble);
-    bubble.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  }
-
-  function appendAiResponse(userQuery) {
-    if (!chatMessagesList) return;
-    const bubble = document.createElement('div');
-    bubble.className = 'chat-bubble ai';
-    bubble.innerHTML = `Synthesizing neural response for <strong>"${escapeHtml(userQuery)}"</strong>... Integrated context loaded across PDF, Memory, and Planner agents.`;
-    chatMessagesList.appendChild(bubble);
-    bubble.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  }
+  // Initialize chat history on boot
+  loadChatHistory();
 
   // =========================================================================
   // VOICE MODE ISOLATION (Only Header + Orb + Greeting + Bottom Mic + Back Button)

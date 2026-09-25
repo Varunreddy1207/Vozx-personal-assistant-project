@@ -1,0 +1,23 @@
+# Environment variables (OpenAI API key and secrets)
+.env
+.env.local
+.env.*.local
+
+# Python cache & virtual environments
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# Node & dependencies
+node_modules/
+npm-debug.log*
+
+# Test browser profiles & OS files
+.test_profile_*
+.DS_Store
+Thumbs.db

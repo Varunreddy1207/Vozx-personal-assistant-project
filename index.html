@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>VOZX AI - Intelligent Assistant Ecosystem</title>
-  <link rel="stylesheet" href="styles.css?v=16.0">
+  <link rel="stylesheet" href="styles.css?v=17.0">
   <script>
     (function() {
       try {
@@ -1802,7 +1802,7 @@
            SCREEN 7: DEDICATED ACTIVE NEURAL CHAT SCREEN
            ================================================================= -->
       <section id="screenChat" class="app-screen" data-screen="chat" aria-label="Active Conversation">
-        <header class="screen-top-header">
+        <header class="screen-top-header chat-screen-header">
           <div class="screen-header-left">
             <button class="back-circle-btn" data-nav-back aria-label="Back to Home" title="Back">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
@@ -1814,17 +1814,29 @@
             <span class="brand-name" style="font-size: 18px;">VOZX AI</span>
             <span class="brand-dot"></span>
           </div>
-          <div class="chat-welcome-pill" style="margin-bottom: 0;">
-            <span class="chat-sparkle">✨</span>
-            <span>Neural Stream</span>
+          <div class="chat-header-actions">
+            <button id="chatNewBtn" class="chat-header-btn" title="Create New Chat" aria-label="Create New Chat">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>New</span>
+            </button>
+            <button id="chatClearBtn" class="chat-header-btn chat-danger-btn" title="Delete Conversation" aria-label="Delete Conversation">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              <span>Clear</span>
+            </button>
+            <div class="chat-welcome-pill" style="margin-bottom: 0;">
+              <span class="chat-live-dot"></span>
+              <span>Neural Stream</span>
+            </div>
           </div>
         </header>
 
-        <div id="chatMessagesList" class="chat-messages-list" style="margin-top: 12px;">
-          <div class="chat-bubble ai">
-            Hello Varun! VOZX neural stream is active. What would you like to build, analyze, or execute today?
-          </div>
-        </div>
+        <div id="chatMessagesList" class="chat-messages-list" style="margin-top: 12px;"></div>
       </section>
 
       <!-- =================================================================
@@ -2269,13 +2281,13 @@
           </svg>
         </div>
 
-        <input 
-          type="text" 
+        <textarea 
           id="chatInput" 
           class="chat-input" 
-          placeholder="Search, command, or ask..." 
+          placeholder="Ask VOZX anything..." 
+          rows="1"
           autocomplete="off"
-        >
+        ></textarea>
 
         <!-- Right Controls: Send Arrow + Mic + Equalizer Wave -->
         <div class="input-controls-right">
@@ -2410,7 +2422,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabaseClient.js"></script>
-  <script src="app.js?v=16.0"></script>
+  <script src="app.js?v=17.0"></script>
   <script>
     if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
       window.addEventListener('load', () => {
