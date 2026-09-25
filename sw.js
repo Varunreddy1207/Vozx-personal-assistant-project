@@ -3,7 +3,7 @@
    Network-First for HTML/CSS/JS ensuring instant updates on Mobile & Tablet
    ========================================================================== */
 
-const CACHE_NAME = 'vozx-ai-v19';
+const CACHE_NAME = 'vozx-ai-v20';
 const PRECACHE_ASSETS = [
   './',
   './index.html',
