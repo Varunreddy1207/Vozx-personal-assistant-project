@@ -7095,6 +7095,339 @@ html.on-getstarted-screen .bottom-bar-container {
   pointer-events: none !important;
 }
 
+/* ==========================================================================
+   GOOGLE ACCOUNT CHOOSER (Pixel-perfect matching media_1790325143857.png)
+   ========================================================================== */
+.google-chooser-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background-color: #202124;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow-y: auto;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  font-family: 'Google Sans', Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.google-chooser-backdrop.active {
+  display: flex;
+  opacity: 1;
+}
+
+.google-chooser-window {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.google-chooser-card {
+  background: #131314;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  padding: 36px 44px;
+  position: relative;
+  overflow: hidden;
+}
+
+.google-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.google-brand-tag {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #e3e3e3;
+  letter-spacing: 0.2px;
+}
+
+.google-close-btn {
+  background: transparent;
+  border: none;
+  color: #c4c7c5;
+  font-size: 18px;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.google-close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.google-loading-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #4285F4, #34A853, #FBBC05, #EA4335);
+  background-size: 200% 100%;
+  display: none;
+  animation: googleBarMove 1.2s infinite linear;
+}
+
+.google-loading-bar.active {
+  display: block;
+}
+
+@keyframes googleBarMove {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.google-card-body {
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+}
+
+.google-left-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.google-app-emblem {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #000000;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 4px 16px rgba(56, 189, 248, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.google-app-emblem img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.google-heading {
+  font-size: 32px;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+  line-height: 1.2;
+}
+
+.google-subheading {
+  font-size: 14px;
+  color: #e3e3e3;
+  margin: 0;
+}
+
+.google-app-link {
+  color: #8ab4f8;
+  font-weight: 500;
+}
+
+.google-right-col {
+  flex: 1.15;
+  min-width: 0;
+}
+
+.google-account-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  user-select: none;
+}
+
+.google-account-item:hover,
+.google-account-item:focus-visible {
+  background: rgba(255, 255, 255, 0.07);
+  outline: none;
+}
+
+.google-avatar-wrap {
+  flex: none;
+}
+
+.google-avatar-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e65100, #ff5722);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.google-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid #8e918f;
+  color: #8e918f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.google-account-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.google-account-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e3e3e3;
+  letter-spacing: 0.3px;
+  margin-bottom: 2px;
+}
+
+.google-account-email {
+  font-size: 12.5px;
+  color: #9aa0a6;
+}
+
+.google-use-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #e3e3e3;
+}
+
+.google-account-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+  margin: 6px 14px;
+}
+
+.google-custom-account-block {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px;
+  margin-top: 6px;
+}
+
+.google-custom-input {
+  flex: 1;
+  background: #1e1f20;
+  border: 1px solid #444746;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #ffffff;
+  font-size: 13px;
+  outline: none;
+}
+
+.google-custom-input:focus {
+  border-color: #8ab4f8;
+}
+
+.google-custom-submit-btn {
+  background: #8ab4f8;
+  color: #041e49;
+  border: none;
+  border-radius: 8px;
+  padding: 0 18px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.google-disclaimer {
+  font-size: 12px;
+  color: #9aa0a6;
+  line-height: 1.55;
+  margin: 24px 0 0 14px;
+}
+
+.google-disclaimer a {
+  color: #8ab4f8;
+  text-decoration: none;
+}
+
+.google-disclaimer a:hover {
+  text-decoration: underline;
+}
+
+.google-outer-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 12px 6px 12px;
+  font-size: 12px;
+  color: #9aa0a6;
+}
+
+.google-lang-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.google-footer-links {
+  display: flex;
+  gap: 24px;
+}
+
+.google-footer-links a {
+  color: #9aa0a6;
+  text-decoration: none;
+}
+
+.google-footer-links a:hover {
+  color: #e3e3e3;
+}
+
+@media (max-width: 768px) {
+  .google-chooser-card {
+    padding: 28px 24px;
+    border-radius: 20px;
+  }
+  .google-card-body {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .google-heading {
+    font-size: 26px;
+  }
+  .google-right-col {
+    width: 100%;
+  }
+  .google-outer-footer {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+}
+
+
 
 
 

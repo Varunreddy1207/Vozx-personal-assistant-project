@@ -2079,28 +2079,100 @@ Would you like me to generate a complete solution, provide code examples, or exp
     handleSignUp();
   });
 
-  // Social Auth Buttons (Google & Apple Only)
+  // =========================================================================
+  // GOOGLE ACCOUNT CHOOSER CONTROLLER (Matching media_1790325143857.png)
+  // =========================================================================
+  const googleChooserModal = document.getElementById('googleAccountChooserModal');
+  const closeGoogleChooserBtn = document.getElementById('closeGoogleChooserBtn');
+  const googleAccountItemVarun = document.getElementById('googleAccountItemVarun');
+  const googleUseAnotherAccountBtn = document.getElementById('googleUseAnotherAccountBtn');
+  const googleCustomAccountBlock = document.getElementById('googleCustomAccountBlock');
+  const googleCustomEmailInput = document.getElementById('googleCustomEmailInput');
+  const googleCustomSubmitBtn = document.getElementById('googleCustomSubmitBtn');
+  const googleChooserLoadingBar = document.getElementById('googleChooserLoadingBar');
+
+  function openGoogleAccountChooser() {
+    if (!googleChooserModal) {
+      window.location.href = 'google-signin.html';
+      return;
+    }
+    if (googleChooserLoadingBar) googleChooserLoadingBar.classList.remove('active');
+    if (googleCustomAccountBlock) googleCustomAccountBlock.style.display = 'none';
+    if (googleCustomEmailInput) googleCustomEmailInput.value = '';
+    googleChooserModal.classList.add('active');
+  }
+
+  function closeGoogleAccountChooser() {
+    if (googleChooserModal) googleChooserModal.classList.remove('active');
+  }
+
+  window.openGoogleAccountChooser = openGoogleAccountChooser;
+  window.closeGoogleAccountChooser = closeGoogleAccountChooser;
+
+  // Bind Google buttons across SPA to open chooser
   ['spaSignInGoogleBtn', 'spaSignUpGoogleBtn'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
-    el.addEventListener('click', async (e) => {
-      showToast('Redirecting to Google Sign-In...');
-      try {
-        if (window.VozxAuth && window.VozxAuth.signInWithGoogleOAuth) {
-          const client = window.VozxAuth.getSupabaseClient?.();
-          const isRealClient = client && !client.supabaseUrl?.includes('demo-vozx.supabase.co');
-          if (isRealClient) {
-            e.preventDefault();
-            const res = await window.VozxAuth.signInWithGoogleOAuth();
-            if (res && res.url) {
-              window.location.href = res.url;
-              return;
-            }
-          }
-        }
-      } catch (err) {}
-      // Default: native href navigation proceeds directly to https://accounts.google.com/signin
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      openGoogleAccountChooser();
     });
+  });
+
+  closeGoogleChooserBtn?.addEventListener('click', closeGoogleAccountChooser);
+
+  googleChooserModal?.addEventListener('click', (e) => {
+    if (e.target === googleChooserModal) {
+      closeGoogleAccountChooser();
+    }
+  });
+
+  // Primary Account Selection: VARUNREDDY MASIREDDY
+  googleAccountItemVarun?.addEventListener('click', () => {
+    if (googleChooserLoadingBar) googleChooserLoadingBar.classList.add('active');
+    try {
+      localStorage.setItem('vozx_user_name', 'Varun Reddy');
+      localStorage.setItem('vozx_user_email', 'varunreddymasireddy2007@gmail.com');
+    } catch (e) {}
+
+    setTimeout(() => {
+      closeGoogleAccountChooser();
+      completeAuthLogin('VARUNREDDY MASIREDDY', 'Signed in with Google as VARUNREDDY MASIREDDY!');
+    }, 650);
+  });
+
+  // Use Another Account
+  googleUseAnotherAccountBtn?.addEventListener('click', () => {
+    if (googleCustomAccountBlock) {
+      const isVisible = googleCustomAccountBlock.style.display === 'flex';
+      googleCustomAccountBlock.style.display = isVisible ? 'none' : 'flex';
+      if (!isVisible && googleCustomEmailInput) {
+        googleCustomEmailInput.focus();
+      }
+    }
+  });
+
+  googleCustomSubmitBtn?.addEventListener('click', () => {
+    const emailVal = googleCustomEmailInput?.value.trim() || 'user@gmail.com';
+    const namePart = emailVal.split('@')[0];
+    const resolvedName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+
+    if (googleChooserLoadingBar) googleChooserLoadingBar.classList.add('active');
+    try {
+      localStorage.setItem('vozx_user_name', resolvedName);
+      localStorage.setItem('vozx_user_email', emailVal);
+    } catch (e) {}
+
+    setTimeout(() => {
+      closeGoogleAccountChooser();
+      completeAuthLogin(resolvedName, `Signed in with Google as ${resolvedName}!`);
+    }, 650);
+  });
+
+  googleCustomEmailInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      googleCustomSubmitBtn?.click();
+    }
   });
 
   ['spaSignInAppleBtn', 'spaSignUpAppleBtn'].forEach(id => {
