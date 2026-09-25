@@ -12,8 +12,8 @@ import { signUpWithSupabase } from './supabaseClient';
  * - Loading animation and redirect to Login
  */
 export default function VozxSignupPage({ onNavigateToLogin, onShowToast }) {
-  const [fullName, setFullName] = useState('Varun Reddy');
-  const [email, setEmail] = useState('varun.reddy@gmail.com');
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);

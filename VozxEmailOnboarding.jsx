@@ -18,7 +18,7 @@ import React, { useState, useEffect, useRef } from 'react';
 export default function VozxEmailOnboarding({ onClose, onComplete, initialStep = 1 }) {
   const [currentStep, setCurrentStep] = useState(initialStep);
   const [selectedProvider, setSelectedProvider] = useState('Gmail');
-  const [emailAddress, setEmailAddress] = useState('varun.reddy@gmail.com');
+  const [emailAddress, setEmailAddress] = useState('');
   const [progressPercent, setProgressPercent] = useState(0);
   const [autoCountdown, setAutoCountdown] = useState(2);
   const [activeTab, setActiveTab] = useState('inbox');

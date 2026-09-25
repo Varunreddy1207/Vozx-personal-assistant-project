@@ -42,6 +42,53 @@ document.addEventListener('DOMContentLoaded', () => {
   let navHistory = ['home'];
   let isCurrentlyOffline = false;
 
+  // Helper to ensure all authentication inputs are empty with placeholders showing for new users
+  function resetAuthFormInputs() {
+    const signInEmail = document.getElementById('spaSignInEmail');
+    const signInPass = document.getElementById('spaSignInPassword');
+    const signInRemember = document.getElementById('spaSignInRemember');
+    if (signInEmail) signInEmail.value = '';
+    if (signInPass) signInPass.value = '';
+    if (signInRemember) signInRemember.checked = false;
+
+    const signUpName = document.getElementById('spaSignUpName');
+    const signUpEmail = document.getElementById('spaSignUpEmail');
+    const signUpPass = document.getElementById('spaSignUpPassword');
+    const signUpConfirm = document.getElementById('spaSignUpConfirm');
+    const signUpTerms = document.getElementById('spaSignUpTerms');
+    if (signUpName) signUpName.value = '';
+    if (signUpEmail) signUpEmail.value = '';
+    if (signUpPass) signUpPass.value = '';
+    if (signUpConfirm) signUpConfirm.value = '';
+    if (signUpTerms) signUpTerms.checked = true;
+
+    const embeddedEmail = document.getElementById('embeddedEmailInput');
+    if (embeddedEmail) embeddedEmail.value = '';
+
+    ['spaSignInEmailErr', 'spaSignInPassErr', 'spaSignUpNameErr', 'spaSignUpEmailErr', 'spaSignUpPassErr', 'spaSignUpConfirmErr'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.textContent = '';
+        el.classList.remove('visible');
+      }
+    });
+
+    ['spaSignInEmailWrap', 'spaSignInPassWrap', 'spaSignUpNameWrap', 'spaSignUpEmailWrap', 'spaSignUpPassWrap', 'spaSignUpConfirmWrap'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('is-invalid');
+    });
+  }
+
+  // Clear inputs on page boot and when page is shown from bfcache
+  try {
+    resetAuthFormInputs();
+  } catch (e) {}
+  window.addEventListener('pageshow', () => {
+    try {
+      resetAuthFormInputs();
+    } catch (e) {}
+  });
+
   function navigateToScreen(targetScreenId, pushHistory = true) {
     // Lock-in: User cannot navigate to website screens without an active internet connection
     if (isCurrentlyOffline && targetScreenId !== 'offline') {
@@ -56,6 +103,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const targetScreen = document.querySelector(`.app-screen[data-screen="${targetScreenId}"]`);
     if (!targetScreen) return;
+
+    // If navigating to an auth screen, guarantee clean empty inputs with placeholder text
+    if (targetScreenId === 'signin' || targetScreenId === 'signup' || targetScreenId === 'getstarted') {
+      resetAuthFormInputs();
+    }
 
     // Transition screens
     appScreens.forEach(screen => {
@@ -127,6 +179,10 @@ document.addEventListener('DOMContentLoaded', () => {
       screensContainer?.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
+
+  // Expose on window for global triggers and integration tests
+  window.navigateToScreen = navigateToScreen;
+  window.resetAuthFormInputs = resetAuthFormInputs;
 
   function goBack() {
     // User cannot go back without internet
