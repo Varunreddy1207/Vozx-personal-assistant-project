@@ -5212,6 +5212,7 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
   outline: none;
+  text-decoration: none;
 }
 
 .auth-social-btn:hover {
