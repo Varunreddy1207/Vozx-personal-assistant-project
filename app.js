@@ -2080,9 +2080,26 @@ Would you like me to generate a complete solution, provide code examples, or exp
   });
 
   // Social Auth Buttons (Google & Apple Only)
+  async function handleGoogleSignIn() {
+    showToast('Redirecting to Google Sign-In...');
+    try {
+      if (window.VozxAuth && window.VozxAuth.signInWithGoogleOAuth) {
+        const res = await window.VozxAuth.signInWithGoogleOAuth();
+        if (res && res.url && res.url !== 'https://accounts.google.com/signin') {
+          window.location.href = res.url;
+          return;
+        }
+      }
+    } catch (e) {}
+    setTimeout(() => {
+      window.location.href = 'https://accounts.google.com/signin';
+    }, 250);
+  }
+
   ['spaSignInGoogleBtn', 'spaSignUpGoogleBtn'].forEach(id => {
-    document.getElementById(id)?.addEventListener('click', () => {
-      completeAuthLogin(currentUserName, 'Signed in with Google successfully!');
+    document.getElementById(id)?.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleGoogleSignIn();
     });
   });
 

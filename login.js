@@ -361,11 +361,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Social Login Mock
-  [googleBtn, appleBtn].forEach((btn) => {
-    if (!btn) return;
-    btn.addEventListener('click', () => {
-      const provider = btn.getAttribute('title') || 'Provider';
+  // Social Login
+  if (googleBtn) {
+    googleBtn.addEventListener('click', () => {
+      showToast('Redirecting to Google Sign-In...', 'normal');
+      setTimeout(() => {
+        window.location.href = 'https://accounts.google.com/signin';
+      }, 300);
+    });
+  }
+
+  if (appleBtn) {
+    appleBtn.addEventListener('click', () => {
+      const provider = 'Apple';
       showToast(`Connecting via ${provider}...`, 'normal');
 
       setTimeout(() => {
@@ -380,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 900);
       }, 700);
     });
-  });
+  }
 
   // Forgot Password Modal
   if (forgotPasswordBtn && forgotModal) {

@@ -220,6 +220,36 @@ async function resetPasswordWithSupabase(email) {
 }
 
 /**
+ * Sign In with Google OAuth (Supabase OAuth provider or direct Google Sign-In redirect)
+ */
+async function signInWithGoogleOAuth() {
+  const client = getSupabaseClient();
+  const isRealClient = client && !client.supabaseUrl?.includes('demo-vozx.supabase.co');
+
+  if (isRealClient) {
+    try {
+      const { data, error } = await client.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: typeof window !== 'undefined' ? window.location.origin : undefined
+        }
+      });
+      if (!error && data?.url) {
+        return { success: true, url: data.url };
+      }
+    } catch (err) {
+      console.warn('Supabase Google OAuth initiation error:', err);
+    }
+  }
+
+  // Direct official Google Sign-In endpoint
+  return {
+    success: true,
+    url: 'https://accounts.google.com/signin'
+  };
+}
+
+/**
  * Sign out current user
  */
 async function signOutUser() {
@@ -285,6 +315,7 @@ if (typeof window !== 'undefined') {
     configureSupabaseKeys,
     signUpWithSupabase,
     signInWithSupabase,
+    signInWithGoogleOAuth,
     resetPasswordWithSupabase,
     signOutUser,
     getCurrentSessionUser,
@@ -299,6 +330,7 @@ if (typeof module !== 'undefined' && module.exports) {
     configureSupabaseKeys,
     signUpWithSupabase,
     signInWithSupabase,
+    signInWithGoogleOAuth,
     resetPasswordWithSupabase,
     signOutUser,
     getCurrentSessionUser,

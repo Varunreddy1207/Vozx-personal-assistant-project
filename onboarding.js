@@ -563,6 +563,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Google Social Button Click Navigation
+  document.addEventListener('click', (e) => {
+    const googleBtn = e.target.closest('.social-btn[title="Google"]');
+    if (googleBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      showOnboardingToast('Redirecting to Google Sign-In...', 'info');
+      setTimeout(() => {
+        window.location.href = 'https://accounts.google.com/signin';
+      }, 300);
+    }
+  });
+
   // Dynamic Serpentine Flow Connector from Screen 4 to Screen 5
   function updateSerpentineConnector() {
     const wrapper = document.querySelector('.board-grid-wrapper');

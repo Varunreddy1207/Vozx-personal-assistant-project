@@ -468,7 +468,12 @@ export default function VozxSignupPage({ onNavigateToLogin, onShowToast }) {
         <div className="grid grid-cols-2 gap-3 mb-4">
           <button
             type="button"
-            onClick={() => onShowToast && onShowToast('Connecting via Google OAuth...', 'info')}
+            onClick={() => {
+              if (onShowToast) onShowToast('Redirecting to Google Sign-In...', 'info');
+              setTimeout(() => {
+                window.location.href = 'https://accounts.google.com/signin';
+              }, 300);
+            }}
             className="h-11 rounded-2xl bg-white/5 border border-white/10 hover:border-cyan-400/40 hover:bg-cyan-400/10 flex items-center justify-center transition-all"
             title="Google"
           >
