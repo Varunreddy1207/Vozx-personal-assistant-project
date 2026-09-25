@@ -743,7 +743,7 @@ document.addEventListener('DOMContentLoaded', () => {
           chatSessionHistory = parsed;
           chatSessionHistory.forEach(item => {
             if (item.role === 'user') {
-              renderUserBubble(item.text, item.time, false);
+              renderUserBubble(item.text, item.time, false, item.id, item.isEdited);
             } else if (item.role === 'ai') {
               renderAiBubble(item.text, item.time, false, item.isError, item.errorCode);
             }
@@ -758,27 +758,270 @@ document.addEventListener('DOMContentLoaded', () => {
     startNewChat(false);
   }
 
-  // Render User Message Bubble
-  function renderUserBubble(text, time = null, animate = true) {
+  // Copy text to clipboard with fallback and visual feedback
+  function copyTextToClipboard(text, btnElement, successLabel = 'Copied!') {
+    const origHtml = btnElement.innerHTML;
+    const performSuccess = () => {
+      btnElement.classList.add('copied');
+      btnElement.innerHTML = `
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>${successLabel}</span>
+      `;
+      showToast('Copied to clipboard');
+      setTimeout(() => {
+        btnElement.classList.remove('copied');
+        btnElement.innerHTML = origHtml;
+      }, 2000);
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(performSuccess).catch(() => {
+        fallbackCopyText(text);
+        performSuccess();
+      });
+    } else {
+      fallbackCopyText(text);
+      performSuccess();
+    }
+  }
+
+  function fallbackCopyText(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    ta.style.top = '-9999px';
+    ta.setAttribute('readonly', '');
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+    } catch (e) {}
+    ta.remove();
+  }
+
+  // Open inline editor inside the user message bubble
+  function openInlineEditor(bubble, textDiv, footer, row, msgId) {
+    if (bubble.classList.contains('is-editing')) return;
+    bubble.classList.add('is-editing');
+
+    const currentText = textDiv.textContent;
+
+    textDiv.style.display = 'none';
+    footer.style.display = 'none';
+
+    const editor = document.createElement('div');
+    editor.className = 'chat-bubble-editor';
+    editor.innerHTML = `
+      <textarea class="chat-edit-textarea" rows="2" aria-label="Edit message">${escapeHtml(currentText)}</textarea>
+      <div class="chat-edit-controls">
+        <span class="chat-edit-shortcut-hint">Enter to send &bull; Esc to cancel</span>
+        <div class="chat-edit-btns">
+          <button class="chat-edit-cancel-btn" type="button">Cancel</button>
+          <button class="chat-edit-save-btn" type="button">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Save &amp; Send</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    bubble.appendChild(editor);
+
+    const textarea = editor.querySelector('.chat-edit-textarea');
+    const cancelBtn = editor.querySelector('.chat-edit-cancel-btn');
+    const saveBtn = editor.querySelector('.chat-edit-save-btn');
+
+    textarea.focus();
+    textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+    const adjustHeight = () => {
+      textarea.style.height = 'auto';
+      textarea.style.height = Math.min(200, textarea.scrollHeight) + 'px';
+    };
+    textarea.addEventListener('input', adjustHeight);
+    adjustHeight();
+
+    const closeEditor = () => {
+      editor.remove();
+      textDiv.style.display = '';
+      footer.style.display = '';
+      bubble.classList.remove('is-editing');
+    };
+
+    cancelBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeEditor();
+    });
+
+    const submitEdit = () => {
+      const newText = textarea.value.trim();
+      if (!newText) {
+        showToast('Message cannot be empty');
+        return;
+      }
+      if (newText === currentText) {
+        closeEditor();
+        return;
+      }
+
+      closeEditor();
+      textDiv.textContent = newText;
+
+      const meta = footer.querySelector('.chat-bubble-meta');
+      if (meta && !meta.querySelector('.chat-meta-edited')) {
+        const ed = document.createElement('span');
+        ed.className = 'chat-meta-edited';
+        ed.textContent = '(edited)';
+        meta.appendChild(ed);
+      }
+
+      // Update in chatSessionHistory
+      const msgIndex = chatSessionHistory.findIndex(m => m.id === msgId || (m.role === 'user' && m.text === currentText));
+      if (msgIndex !== -1) {
+        chatSessionHistory[msgIndex].text = newText;
+        chatSessionHistory[msgIndex].isEdited = true;
+        chatSessionHistory[msgIndex].time = getChatTimestamp();
+
+        // Remove subsequent messages in chatMessagesList and chatSessionHistory
+        const allRows = Array.from(chatMessagesList.children);
+        const currentRowIndex = allRows.indexOf(row);
+        if (currentRowIndex !== -1) {
+          while (chatMessagesList.children.length > currentRowIndex + 1) {
+            chatMessagesList.lastElementChild.remove();
+          }
+        }
+        chatSessionHistory = chatSessionHistory.slice(0, msgIndex + 1);
+        saveChatHistory();
+
+        if (typeof executeAiQuery === 'function') {
+          executeAiQuery(newText);
+        }
+      } else {
+        if (typeof executeAiQuery === 'function') {
+          executeAiQuery(newText);
+        }
+      }
+    };
+
+    saveBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      submitEdit();
+    });
+
+    textarea.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeEditor();
+      } else if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        submitEdit();
+      }
+    });
+  }
+
+  // Render User Message Bubble with Edit & Copy actions
+  function renderUserBubble(text, time = null, animate = true, msgId = null, isEdited = false) {
     if (!chatMessagesList) return;
+
+    const id = msgId || ('user-msg-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7));
+
     const row = document.createElement('div');
     row.className = 'chat-message-row user' + (animate ? '' : ' no-anim');
+    row.dataset.msgId = id;
 
     const bubble = document.createElement('div');
     bubble.className = 'chat-bubble user';
-    bubble.textContent = text;
+
+    const textDiv = document.createElement('div');
+    textDiv.className = 'chat-bubble-text';
+    textDiv.textContent = text;
+
+    const footer = document.createElement('div');
+    footer.className = 'chat-bubble-footer';
+
+    const actions = document.createElement('div');
+    actions.className = 'chat-bubble-actions';
+
+    // Edit Button
+    const editBtn = document.createElement('button');
+    editBtn.className = 'chat-action-btn chat-edit-btn';
+    editBtn.title = 'Edit message (or double-click)';
+    editBtn.setAttribute('aria-label', 'Edit message');
+    editBtn.innerHTML = `
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 20h9"></path>
+        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+      </svg>
+      <span>Edit</span>
+    `;
+
+    // Copy Button
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'chat-action-btn chat-copy-btn';
+    copyBtn.title = 'Copy message';
+    copyBtn.setAttribute('aria-label', 'Copy message');
+    copyBtn.innerHTML = `
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+      </svg>
+      <span>Copy</span>
+    `;
+
+    actions.appendChild(editBtn);
+    actions.appendChild(copyBtn);
 
     const meta = document.createElement('div');
     meta.className = 'chat-bubble-meta';
-    meta.textContent = time || getChatTimestamp();
+    
+    const timeSpan = document.createElement('span');
+    timeSpan.className = 'chat-meta-time';
+    timeSpan.textContent = time || getChatTimestamp();
+    meta.appendChild(timeSpan);
 
-    bubble.appendChild(meta);
+    if (isEdited) {
+      const ed = document.createElement('span');
+      ed.className = 'chat-meta-edited';
+      ed.textContent = '(edited)';
+      meta.appendChild(ed);
+    }
+
+    footer.appendChild(actions);
+    footer.appendChild(meta);
+
+    bubble.appendChild(textDiv);
+    bubble.appendChild(footer);
     row.appendChild(bubble);
     chatMessagesList.appendChild(row);
+
+    // Copy Action Handler
+    copyBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const currentContent = textDiv.textContent || text;
+      copyTextToClipboard(currentContent, copyBtn, 'Copied!');
+    });
+
+    // Edit Action Handler
+    editBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openInlineEditor(bubble, textDiv, footer, row, id);
+    });
+
+    // Double-click text to quick edit
+    textDiv.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      openInlineEditor(bubble, textDiv, footer, row, id);
+    });
 
     if (animate) {
       scrollChatToBottom(true);
     }
+
+    return id;
   }
 
   // Render AI Message Bubble with Glowing Avatar & Copy Button
@@ -813,28 +1056,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyBtn = bubbleHeader.querySelector('.chat-copy-btn');
     copyBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      navigator.clipboard.writeText(text).then(() => {
-        copyBtn.classList.add('copied');
-        copyBtn.innerHTML = `
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          <span>Copied!</span>
-        `;
-        showToast('AI response copied to clipboard');
-        setTimeout(() => {
-          copyBtn.classList.remove('copied');
-          copyBtn.innerHTML = `
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-            <span>Copy</span>
-          `;
-        }, 2200);
-      }).catch(() => {
-        showToast('Could not copy to clipboard');
-      });
+      copyTextToClipboard(text, copyBtn, 'Copied!');
     });
 
     const contentDiv = document.createElement('div');
@@ -1235,11 +1457,17 @@ Would you like me to generate a complete solution, provide code examples, or exp
 
     // Append user message
     const userTime = getChatTimestamp();
-    chatSessionHistory.push({ role: 'user', text: query, time: userTime });
+    const msgId = 'user-msg-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7);
+    chatSessionHistory.push({ id: msgId, role: 'user', text: query, time: userTime });
     saveChatHistory();
-    renderUserBubble(query, userTime, true);
+    renderUserBubble(query, userTime, true, msgId, false);
 
-    // Disable send button during request
+    await executeAiQuery(query);
+  }
+
+  // Execute AI query with OpenAI backend or client Neural Core fallback
+  async function executeAiQuery(query) {
+    if (isAiResponding) return;
     isAiResponding = true;
     if (sendBtn) {
       sendBtn.disabled = true;
