@@ -2,6 +2,8 @@
  * Vercel Serverless Function: /api/chat
  */
 
+import { generateVozxReply } from '../vozxBrain.js';
+
 export default async function handler(req, res) {
   // CORS Headers
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -79,17 +81,29 @@ export default async function handler(req, res) {
       });
     } else {
       const errDetail = data?.error?.message || 'OpenAI error';
-      // REQUIREMENT: If the API request fails, show "Something went wrong. Please try again."
-      return res.status(openAiResponse.status).json({
-        error: 'Something went wrong. Please try again.',
-        code: data?.error?.type || 'api_error',
-        details: errDetail
+      console.error(`[OpenAI Error ${openAiResponse.status}]:`, errDetail);
+      // Fallback to VOZX Autonomous Engine so user conversation never breaks
+      const userName = req.body?.userName || 'Varun';
+      const vozxReply = generateVozxReply(userMessage, history || rawMessages, userName);
+      return res.status(200).json({
+        reply: vozxReply,
+        role: 'assistant',
+        model: 'vozx-neural-engine',
+        source: 'vozx-autonomous',
+        fallback: true,
+        api_error: errDetail
       });
     }
   } catch (error) {
-    return res.status(500).json({
-      error: 'Something went wrong. Please try again.',
-      code: 'server_error'
+    console.error('Server error, falling back to VOZX Engine:', error);
+    const vozxReply = generateVozxReply(req.body?.message || '', [], 'Varun');
+    return res.status(200).json({
+      reply: vozxReply,
+      role: 'assistant',
+      model: 'vozx-neural-engine',
+      source: 'vozx-autonomous',
+      fallback: true
     });
   }
 }
+

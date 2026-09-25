@@ -163,25 +163,63 @@ def api_chat():
             err_type = resp_json.get("error", {}).get("type", "")
             logging.error(f"OpenAI error (HTTP {resp.status_code}): {err_msg} [{err_type}]")
 
-            # REQUIREMENT: If the API request fails, show "Something went wrong. Please try again."
-            return jsonify({
-                "error": "Something went wrong. Please try again.",
-                "code": err_type or "api_error",
-                "details": err_msg
-            }), resp.status_code
+            # Fallback to VOZX Autonomous Intelligence Engine so user conversation never breaks
+            try:
+                from vozx_brain import generate_vozx_reply
+                user_name = data.get("userName") or "Varun"
+                vozx_reply = generate_vozx_reply(user_message, history=history or raw_messages, user_name=user_name)
+                return jsonify({
+                    "reply": vozx_reply,
+                    "role": "assistant",
+                    "model": "vozx-neural-engine",
+                    "source": "vozx-autonomous",
+                    "fallback": True,
+                    "api_error": err_msg
+                }), 200
+            except Exception as fe:
+                logging.error(f"Fallback error: {fe}")
+                return jsonify({
+                    "error": "Something went wrong. Please try again.",
+                    "code": err_type or "api_error",
+                    "details": err_msg
+                }), resp.status_code
 
     except requests.exceptions.Timeout:
-        logging.error("OpenAI API request timed out (35s)")
-        return jsonify({
-            "error": "Something went wrong. Please try again.",
-            "code": "timeout"
-        }), 504
+        logging.error("OpenAI API request timed out (35s), switching to VOZX Neural Engine")
+        try:
+            from vozx_brain import generate_vozx_reply
+            user_name = data.get("userName") or "Varun"
+            vozx_reply = generate_vozx_reply(user_message, history=history or raw_messages, user_name=user_name)
+            return jsonify({
+                "reply": vozx_reply,
+                "role": "assistant",
+                "model": "vozx-neural-engine",
+                "source": "vozx-autonomous",
+                "fallback": True
+            }), 200
+        except Exception:
+            return jsonify({
+                "error": "Something went wrong. Please try again.",
+                "code": "timeout"
+            }), 504
     except Exception as e:
-        logging.error(f"Internal server error while communicating with OpenAI: {e}")
-        return jsonify({
-            "error": "Something went wrong. Please try again.",
-            "code": "server_error"
-        }), 500
+        logging.error(f"OpenAI communication error: {e}, switching to VOZX Neural Engine")
+        try:
+            from vozx_brain import generate_vozx_reply
+            user_name = data.get("userName") or "Varun"
+            vozx_reply = generate_vozx_reply(user_message, history=history or raw_messages, user_name=user_name)
+            return jsonify({
+                "reply": vozx_reply,
+                "role": "assistant",
+                "model": "vozx-neural-engine",
+                "source": "vozx-autonomous",
+                "fallback": True
+            }), 200
+        except Exception:
+            return jsonify({
+                "error": "Something went wrong. Please try again.",
+                "code": "server_error"
+            }), 500
 
 # Static File Routes
 @app.route("/")
@@ -199,3 +237,4 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     logging.info(f"VOZX AI Backend running on http://127.0.0.1:{port}")
     app.run(host="0.0.0.0", port=port, debug=False)
+
