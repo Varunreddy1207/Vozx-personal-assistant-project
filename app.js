@@ -968,8 +968,56 @@ document.addEventListener('DOMContentLoaded', () => {
     chatInput?.focus();
   }
 
+  // Real-Time World Knowledge Retrieval via Wikipedia Engine
+  async function queryClientKnowledgeEngine(query) {
+    const cleanQ = (query || '')
+      .replace(/^(who is|who was|who are|what is|what are|what was|tell me about|tell me regarding|explain|describe|define|where is|when was|when did|history of)\s+/i, '')
+      .replace(/[?."'`]/g, '')
+      .trim();
+
+    if (!cleanQ || cleanQ.length < 2) return null;
+
+    try {
+      const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(cleanQ)}&format=json&utf8=1&origin=*`;
+      const searchRes = await fetch(searchUrl);
+      if (!searchRes.ok) return null;
+      const sdata = await searchRes.json();
+      const search = sdata?.query?.search || [];
+      if (!search.length) return null;
+
+      const topTitle = search[0].title;
+      const summaryUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(topTitle)}`;
+      const sumRes = await fetch(summaryUrl);
+      if (!sumRes.ok) return null;
+      const sumData = await sumRes.json();
+
+      const extract = sumData.extract;
+      if (!extract || extract.trim().length < 15) return null;
+
+      const title = sumData.title || cleanQ;
+      const desc = sumData.description ? ` *(${sumData.description})*` : '';
+
+      const sentences = extract.split(/(?<=[.!?])\s+/).filter(s => s.trim());
+      const lead = sentences[0] || extract;
+      const bodyPoints = sentences.slice(1, 6);
+
+      let resp = `### **${title}**${desc}\n\n${lead}\n\n`;
+      if (bodyPoints.length > 0) {
+        resp += `### Key Details:\n`;
+        bodyPoints.forEach(pt => {
+          resp += `• ${pt}\n`;
+        });
+        resp += `\n`;
+      }
+      resp += `Would you like to explore deeper into **${title}**, analyze specific details, or examine practical applications?`;
+      return resp;
+    } catch (e) {
+      return null;
+    }
+  }
+
   // Client-Side VOZX Autonomous Intelligence Fallback
-  function generateClientVozxReply(userMessage, history = [], userName = 'Varun') {
+  async function generateClientVozxReply(userMessage, history = [], userName = 'Varun') {
     const msg = (userMessage || '').trim();
     const lower = msg.toLowerCase();
     const clean = lower.replace(/[^\w\s]/g, '').trim();
@@ -978,9 +1026,9 @@ document.addEventListener('DOMContentLoaded', () => {
       return `Hello ${userName}! I'm **VOZX AI**, your intelligent personal assistant. My neural stream is active and ready.
 
 Here are a few things I can assist you with right now:
+• **Knowledge & Research**: Ask about any topic, person, company, concept, or technology.
 • **Code & Debugging**: Write functions, scripts, or debug in Python, JavaScript, HTML/CSS, SQL, and more.
 • **Productivity**: Draft emails, summarize topics, outline plans, or organize your schedule.
-• **Knowledge & Research**: Explain complex concepts, analyze data, or brainstorm solutions.
 • **System Controls**: Switch to Voice Mode, configure Settings, or view Workspace Analytics.
 
 What would you like to build or explore today?`;
@@ -1007,9 +1055,9 @@ You can ask me to do any of the following:
 
 | Feature | Examples |
 | :--- | :--- |
+| **Knowledge & Answers** | *"Who is the CEO of Apple?"*, *"Tell me about AI"*, *"What is quantum computing?"* |
 | **Code Generation** | *"Write a JavaScript function to debounce input"*, *"Create a Python Flask REST API"* |
 | **Writing & Drafting** | *"Draft a follow-up email to a client"*, *"Write a product launch announcement"* |
-| **Technical Explanations** | *"Explain how transformers in LLMs work"*, *"What is the difference between SQL and NoSQL?"* |
 | **Calculations & Logic** | *"Calculate 15% tip on $148"*, *"Solve compound interest for $5,000 at 7% over 5 years"* |
 | **App Controls** | *"Switch to Voice Mode"*, *"Open Settings"*, *"Clear conversation"* |
 
@@ -1093,7 +1141,14 @@ print([x for x in range(30) if is_prime(x)])
 // VOZX Neural Engine - Implementation
 async function executeTask(payload) {
     try {
-        const response = await fetch('/api/process', {\n            method: 'POST',\n            headers: { 'Content-Type': 'application/json' },\n            body: JSON.stringify(payload)\n        });\n        if (!response.ok) throw new Error(\`HTTP error! status: \${response.status}\`);\n        return await response.json();\n    } catch (err) {\n        console.error('Execution failure:', err);\n        throw err;\n    }\n}\n\`\`\`\n\n### Key Highlights:\n1. **Robust Error Handling**: Wraps the async routine in a clean \`try/catch\` with descriptive status logging.\n2. **Type Compatibility**: Easily adapts into TypeScript interfaces or Python asynchronous coroutines.\n3. **Scalability**: Can be plugged into your existing VOZX backend service seamlessly.\n\nWould you like me to tailor this for a specific framework or database?`;
+        const response = await fetch('/api/process', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if (!response.ok) throw new Error(\`HTTP error! status: \${response.status}\`);
+        return await response.json();
+    } catch (err) {\n        console.error('Execution failure:', err);\n        throw err;\n    }\n}\n\`\`\`\n\n### Key Highlights:\n1. **Robust Error Handling**: Wraps the async routine in a clean \`try/catch\` with descriptive status logging.\n2. **Type Compatibility**: Easily adapts into TypeScript interfaces or Python asynchronous coroutines.\n3. **Scalability**: Can be plugged into your existing VOZX backend service seamlessly.\n\nWould you like me to tailor this for a specific framework or database?`;
     }
 
     if (/\b(email|draft|write an? (email|letter|announcement|proposal))\b/.test(lower)) {
@@ -1131,6 +1186,12 @@ Feel free to let me know if you would like me to adjust the tone, add specific d
 
     if (/\b(voice mode|voice|microphone|talk|listen)\b/.test(lower)) {
       return `You can activate **Voice Mode** at any time by tapping the microphone icon in the bottom floating dock, or by selecting **Voice Mode** from the Home dashboard action grid. In Voice Mode, you can speak naturally with interactive soundwave visualizers and real-time auditory synthesis.`;
+    }
+
+    // 10. REAL-TIME WORLD KNOWLEDGE RETRIEVAL (Wikipedia World Knowledge Search)
+    const knowledgeRes = await queryClientKnowledgeEngine(msg);
+    if (knowledgeRes) {
+      return knowledgeRes;
     }
 
     return `I've analyzed your query regarding **"${msg}"**.
@@ -1220,7 +1281,7 @@ Would you like me to generate a complete solution, provide code examples, or exp
       } else {
         // Fallback to VOZX Autonomous Neural Core if OpenAI quota or backend fails
         console.warn('[VOZX AI] Using Autonomous Neural Core response:', data);
-        const fallbackReply = generateClientVozxReply(query, historyPayload, currentUserName || 'Varun');
+        const fallbackReply = await generateClientVozxReply(query, historyPayload, currentUserName || 'Varun');
         const aiTime = getChatTimestamp();
         chatSessionHistory.push({ role: 'ai', text: fallbackReply, time: aiTime });
         saveChatHistory();
@@ -1229,7 +1290,7 @@ Would you like me to generate a complete solution, provide code examples, or exp
     } catch (err) {
       hideThinkingState();
       console.warn('[VOZX AI Network Offline] Using client Neural Core:', err);
-      const fallbackReply = generateClientVozxReply(query, historyPayload, currentUserName || 'Varun');
+      const fallbackReply = await generateClientVozxReply(query, historyPayload, currentUserName || 'Varun');
       const aiTime = getChatTimestamp();
       chatSessionHistory.push({ role: 'ai', text: fallbackReply, time: aiTime });
       saveChatHistory();

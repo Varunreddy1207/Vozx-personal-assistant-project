@@ -1,11 +1,58 @@
 /**
  * VOZX AI - Autonomous Neural Engine & Intelligence Fallback (JavaScript)
- * Provides context-aware AI conversational capabilities, code generation,
- * task management, and analytical reasoning for VOZX AI.
+ * Provides context-aware AI conversational capabilities, real-time world knowledge retrieval,
+ * code generation, task management, and analytical reasoning for VOZX AI.
  * Used automatically when OpenAI API quota is exhausted or offline.
  */
 
-function generateVozxReply(userMessage, history = [], userName = 'Varun') {
+async function queryKnowledgeEngine(query) {
+  const cleanQ = (query || '')
+    .replace(/^(who is|who was|who are|what is|what are|what was|tell me about|tell me regarding|explain|describe|define|where is|when was|when did|history of)\s+/i, '')
+    .replace(/[?."'`]/g, '')
+    .trim();
+
+  if (!cleanQ || cleanQ.length < 2) return null;
+
+  try {
+    const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(cleanQ)}&format=json&utf8=1&origin=*`;
+    const searchRes = await fetch(searchUrl);
+    if (!searchRes.ok) return null;
+    const sdata = await searchRes.json();
+    const search = sdata?.query?.search || [];
+    if (!search.length) return null;
+
+    const topTitle = search[0].title;
+    const summaryUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(topTitle)}`;
+    const sumRes = await fetch(summaryUrl);
+    if (!sumRes.ok) return null;
+    const sumData = await sumRes.json();
+
+    const extract = sumData.extract;
+    if (!extract || extract.trim().length < 15) return null;
+
+    const title = sumData.title || cleanQ;
+    const desc = sumData.description ? ` *(${sumData.description})*` : '';
+
+    const sentences = extract.split(/(?<=[.!?])\s+/).filter(s => s.trim());
+    const lead = sentences[0] || extract;
+    const bodyPoints = sentences.slice(1, 6);
+
+    let resp = `### **${title}**${desc}\n\n${lead}\n\n`;
+    if (bodyPoints.length > 0) {
+      resp += `### Key Details:\n`;
+      bodyPoints.forEach(pt => {
+        resp += `• ${pt}\n`;
+      });
+      resp += `\n`;
+    }
+    resp += `Would you like to explore deeper into **${title}**, analyze specific details, or examine practical applications?`;
+    return resp;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function generateVozxReply(userMessage, history = [], userName = 'Varun') {
   const msg = (userMessage || '').trim();
   const lower = msg.toLowerCase();
   const clean = lower.replace(/[^\w\s]/g, '').trim();
@@ -15,9 +62,9 @@ function generateVozxReply(userMessage, history = [], userName = 'Varun') {
     return `Hello ${userName}! I'm **VOZX AI**, your intelligent personal assistant. My neural stream is active and ready.
 
 Here are a few things I can assist you with right now:
+• **Knowledge & Research**: Ask about any topic, person, company, concept, or technology.
 • **Code & Debugging**: Write functions, scripts, or debug in Python, JavaScript, HTML/CSS, SQL, and more.
 • **Productivity**: Draft emails, summarize topics, outline plans, or organize your schedule.
-• **Knowledge & Research**: Explain complex concepts, analyze data, or brainstorm solutions.
 • **System Controls**: Switch to Voice Mode, configure Settings, or view Workspace Analytics.
 
 What would you like to build or explore today?`;
@@ -47,9 +94,9 @@ You can ask me to do any of the following:
 
 | Feature | Examples |
 | :--- | :--- |
+| **Knowledge & Answers** | *"Who is the CEO of Apple?"*, *"Tell me about AI"*, *"What is quantum computing?"* |
 | **Code Generation** | *"Write a JavaScript function to debounce input"*, *"Create a Python Flask REST API"* |
 | **Writing & Drafting** | *"Draft a follow-up email to a client"*, *"Write a product launch announcement"* |
-| **Technical Explanations** | *"Explain how transformers in LLMs work"*, *"What is the difference between SQL and NoSQL?"* |
 | **Calculations & Logic** | *"Calculate 15% tip on $148"*, *"Solve compound interest for $5,000 at 7% over 5 years"* |
 | **App Controls** | *"Switch to Voice Mode"*, *"Open Settings"*, *"Clear conversation"* |
 
@@ -67,7 +114,6 @@ Just type your request naturally, and I will handle it!`;
         .replace(/x/g, '*')
         .replace(/[^0-9\+\-\*\/\.\(\)]/g, '');
       if (sanitized && /[\+\-\*\/]/.test(sanitized)) {
-        // Safe evaluation of arithmetic
         const result = Function(`'use strict'; return (${sanitized})`)();
         if (typeof result === 'number' && !isNaN(result)) {
           return `The result of **${sanitized}** is **${result.toLocaleString()}**.`;
@@ -221,7 +267,14 @@ Feel free to let me know if you would like me to adjust the tone, add specific d
     return `You can activate **Voice Mode** at any time by tapping the microphone icon in the bottom floating dock, or by selecting **Voice Mode** from the Home dashboard action grid. In Voice Mode, you can speak naturally with interactive soundwave visualizers and real-time auditory synthesis.`;
   }
 
-  // 10. Default Contextual AI Response
+  // 10. REAL-TIME KNOWLEDGE RETRIEVAL (Wikipedia World Knowledge Search)
+  // Answers "who is the ceo of apple", "tell me about ai", science, history, facts, geography, etc.
+  const knowledgeRes = await queryKnowledgeEngine(msg);
+  if (knowledgeRes) {
+    return knowledgeRes;
+  }
+
+  // 11. Contextual Fallback for Specific Inquiries
   return `I've analyzed your query regarding **"${msg}"**.
 
 ### Key Insights & Analysis:

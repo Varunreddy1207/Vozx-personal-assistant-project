@@ -181,7 +181,7 @@ const server = http.createServer(async (req, res) => {
           console.error(`[OpenAI Error ${openAiResp.status}]:`, errDetail);
           // Fallback to VOZX Autonomous Engine so user conversation never breaks
           const userName = json.userName || 'Varun';
-          const vozxReply = generateVozxReply(userMessage, history || rawMessages, userName);
+          const vozxReply = await generateVozxReply(userMessage, history || rawMessages, userName);
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({
             reply: vozxReply,
@@ -194,7 +194,7 @@ const server = http.createServer(async (req, res) => {
         }
       } catch (err) {
         console.error('Server error, falling back to VOZX Engine:', err.message);
-        const vozxReply = generateVozxReply(userMessage || '', [], 'Varun');
+        const vozxReply = await generateVozxReply(userMessage || '', [], 'Varun');
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           reply: vozxReply,

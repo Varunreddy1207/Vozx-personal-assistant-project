@@ -84,7 +84,7 @@ export default async function handler(req, res) {
       console.error(`[OpenAI Error ${openAiResponse.status}]:`, errDetail);
       // Fallback to VOZX Autonomous Engine so user conversation never breaks
       const userName = req.body?.userName || 'Varun';
-      const vozxReply = generateVozxReply(userMessage, history || rawMessages, userName);
+      const vozxReply = await generateVozxReply(userMessage, history || rawMessages, userName);
       return res.status(200).json({
         reply: vozxReply,
         role: 'assistant',
@@ -96,7 +96,7 @@ export default async function handler(req, res) {
     }
   } catch (error) {
     console.error('Server error, falling back to VOZX Engine:', error);
-    const vozxReply = generateVozxReply(req.body?.message || '', [], 'Varun');
+    const vozxReply = await generateVozxReply(req.body?.message || '', [], 'Varun');
     return res.status(200).json({
       reply: vozxReply,
       role: 'assistant',

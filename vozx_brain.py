@@ -1,12 +1,75 @@
 """
-VOZX AI - Autonomous Neural Engine & Intelligence Fallback
-Provides robust, context-aware AI conversational capabilities, code generation,
-task management, and analytical reasoning for VOZX AI.
-Used automatically when OpenAI API quota is exhausted or offline.
+VOZX AI - Autonomous Neural Engine & Intelligence Engine
+Provides context-aware conversational capabilities, real-time knowledge retrieval,
+code generation, task management, and analytical reasoning for VOZX AI.
+Seamlessly handles queries whenever OpenAI API quota is exhausted or offline.
 """
 
 import re
 import datetime
+import urllib.request
+import urllib.parse
+import json
+
+def query_knowledge_engine(query: str):
+    """
+    Live real-time knowledge search using Wikipedia REST API.
+    Zero-key, high-speed, authoritative world knowledge retrieval.
+    """
+    clean_q = re.sub(
+        r'^(who is|who was|who are|what is|what are|what was|tell me about|tell me regarding|explain|describe|define|where is|when was|when did|history of)\s+',
+        '',
+        query,
+        flags=re.I
+    ).strip(' ?."\'')
+
+    if not clean_q or len(clean_q) < 2:
+        return None
+
+    try:
+        search_url = 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=' + urllib.parse.quote(clean_q) + '&format=json&utf8=1'
+        req = urllib.request.Request(search_url, headers={'User-Agent': 'VOZX-AI-Assistant/1.0 (contact@vozx.ai)'})
+        with urllib.request.urlopen(req, timeout=4) as r:
+            sdata = json.loads(r.read().decode())
+        search = sdata.get('query', {}).get('search', [])
+        if not search:
+            return None
+
+        top_title = search[0]['title']
+        summary_url = 'https://en.wikipedia.org/api/rest_v1/page/summary/' + urllib.parse.quote(top_title)
+        req2 = urllib.request.Request(summary_url, headers={'User-Agent': 'VOZX-AI-Assistant/1.0 (contact@vozx.ai)'})
+        with urllib.request.urlopen(req2, timeout=4) as r2:
+            sum_data = json.loads(r2.read().decode())
+
+        extract = sum_data.get('extract')
+        if not extract or len(extract.strip()) < 15:
+            return None
+
+        title = sum_data.get('title', clean_q.title())
+        desc = sum_data.get('description', '')
+
+        sentences = [s.strip() for s in re.split(r'(?<=[.!?])\s+', extract) if s.strip()]
+        lead = sentences[0] if sentences else extract
+        body_points = sentences[1:6]
+
+        resp = f"### **{title}**"
+        if desc:
+            resp += f" *({desc})*\n\n"
+        else:
+            resp += "\n\n"
+
+        resp += f"{lead}\n\n"
+
+        if body_points:
+            resp += "### Key Details:\n"
+            for pt in body_points:
+                resp += f"• {pt}\n"
+            resp += "\n"
+
+        resp += f"Would you like to explore deeper into **{title}**, analyze specific details, or examine practical applications?"
+        return resp
+    except Exception:
+        return None
 
 def generate_vozx_reply(user_message: str, history: list = None, user_name: str = "Varun") -> str:
     msg = user_message.strip()
@@ -19,9 +82,9 @@ def generate_vozx_reply(user_message: str, history: list = None, user_name: str 
             f"Hello {user_name}! I'm **VOZX AI**, your intelligent personal assistant. "
             "My neural stream is active and ready.\n\n"
             "Here are a few things I can assist you with right now:\n"
+            "• **Knowledge & Research**: Ask about any topic, person, concept, or current technology.\n"
             "• **Code & Debugging**: Write functions, scripts, or debug in Python, JavaScript, HTML/CSS, SQL, and more.\n"
             "• **Productivity**: Draft emails, summarize topics, outline plans, or organize your schedule.\n"
-            "• **Knowledge & Research**: Explain complex concepts, analyze data, or brainstorm solutions.\n"
             "• **System Controls**: Switch to Voice Mode, configure Settings, or view Workspace Analytics.\n\n"
             "What would you like to build or explore today?"
         )
@@ -51,9 +114,9 @@ def generate_vozx_reply(user_message: str, history: list = None, user_name: str 
             "You can ask me to do any of the following:\n\n"
             "| Feature | Examples |\n"
             "| :--- | :--- |\n"
+            "| **Knowledge & Answers** | *\"Who is the CEO of Apple?\"*, *\"Tell me about AI\"*, *\"What is quantum computing?\"* |\n"
             "| **Code Generation** | *\"Write a JavaScript function to debounce input\"*, *\"Create a Python Flask REST API\"* |\n"
             "| **Writing & Drafting** | *\"Draft a follow-up email to a client\"*, *\"Write a product launch announcement\"* |\n"
-            "| **Technical Explanations** | *\"Explain how transformers in LLMs work\"*, *\"What is the difference between SQL and NoSQL?\"* |\n"
             "| **Calculations & Logic** | *\"Calculate 15% tip on $148\"*, *\"Solve compound interest for $5,000 at 7% over 5 years\"* |\n"
             "| **App Controls** | *\"Switch to Voice Mode\"*, *\"Open Settings\"*, *\"Clear conversation\"* |\n\n"
             "Just type your request naturally, and I will handle it!"
@@ -63,7 +126,7 @@ def generate_vozx_reply(user_message: str, history: list = None, user_name: str 
     math_match = re.search(r'(\d+(?:\.\d+)?)\s*([\+\-\*\/xX\^%]|times|divided by|plus|minus)\s*(\d+(?:\.\d+)?)', lower)
     if math_match or re.search(r'\b(calculate|solve|what is \d+)\b', lower):
         try:
-            expr_str = re.sub(r'[^0-9\+\-\*\/\.\(\)\^]', '', lower.replace('x', '*').replace('times', '*').replace('plus', '+').replace('minus', '-'))
+            expr_str = re.sub(r'[^0-9\+\-\*\/\.\(\)]', '', lower.replace('x', '*').replace('times', '*').replace('plus', '+').replace('minus', '-'))
             if expr_str and any(op in expr_str for op in ['+', '-', '*', '/']):
                 safe_val = eval(expr_str, {"__builtins__": None}, {})
                 return f"The result of **{expr_str}** is **{safe_val:,}**."
@@ -137,6 +200,7 @@ def generate_vozx_reply(user_message: str, history: list = None, user_name: str 
                 "**Time Complexity**: `O(sqrt(n))` with a 3x speedup from the `6k ± 1` rule."
             )
 
+        # General Coding Response
         return (
             f"Here is a recommended architectural solution for your request:\n\n"
             "```javascript\n"
@@ -199,7 +263,13 @@ def generate_vozx_reply(user_message: str, history: list = None, user_name: str 
             "with interactive soundwave visualizers and real-time auditory synthesis."
         )
 
-    # 10. Default Contextual AI Response
+    # 10. REAL-TIME KNOWLEDGE RETRIEVAL (Wikipedia World Knowledge Search)
+    # Answers "who is the ceo of apple", "tell me about ai", science, history, facts, geography, etc.
+    knowledge_res = query_knowledge_engine(msg)
+    if knowledge_res:
+        return knowledge_res
+
+    # 11. Contextual Fallback for Specific Inquiries
     return (
         f"I've analyzed your query regarding **\"{msg}\"**.\n\n"
         "### Key Insights & Analysis:\n"
